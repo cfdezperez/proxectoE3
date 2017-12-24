@@ -5,10 +5,14 @@
  */
 package elementos;
 
+import vista.Celda;
+
 /**
  *
  * @author celia
  */
-public class Grupo extends Personaje {
-    
+public class Grupo extends Personaje{
+    public Grupo(Celda c, String nombre, Civilizacion civil, int tipo){
+        super(c, nombre, civil, tipo);
+    }
 }

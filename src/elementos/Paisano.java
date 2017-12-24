@@ -5,10 +5,15 @@
  */
 package elementos;
 
+import vista.Celda;
+
 /**
  *
  * @author celia
  */
-public class Paisano extends Personaje{
+public class Paisano extends Personaje {
 
+    public Paisano(Celda c, String nombre, Civilizacion civil, int tipo) {
+        super(c, nombre, civil, tipo);
+    }
 }

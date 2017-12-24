@@ -11,8 +11,9 @@ import vista.Celda;
  *
  * @author celia
  */
-public class Soldado extends Personaje{
-    public Soldado(Celda c, String nombre, Civilizacion civil, int tipo){
+public class Arquero extends Soldado{
+    
+    public Arquero(Celda c, String nombre, Civilizacion civil, int tipo){
         super(c, nombre, civil, tipo);
     }
 }

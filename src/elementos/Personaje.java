@@ -5,6 +5,8 @@
  */
 package elementos;
 import vista.Celda;
+import interfazUsuario.Juego;
+
 /**
  *
  * @author celia
@@ -22,7 +24,6 @@ public class Personaje {
     private int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
     //2 capacidad comida, 3 capacidad piedra
     private final int capRecoleccionInicial;
-    private boolean capEdificacion; //True paisano, False soldado
     private boolean estarGrupo;
 
     //CONSTRUCTORES
@@ -52,7 +53,7 @@ public class Personaje {
      * @param capacidad
      */
     public Personaje(Celda celda, String nombre, Civilizacion civil, int tipo, int salud, int armadura, int ataque, int capacidad) {
-        // Si la capacidad de recolección o la salud es 0, estoy muerto
+        // Si la capacidad de recolección o la salud es 0, estoy muerto TRANSFORMAR EN EXCEPCION
         if (salud <= 0) {
             this.estado = false;
             this.capRecoleccionInicial = 0;
@@ -68,16 +69,14 @@ public class Personaje {
             this.ataque = ataque < 0 ? 0 : ataque;
             this.tipoPersonaje = tipo;
 
-            //Es un soldado por lo que no tiene capacidad de recolección ni edificación
-            if (this.tipoPersonaje == Mapa.TSOLDADO) {
-                this.capRecoleccion[0] = 0;
-                this.capEdificacion = false;
-            } else if (this.tipoPersonaje == Mapa.TPAISANO && capacidad <= 0) {
-                this.estado = false;
-            } else {
-                this.capRecoleccion[0] = capacidad;
-                this.capEdificacion = true;
-            }
+            //Es un soldado por lo que no tiene capacidad de recolección ni edificación TRANSFORMAR EN EXCEPCION
+//            if (this.tipoPersonaje == Juego.TSOLDADO) {
+//                this.capRecoleccion[0] = 0;
+//            } else if (this.tipoPersonaje == Juego.TPAISANO && capacidad <= 0) {
+//                this.estado = false;
+//            } else {
+//                this.capRecoleccion[0] = capacidad;
+//            }
             this.capRecoleccionInicial = this.capRecoleccion[0];
             this.estarGrupo = false;
         }
@@ -111,17 +110,17 @@ public class Personaje {
         return this.civilizacion;
     }
 
-    /**
-     * Estado del personaje
-     * 
-     * @return boolean determinando su estado
-     */
-    public boolean getEstado() {
-        return this.estado;
-    }
+//    /**
+//     * Estado del personaje
+//     * 
+//     * @return boolean determinando su estado
+//     */
+//    public boolean getEstado() {
+//        return this.estado;
+//    }
 
     /**
-     * Tippo de personaje: paisano, soldado o grupo
+     * Tipo de personaje: paisano, soldado o grupo
      * 
      * @return int con tipo
      */
@@ -192,15 +191,6 @@ public class Personaje {
         return this.capRecoleccion[Recurso.TRPIEDRA];
     }
 
-    /**
-     * Determina si puede o no edificar
-     * 
-     * @return boolean si puede o no edificar
-     */
-    public boolean getCapEdificacion() {
-        return this.capEdificacion;
-    }
-
     public boolean getEstarGrupo() {
         return this.estarGrupo;
     }
@@ -240,7 +230,7 @@ public class Personaje {
      */
     public void setCelda(int x_ej, int y_ej) {
         if (x_ej >= 0 && y_ej >= 0) {
-            this.celda = new Celda(x_ej, y_ej, this.tipoPersonaje, this.nombre, this.civilizacion);
+//            this.celda = new Celda(x_ej, y_ej, this.tipoPersonaje, this.nombre, this.civilizacion);
         }
     }
 
@@ -314,5 +304,5 @@ public class Personaje {
 
     public void setPiedra(int a) {
         this.capRecoleccion[Recurso.TRPIEDRA] = a;
-    }
+    }  
 }
