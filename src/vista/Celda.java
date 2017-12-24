@@ -27,66 +27,23 @@ public class Celda {
     private Edificio edificio = null;
     private ContRecurso contRecurso = null;
     private Civilizacion civilizacion;
-    private int numElementos;
-    private boolean transitable;
-    private boolean visible;
+    private boolean transitable = false;
+    private boolean visible = false;
 
     /**
-     * Crea una nueva celda con un personaje dentro
+     * Crea una nueva celda vacía
      *
      * @param x_ej Posición x de la celda
      * @param y_ej Posición y de la celda
-     * @param personaje Personaje en la celda
-     * @param transitable Indica si se puede entrar en la celda
-     * @param visible Indica si la celda se va a visualizar
      */
-    public Celda(int x_ej, int y_ej, Personaje personaje, boolean transitable, boolean visible) {
+    public Celda(int x_ej, int y_ej) {
         this.x = x_ej;
         this.y = y_ej;
-        this.listaPersonajes.add(personaje);
-        this.civilizacion = personaje.getCivilizacion();
         this.transitable = transitable;
         this.visible = visible;
         setTipo();
     }
 
-    /**
-     * Crea una nueva celda con un edificio dentro
-     *
-     * @param x_ej Posición x de la celda
-     * @param y_ej Posición y de la celda
-     * @param edificio Edificio en la celda
-     * @param transitable Indica si se puede entrar en la celda
-     * @param visible Indica si la celda se va a visualizar
-     */
-    public Celda(int x_ej, int y_ej, Edificio edificio, boolean transitable, boolean visible) {
-        this.x = x_ej;
-        this.y = y_ej;
-        this.edificio = edificio;
-        this.civilizacion = edificio.getCivilizacion();
-        this.transitable = transitable;
-        this.visible = visible;
-        setTipo();        
-    }
-
-    /**
-     * Crea una nueva celda con un contenedor de recursos dentro
-     *
-     * @param x_ej Posición x de la celda
-     * @param y_ej Posición y de la celda
-     * @param contenedor Contenedor de recursos en la celda
-     * @param transitable Indica si se puede entrar en la celda
-     * @param visible Indica si la celda se va a visualizar
-     */
-    public Celda(int x_ej, int y_ej, ContRecurso contenedor, boolean transitable, boolean visible) {
-        this.x = x_ej;
-        this.y = y_ej;
-        this.contRecurso = contenedor;
-        this.civilizacion = null;
-        this.transitable = transitable;
-        this.visible = visible;
-        setTipo();
-    }
 
     //GETTERS Y SETTERS
     public int getX() {
@@ -151,16 +108,14 @@ public class Celda {
         this.visible = visible;
     }
 
-    public void setNumeroElementos(int n) {
-        this.numElementos = n;
-    }
-
     public void setCivilizacion(Civilizacion civ) {
         this.civilizacion = civ;
     }
 
 
     //FUNCIONES
+    
+    
     //Devuelve una cadena con las coordenadas de la celdas
     @Override
     public String toString() {
