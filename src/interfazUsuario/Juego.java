@@ -11,11 +11,12 @@ import java.util.Map;
 import elementos.ContRecurso;
 import elementos.Civilizacion;
 import java.util.List;
-import vista.Celda;
+import vista.Mapa;
 
 /**
- *
- * @author tomas
+ * Clase principal para inciar el juego
+ * 
+ * @author celia
  */
 public class Juego {
     public static final int TPAISANO = 4;
@@ -35,23 +36,20 @@ public class Juego {
 
     private Map<String, Civilizacion> Civilizaciones;
     private Map<String, ContRecurso> ContRecursos;
-    private List<List<Celda>> Celdas;
     private Civilizacion civilizacionActiva;
-    private int tamX;
-    private int tamY;
+    private Mapa mapa;
     private int[] contador; // Para los contenedores de recursos
     private int[][] contadorElementos; //Primer campo es la civilizacion, segundo campo es el tipo de dato
     
+    
     /**
-     * Construye un juego
+     * Construye un juego por defecto, tamaño 10x10
+     * 
      * @param nombreCivilizaciones Nombre de las civilizaciones que participan en el juego 
      */
-
-    public  Juego(String[] nombreCivilizaciones) {
+    public Juego(String[] nombreCivilizaciones) {
+        mapa = new Mapa(10, 10);
         this.ContRecursos = new HashMap<String, ContRecurso>();
-        this.Celdas = new ArrayList<List<Celda>>();
-        this.tamX = 10;
-        this.tamY = 10;
         this.contador = new int[9];
         String[] nc = new String[nombreCivilizaciones.length];
 
@@ -68,4 +66,6 @@ public class Juego {
             idCiv++;
         }        
     }
+    
+    
 }
