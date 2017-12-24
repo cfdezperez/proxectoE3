@@ -9,6 +9,6 @@ package elementos;
  *
  * @author celia
  */
-public class Soldado extends Personajes{
+public class Soldado extends Personaje{
     
 }

@@ -9,6 +9,6 @@ package elementos;
  *
  * @author celia
  */
-public class Grupo extends Personajes{
+public class Grupo extends Personaje {
     
 }

@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 package elementos;
-
+import vista.Celda;
 /**
  *
  * @author celia
  */
-public class Personajes {
+public class Personaje {
     private Celda celda;
     private String nombre;
     private Civilizacion civilizacion;

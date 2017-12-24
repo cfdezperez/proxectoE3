@@ -8,7 +8,7 @@ package interfazUsuario;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import elementos.ContRecursos;
+import elementos.ContRecurso;
 import elementos.Civilizacion;
 import java.util.List;
 import vista.Celda;
@@ -34,7 +34,7 @@ public class Juego {
     {" X ", " B ", " A ", " C ", " p ", " s ", " m ", " l ", " n ", " g ", " v "}};
 
     private Map<String, Civilizacion> Civilizaciones;
-    private Map<String, ContRecursos> ContRecursos;
+    private Map<String, ContRecurso> ContRecursos;
     private List<List<Celda>> Celdas;
     private Civilizacion civilizacionActiva;
     private int tamX;
@@ -48,7 +48,7 @@ public class Juego {
      */
 
     public  Juego(String[] nombreCivilizaciones) {
-        this.ContRecursos = new HashMap<String, ContRecursos>();
+        this.ContRecursos = new HashMap<String, ContRecurso>();
         this.Celdas = new ArrayList<List<Celda>>();
         this.tamX = 10;
         this.tamY = 10;

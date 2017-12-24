@@ -9,6 +9,6 @@ package elementos;
  *
  * @author celia
  */
-public class Edificios {
+public class ContRecurso {
     
 }
