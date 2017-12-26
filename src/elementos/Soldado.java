@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.ParametroIncorrectoException;
 import vista.Celda;
 
 /**
@@ -13,11 +14,11 @@ import vista.Celda;
  */
 public class Soldado extends Personaje{
     
-    public Soldado(Celda c, Civilizacion civ, int tipo) {
+    public Soldado(Celda c, Civilizacion civ, int tipo) throws ParametroIncorrectoException {
         this(c, civ, 100, 50, 75, tipo);
     }
     
-    public Soldado(Celda c, Civilizacion civil, int salud, int armadura, int ataque, int tipo) {
+    public Soldado(Celda c, Civilizacion civil, int salud, int armadura, int ataque, int tipo) throws ParametroIncorrectoException {
         // Los soldados no pueden recolectar ni edificar
         super(c, civil, salud, armadura, ataque, false, tipo);
     }
