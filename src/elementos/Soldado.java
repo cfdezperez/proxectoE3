@@ -7,6 +7,7 @@ package elementos;
 
 import excepciones.ParametroIncorrectoException;
 import vista.Celda;
+import excepciones.SoldadoRecException;
 
 /**
  *
@@ -21,5 +22,9 @@ public class Soldado extends Personaje{
     public Soldado(Celda c, Civilizacion civil, int salud, int armadura, int ataque, int tipo) throws ParametroIncorrectoException {
         // Los soldados no pueden recolectar ni edificar
         super(c, civil, salud, armadura, ataque, false, tipo);
+    }
+    
+    public void recolectar(String direccion) throws SoldadoRecException {
+        throw new SoldadoRecException("Un soldado no puede recolectar");
     }
 }
