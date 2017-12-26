@@ -6,15 +6,12 @@
 package interfazUsuario;
 
 import elementos.Cantera;
-import elementos.Civilizacion;
 import elementos.Paisano;
 import elementos.Piedra;
 import excepciones.CeldaEnemigaException;
 import excepciones.FueraDeMapaException;
 import excepciones.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import vista.Celda;
 import vista.Mapa;
 
@@ -36,10 +33,8 @@ public class Proyecto_final {
         try {
             p = new Paisano(c, Juego.getCivilizacionActiva());
         
-        
         Celda c1 = mapa.obtenerCelda(2,2);
         Cantera cant = new Cantera(c1, new Piedra(150));
-        mapa.actualizaVisibilidad(c, this);
 
         mapa.imprimir();
 
