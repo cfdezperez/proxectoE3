@@ -62,6 +62,7 @@ public class Personaje {
             this.tipoPersonaje = tipo;
             // No estamos en ningun grupo
             this.estarGrupo = false;
+            this.actualizaVisibilidad();
             
             // Añadimos el personaje a la celda y cambiamos las características de la misma
             this.celda.anhadePersonaje(this);
@@ -245,7 +246,9 @@ public class Personaje {
             vecina.anhadePersonaje(this);
             this.setCelda(vecina);
             vecina.setCivilizacion(Juego.getCivilizacionActiva());
-
+            // Actualiza la visibilidad
+            this.actualizaVisibilidad();
+            
             // Si la celda vecina tiene un edificio, indicamos que ya no está vacío
             Edificio e = vecina.getEdificio();
             if (e != null) {
@@ -257,12 +260,13 @@ public class Personaje {
         }
     }
     
-        /**
-     * Haz visibles las celdas que rodean a una dada
+   /**
+     * Haz visibles las celdas que rodean al personaje
      *
-     * @param c La celda de la que cambiamos su visibilidad
      */
-    public void actualizaVisibilidad(Celda c, Mapa mapa) {
+    private void actualizaVisibilidad() {
+        Celda c = this.getCelda();
+        Mapa mapa = c.getMapa();
         int x = c.getX();
         int y = c.getY();
         if (x == 1 && y == 1) {
@@ -270,15 +274,19 @@ public class Personaje {
         }
         if (x > 0) {
             mapa.obtenerCelda(x - 1, y).setVisible(true);
+            mapa.obtenerCelda(x - 1, y).setVisitadaPor(this.civilizacion);
         }
         if (x < (mapa.getTamX() - 1)) {
             mapa.obtenerCelda(x + 1, y).setVisible(true);
+            mapa.obtenerCelda(x + 1, y).setVisitadaPor(this.civilizacion);
         }
         if (y > 0) {
             mapa.obtenerCelda(x, y - 1).setVisible(true);
+            mapa.obtenerCelda(x, y - 1).setVisitadaPor(this.civilizacion);
         }
         if (y < (mapa.getTamY() - 1)) {
             mapa.obtenerCelda(x, y + 1).setVisible(true);
+            mapa.obtenerCelda(x, y + 1).setVisitadaPor(this.civilizacion);
         }
     }
 
