@@ -5,12 +5,11 @@
  */
 package interfazUsuario;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import elementos.ContRecurso;
 import elementos.Civilizacion;
-import java.util.List;
+import elementos.Paisano;
 import vista.Mapa;
 
 /**
@@ -18,7 +17,7 @@ import vista.Mapa;
  * 
  * @author celia
  */
-public class Juego {
+public class Juego implements Comando{
     public static final int TPAISANO = 4;
     public static final int TSOLDADO = 5;
     public static final int TCIUDADELA = 6;
@@ -30,25 +29,31 @@ public class Juego {
     public static final int TPRADERA = 0;
     public static final int TGRUPO = 9;
     public static final int TVARIOS = 10;
+    public static final int TARQUERO = 11;
+    public static final int TCABALLERO = 12;
+    public static final int TLEGIONARIO= 13;
 
-    public static final String[][] SIMBOLOS = {{" X ", " B ", " A ", " C ", " P ", " S ", " M ", " L ", " N ", " G ", " V "},
-    {" X ", " B ", " A ", " C ", " p ", " s ", " m ", " l ", " n ", " g ", " v "}};
+    public static final String[][] SIMBOLOS = {{" X ", " B ", " A ", " C ", " P ", " S ", " M ", " L ", " N ", " G ", " V ", " Q ", " O ", " I "},
+    {" X ", " B ", " A ", " C ", " p ", " s ", " m ", " l ", " n ", " g ", " v ", " q ", " o ", " i "}};
 
     private Map<String, Civilizacion> Civilizaciones;
     private Map<String, ContRecurso> ContRecursos;
-    private Civilizacion civilizacionActiva;
+    private static Civilizacion civilizacionActiva;
     private Mapa mapa;
     private int[] contador; // Para los contenedores de recursos
     private int[][] contadorElementos; //Primer campo es la civilizacion, segundo campo es el tipo de dato
     
     
     /**
-     * Construye un juego por defecto, tamaño 10x10
+     * Construye un juego por defecto
      * 
-     * @param nombreCivilizaciones Nombre de las civilizaciones que participan en el juego 
+     * @param tamX Número de columnas del mapa
+     * @param tamY Número de filas del mapa
+     * 
+     * @param nombreCivilizaciones Nombres de las civilizaciones que participan en el juego 
      */
-    public Juego(String[] nombreCivilizaciones) {
-        mapa = new Mapa(10, 10);
+    public Juego(int tamX, int tamY, String[] nombreCivilizaciones) {
+        mapa = new Mapa(tamX, tamY);
         this.ContRecursos = new HashMap<String, ContRecurso>();
         this.contador = new int[9];
         String[] nc = new String[nombreCivilizaciones.length];
@@ -67,5 +72,17 @@ public class Juego {
         }        
     }
     
+    public static Civilizacion getCivilizacionActiva() {
+        return civilizacionActiva;
+    }
+
+    public Mapa getMapa() {
+        return this.mapa;
+    }
+
+    @Override
+    public void mover(String nombre, int direccion) {
+        this.civilizacionActiva.getPersonaje(nombre).mover(mapa, nombre);
+    }
     
 }

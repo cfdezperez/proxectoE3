@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfazUsuario;
+package excepciones;
 
-/**
- *
- * @author tomas
- */
-public interface Comando {
-    public void mover(String nombre, int direccion);
-    
+
+public class MoverException extends PersonajeException {
+    public MoverException(String m) {
+        super(m);
+    }
 }

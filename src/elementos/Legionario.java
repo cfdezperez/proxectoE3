@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import interfazUsuario.Juego;
 import vista.Celda;
 
 /**
@@ -12,8 +13,10 @@ import vista.Celda;
  * @author celia
  */
 public class Legionario extends Soldado{
-    
+    private static int [] numeroLegionarios = new int[Civilizacion.getNumDeCivilizaciones()];
     public Legionario(Celda c, String nombre, Civilizacion civil, int tipo){
-        super(c, nombre, civil, tipo);
+        super(c, civil, Juego.TLEGIONARIO);
+        numeroLegionarios[civil.getIdCivilizacion()]++;        
+        setNombre("Legionario-"+numeroLegionarios[civil.getIdCivilizacion()]);
     }
 }

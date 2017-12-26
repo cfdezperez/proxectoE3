@@ -4,35 +4,30 @@
  * and open the template in the editor.
  */
 package elementos;
+
 import vista.*;
+
 /**
  *
  * @author celia
  */
 public class ContRecurso {
+
     private Celda celda;
     private Recurso recurso;
     private String nombre;
     private int tipoContenedor;
 
     //CONSTRUCTORES
-    public ContRecurso(Celda c, Recurso rec, String nombre) {
-        if (rec.getTipo() < 1 || rec.getTipo() > 3) {
-            System.out.println("El contenedor de recursos se transforma en pradera\n");
-            this.recurso = new Recurso();
-            this.tipoContenedor = this.recurso.getTipo();
-        } else {
-            this.celda = new Celda(c);
-            this.recurso = new Recurso(rec);
-            this.nombre = nombre;
-            this.tipoContenedor = this.recurso.getTipo();
-
-        }
+    public ContRecurso(Celda c, Recurso rec) {
+        this.celda = c;
+        this.recurso = new Recurso(rec);
+        this.tipoContenedor = this.recurso.getTipo();
+        c.setCivilizacion(null);
+        c.anhadeCR(this);
     }
 
-    
-    //GETTERS Y SETTERS
-    
+    //GETTERS Y SETTERS    
     public Celda getCelda() {
         return this.celda;
     }
@@ -42,17 +37,13 @@ public class ContRecurso {
     }
 
     public String getNombre() {
-        return this.nombre;
+        return this.recurso.getNombre();
     }
 
     public int getTipo() {
         return this.tipoContenedor;
     }
-    
-    public void setCelda(int x_ej, int y_ej) {
-        if(x_ej >= 0 && y_ej >= 0)
-            this.celda = new Celda(x_ej, y_ej, this.tipoContenedor, this.nombre, null);
-    }
+
 
     //Solo se puede cambiar el recurso o tipo cuando llega a 0 y se transforma en pradera
     public void setRecurso(int tipo) {

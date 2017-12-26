@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import interfazUsuario.Juego;
 import vista.Celda;
 
 /**
@@ -12,7 +13,8 @@ import vista.Celda;
  * @author celia
  */
 public class Pradera extends ContRecurso{
-    public Pradera(Celda c, Recurso rec, String nombre){
-        super(c, rec, nombre);
+    public Pradera(Celda c){
+        super(c, new Recurso(Juego.TPRADERA, 0));
+        c.setTransitable(true);
     }
 }

@@ -4,13 +4,16 @@
  * and open the template in the editor.
  */
 package elementos;
+import interfazUsuario.Juego;
 import vista.Celda;
 /**
  *
  * @author celia
  */
 public class Cantera extends ContRecurso{
-    public Cantera(Celda c, Recurso rec, String nombre){
-        super(c, rec, nombre);
+    public Cantera(Celda c, Recurso rec){
+        super(c, rec);
+        c.setTransitable(false);
+        setTipo(Juego.TCANTERA);        
     }
 }

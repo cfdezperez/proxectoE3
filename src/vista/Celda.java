@@ -12,6 +12,7 @@ import java.util.List;
 import elementos.Civilizacion;
 import elementos.ContRecurso;
 import elementos.Edificio;
+import elementos.Pradera;
 import interfazUsuario.Juego;
 
 /**
@@ -22,28 +23,28 @@ import interfazUsuario.Juego;
 public class Celda {
 
     private int x, y;   // Posición del elemento en la pantalla
+    private Mapa mapa;
     private int tipoCelda;
     private List<Personaje> listaPersonajes = new ArrayList<Personaje>();
     private Edificio edificio = null;
     private ContRecurso contRecurso = null;
     private Civilizacion civilizacion;
-    private boolean transitable = false;
+    private boolean transitable = true;
     private boolean visible = false;
 
     /**
-     * Crea una nueva celda vacía
-     *
-     * @param x_ej Posición x de la celda
-     * @param y_ej Posición y de la celda
+     * Crea una nueva celda vacía en un mapa
+     * 
+     * @param m El mapa donde colocamos la celda
+     * @param x Posición x de la celda
+     * @param y Posición y de la celda
      */
-    public Celda(int x_ej, int y_ej) {
-        this.x = x_ej;
-        this.y = y_ej;
-        this.transitable = transitable;
-        this.visible = visible;
+    public Celda(Mapa m, int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.mapa = m;
         setTipo();
     }
-
 
     //GETTERS Y SETTERS
     public int getX() {
@@ -79,6 +80,18 @@ public class Celda {
     public boolean getVisible() {
         return this.visible;
     }
+    
+    public Edificio getEdificio() {
+        return this.edificio;
+    }
+    
+    public ContRecurso getContRecurso() {
+        return this.contRecurso;
+    }
+    
+    public List<Personaje> getPersonajes() {
+        return this.listaPersonajes;
+    }
 
     public void setX(int x_ej) {
         if (x_ej > 0) {
@@ -112,18 +125,69 @@ public class Celda {
         this.civilizacion = civ;
     }
 
-
     //FUNCIONES
-    
+
+    /**
+     * Añade un personaje a la celda
+     *
+     * @param p Personaje a añadir
+     */
+    public void anhadePersonaje(Personaje p) {
+        if (getTransitable()) {
+            // Si es una pradera, la elimino
+            if(this.contRecurso.getTipo() == Juego.TPRADERA) {
+                this.contRecurso = null;
+            }
+            this.listaPersonajes.add(p);
+            setVisible(true);
+            mapa.actualizaVisibilidad(this);
+            setTipo();
+        } else {
+            // TODO: throws new CeldaNoTransitableException
+            System.out.println("No puedo añadir un elemento = "+getNumElementos());
+        }
+    }
+
+    /**
+     * Añade un edificio a la celda
+     *
+     * @param e Edificio a añadir
+     */
+    public void anhadeEdificio(Edificio e) {
+        if (getTransitable()) {
+            if (this.edificio == null) {
+                this.edificio = e;
+                setTipo();
+            } else {
+                // TODO: throws new CeldaOcupadaException
+            }
+        } else {
+            // TODO: throws new CeldaNoTransitableException
+        }
+    }
+    /**
+     * Añade un contenedor de recursos a la celda
+     *
+     * @param cr Contenedor a añadir
+     */
+    public void anhadeCR(ContRecurso cr) {
+        if ((this.listaPersonajes.isEmpty()) && (this.edificio == null)) {
+            this.contRecurso = cr;
+            setTipo();
+        } else {
+            // TODO: throws new CeldaOcupadaException
+        }
+    }    
+
     
     //Devuelve una cadena con las coordenadas de la celdas
     @Override
     public String toString() {
-        String s = "(" + this.getX() + "," + this.getY() + ")";
+        String s = "(" + this.getY() + "," + this.getX() + ")";
         return s;
     }
 
-    public void elimina(Personaje p) {
+    public void eliminarPersonaje(Personaje p) {
         this.listaPersonajes.remove(p);
         // Fijo el tipo después de eliminar el personaje
         this.setTipo();
@@ -137,20 +201,20 @@ public class Celda {
     }
 
     private void setTipo() {
-        // Si se queda sin elementos, la convierto en pradera
-        if (this.getNumElementos() <= 0) {
-            this.setTipoCelda(Juego.TPRADERA);
-            this.setTransitable(true);
+        // Si no tiene elementos, la convierto en pradera
+        if(getNumElementos() <= 0) {
+            new Pradera(this);
             this.setVisible(true);
-            this.setCivilizacion(null);
         } else if (getNumElementos() > 1) { // Queda más de un elemento
             this.setTipoCelda(Juego.TVARIOS);
-
-        } else { // Si queda solo un tipo de elemento, miramos si es un edificio o un personaje
-            if(this.edificio != null) {
-                this.setTipoCelda(edificio.getTipo());
-            } else {
-                this.setTipoCelda(listaPersonajes.get(0).getTipo());
+        }
+        else { // Si queda solo un tipo de elemento, miramos si es un CR, edificio o un personaje
+            if(this.contRecurso != null) {
+                this.setTipoCelda(this.contRecurso.getTipo());
+            } else if (this.edificio != null) {
+                this.setTipoCelda(this.edificio.getTipo());
+            } else if (!this.getPersonajes().isEmpty()) {
+                this.setTipoCelda(this.listaPersonajes.get(0).getTipo());
             }
         }
     }

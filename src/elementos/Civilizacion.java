@@ -43,7 +43,7 @@ public class Civilizacion {
      *
      * @return el HashMap de los personajes pertenecientes a la civilizacion
      */
-    public Map<String, Personaje> getPerCivilizacion() {
+    public Map<String, Personaje> getMapaPersonajes() {
         return this.Personajes;
     }
 
@@ -105,5 +105,15 @@ public class Civilizacion {
     public int numeroPersonajes() {
         return this.Personajes.size();
 
+    }
+    
+    /**
+     * Devuelve un personaje de la civilización dado su nombre
+     * @param nombre Nombre del personaje
+     * @return El personaje
+     */
+    public Personaje getPersonaje(String nombre) {
+        Personaje p = Personajes.get(nombre);
+        return p;
     }
 }

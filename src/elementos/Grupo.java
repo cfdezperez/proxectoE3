@@ -5,14 +5,20 @@
  */
 package elementos;
 
+import interfazUsuario.Juego;
 import vista.Celda;
 
 /**
  *
  * @author celia
  */
-public class Grupo extends Personaje{
-    public Grupo(Celda c, String nombre, Civilizacion civil, int tipo){
-        super(c, nombre, civil, tipo);
+public class Grupo extends Personaje {
+
+    private static int[] numeroGrupos = new int[Civilizacion.getNumDeCivilizaciones()];
+
+    public Grupo(Celda c, Civilizacion civil, int salud, int armadura, int ataque, int capacidad) {
+        super(c, civil, salud, armadura, ataque, capacidad, true, Juego.TGRUPO);
+        numeroGrupos[civil.getIdCivilizacion()]++;
+        setNombre("Grupo-" + numeroGrupos[civil.getIdCivilizacion()]);
     }
 }

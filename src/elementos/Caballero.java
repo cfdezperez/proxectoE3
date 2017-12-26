@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import interfazUsuario.Juego;
 import vista.Celda;
 
 /**
@@ -12,7 +13,12 @@ import vista.Celda;
  * @author celia
  */
 public class Caballero extends Soldado{
-    public Caballero(Celda c, String nombre, Civilizacion civil, int tipo){
-        super(c, nombre, civil, tipo);
+    private static int [] numeroCaballeros = new int[Civilizacion.getNumDeCivilizaciones()];
+    
+    public Caballero(Celda c, Civilizacion civil){
+        // TODO: Poner bien las características de los arqueros
+        super(c, civil, Juego.TCABALLERO);
+        numeroCaballeros[civil.getIdCivilizacion()]++;
+        setNombre("Caballero-"+numeroCaballeros[civil.getIdCivilizacion()]);
     }
 }

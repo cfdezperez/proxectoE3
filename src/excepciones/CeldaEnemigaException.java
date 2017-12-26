@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package interfazUsuario;
+package excepciones;
 
 /**
  *
- * @author tomas
+ * @author celia
  */
-public interface Comando {
-    public void mover(String nombre, int direccion);
-    
+public class CeldaEnemigaException extends MoverException{
+    public CeldaEnemigaException(String m) {
+        super(m);
+    }
 }

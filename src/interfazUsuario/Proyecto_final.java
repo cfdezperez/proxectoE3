@@ -5,12 +5,48 @@
  */
 package interfazUsuario;
 
+import elementos.Civilizacion;
+import elementos.Paisano;
+import excepciones.CeldaEnemigaException;
+import excepciones.FueraDeMapaException;
+import excepciones.NoTransitablebleException;
+import excepciones.ParametroIncorrectoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import vista.Celda;
+import vista.Mapa;
+
 /**
  *
  * @author tomas
  */
 public class Proyecto_final {
+
     public static void main(String[] args) {
-    
+        String[] civs = {"Romana", "Griega"};
+        Juego j = new Juego(5, 10, civs);
+        Mapa mapa = j.getMapa();
+        mapa.inicializaMapa();
+        mapa.imprimir();
+
+        Celda c = mapa.obtenerCelda(2, 1);
+        Paisano p = new Paisano(c, Juego.getCivilizacionActiva());
+        mapa.actualizaVisibilidad(c);
+
+        mapa.imprimir();
+
+        try {
+            p.mover(mapa, "norte");
+        } catch (NoTransitablebleException | FueraDeMapaException | ParametroIncorrectoException | CeldaEnemigaException ex) {
+            System.out.println("El personaje " + p.getNombre() + " no se puede mover en la dirección indicada: " + ex.getMessage());
+        }
+        mapa.imprimir();
+
+        try {
+            p.mover(mapa, "norte");
+        } catch (NoTransitablebleException | FueraDeMapaException | ParametroIncorrectoException | CeldaEnemigaException ex) {
+            System.out.println("El personaje " + p.getNombre() + " no se puede mover en la dirección indicada: " + ex.getMessage());
+        }
+        mapa.imprimir();
     }
 }
