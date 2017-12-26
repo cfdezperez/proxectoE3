@@ -54,6 +54,10 @@ public class Celda {
     public int getY() {
         return this.y;
     }
+    
+    public Mapa getMapa() {
+        return this.mapa;
+    }
 
     public int getTipoCelda() {
         return this.tipoCelda;
@@ -125,6 +129,9 @@ public class Celda {
         this.civilizacion = civ;
     }
 
+    public void setContRecurso(ContRecurso x){
+        this.contRecurso = x;
+    }
     //FUNCIONES
 
     /**
@@ -200,6 +207,18 @@ public class Celda {
         this.listaPersonajes = new ArrayList<Personaje>();
     }
 
+    /**
+     * Reinicializa la celda
+     */
+    public void restartCelda(){
+        this.restartPersonajes();
+        this.edificio = null;
+        this.contRecurso = new Pradera(this);
+        this.tipoCelda = Juego.TPRADERA;
+        this.civilizacion = null;
+        this.transitable = true;
+    }
+    
     private void setTipo() {
         // Si no tiene elementos, la convierto en pradera
         if(getNumElementos() <= 0) {

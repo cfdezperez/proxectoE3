@@ -32,9 +32,6 @@ public class Personaje {
     private final int saludInicial;
     private int armadura;
     private int ataque;
-    private int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
-    //2 capacidad comida, 3 capacidad piedra
-    private final int capRecoleccionInicial;
     private boolean capEdificacion;
     private boolean estarGrupo;
 
@@ -49,13 +46,9 @@ public class Personaje {
      * @param capacidad Capacidad recolectora inicial
      * @param capEdificacion Indica si puede edificar
      */
-    public Personaje(Celda celda, Civilizacion civil, int salud, int armadura, int ataque, int capacidad, boolean capEdificacion, int tipo) {
-        // Si la capacidad de recolección o la salud es 0, estoy muerto TRANSFORMAR EN EXCEPCION
+    public Personaje(Celda celda, Civilizacion civil, int salud, int armadura, int ataque, boolean capEdificacion, int tipo) throws ParametroIncorrectoException {
         if (salud <= 0) {
-            this.estado = false;
-            this.capRecoleccionInicial = 0;
-            this.saludInicial = salud;
-            // TODO: throws new ParametroIncorrectoException
+            throw new ParametroIncorrectoException("La salud no puede ser negativa o nula");
         } else {
             this.celda = celda;
             this.civilizacion = civil;
@@ -64,8 +57,6 @@ public class Personaje {
             this.saludInicial = salud;
             this.armadura = armadura < 0 ? 0 : armadura;
             this.ataque = ataque < 0 ? 0 : ataque;
-            this.capRecoleccion[0] = capacidad < 0 ? 0 : capacidad;
-            this.capRecoleccionInicial = this.capRecoleccion[0];
             this.capEdificacion = capEdificacion;
             this.tipoPersonaje = tipo;
 
@@ -427,24 +418,6 @@ public class Personaje {
 //        }
 //    }
 //
-//    /**
-//     *
-//     * @param mapa
-//     * @param direccion
-//     */
-//    public void recolectar(Mapa mapa, String direccion) {
-//        if (this.tipoPersonaje != Mapa.TPAISANO) {
-//            System.out.println("Solo los paisanos pueden recolectar.");
-//        } else {
-//            Celda vecina = obtenerCeldaVecina(mapa, direccion);
-//            if (vecina == null) {
-//                System.out.println("No se puede recolectar hacia el "
-//                        + direccion + ": se sale del mapa.");
-//            } else {
-//                recolecta(mapa, vecina);
-//            }
-//        }
-//    }
 //
 //    /**
 //     *
@@ -521,68 +494,6 @@ public class Personaje {
 //
 //
 //
-//
-//    private void recolecta(Mapa mapa, Celda c) {
-//        //Solo va a haber un elemento en la celd que va a ser un contenedor de recurso
-//        for (String s : c.getNombreElementos()) {
-//            if (mapa.getContRecursos().containsKey(s)) {
-//                ContRecurso cr = mapa.getContRecursos().get(s);
-//                //se restan de la capacidad del contenedor de recursos la capacidad 
-//                // que tiene el personaje para recolectar
-//                int disponible = cr.getRecurso().getCapacidad(); //Capacidad disponible en ese momento
-//                int recolectado;
-//                if (this.getCapRecoleccion() == 0) {
-//                    System.out.println(this.getNombre() + " ya no puede recolectar más");
-//                } else if (disponible > this.getCapRecoleccion()) {
-//                    recolectado = this.getCapRecoleccion();
-//                    cr.getRecurso().setCapacidad(disponible - recolectado); //cambia capacidad para recolectar en funcion de la recolectado
-//                    this.capRecoleccion[0] = 0;
-//                    this.capRecoleccion[cr.getRecurso().getTipo()] += recolectado;
-//                    System.out.println("El paisano ha conseguido " + recolectado + " unidades de " + cr.getRecurso().getNombre());
-//                } else if (this.getCapRecoleccion() >= disponible) {
-//                    recolectado = disponible;
-//                    this.capRecoleccion[0] -= recolectado;
-//                    this.capRecoleccion[cr.getRecurso().getTipo()] += recolectado;
-//                    // Eliminamos el contenedor de recursos agotado
-//                    mapa.getContRecursos().remove(s);
-//                    // Convertimos la celda en pradera
-//                    c.restartElementos();
-//                    c.setCivilizacion(null);
-//                    c.setTipoCelda(Mapa.TPRADERA);
-//                    c.setTransitable(true);
-//                    System.out.println("Has conseguido " + recolectado + " unidades de " + cr.getRecurso().getNombre());
-//                } else { //Si disponible, que 
-//                    System.out.println("Ocurrió un error al intentar recolectar");
-//                }
-//            } else {
-//                String mensaje;
-//                switch (c.getTipoCelda()) {
-//                    case Mapa.TCASA:
-//                        mensaje = "una casa";
-//                        break;
-//                    case Mapa.TCIUDADELA:
-//                        mensaje = "una ciudadela";
-//                        break;
-//                    case Mapa.TCUARTEL:
-//                        mensaje = "un cuartel";
-//                        break;
-//                    case Mapa.TPAISANO:
-//                        mensaje = "un paisano";
-//                        break;
-//                    case Mapa.TSOLDADO:
-//                        mensaje = "un soldado";
-//                        break;
-//                    case Mapa.TPRADERA:
-//                        mensaje = "una pradera";
-//                        break;
-//                    default:
-//                        mensaje = "esa celda";
-//                }
-//                System.out.println("El " + this.nombre
-//                        + " no puede recolectar de " + mensaje + ".");
-//            }
-//        }
-//    }
 //
 //
 //

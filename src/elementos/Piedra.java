@@ -10,7 +10,7 @@ package elementos;
  * @author celia
  */
 public class Piedra extends Recurso{
-    public Piedra(int t1, int cap){
-        super(t1, cap);
+    public Piedra(int cap){
+        super(Recurso.TRPIEDRA, cap);
     }
 }

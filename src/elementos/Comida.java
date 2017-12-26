@@ -9,8 +9,9 @@ package elementos;
  *
  * @author celia
  */
-public class Comida extends Recurso{
-    public Comida(int t1, int cap){
-        super(t1, cap);
+public class Comida extends Recurso {
+
+    public Comida(int cap) {
+        super(Recurso.TRCOMIDA, cap);
     }
 }

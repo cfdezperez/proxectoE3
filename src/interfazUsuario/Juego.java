@@ -9,7 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 import elementos.ContRecurso;
 import elementos.Civilizacion;
-import elementos.Paisano;
+import excepciones.CeldaEnemigaException;
+import excepciones.FueraDeMapaException;
+import excepciones.NoTransitablebleException;
+import excepciones.ParametroIncorrectoException;
 import vista.Mapa;
 
 /**
@@ -79,9 +82,13 @@ public class Juego implements Comando{
     public Mapa getMapa() {
         return this.mapa;
     }
-
+    
+    public Map<String, ContRecurso> getContRecursos(){
+        return this.ContRecursos;
+    }
+    
     @Override
-    public void mover(String nombre, int direccion) {
+    public void mover(String nombre, int direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException{
         this.civilizacionActiva.getPersonaje(nombre).mover(mapa, nombre);
     }
     

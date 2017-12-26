@@ -5,11 +5,16 @@
  */
 package interfazUsuario;
 
+import excepciones.CeldaEnemigaException;
+import excepciones.FueraDeMapaException;
+import excepciones.NoTransitablebleException;
+import excepciones.ParametroIncorrectoException;
+
 /**
  *
  * @author tomas
  */
 public interface Comando {
-    public void mover(String nombre, int direccion);
+    public void mover(String nombre, int direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException;
     
 }

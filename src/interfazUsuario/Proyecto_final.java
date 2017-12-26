@@ -5,8 +5,10 @@
  */
 package interfazUsuario;
 
+import elementos.Cantera;
 import elementos.Civilizacion;
 import elementos.Paisano;
+import elementos.Piedra;
 import excepciones.CeldaEnemigaException;
 import excepciones.FueraDeMapaException;
 import excepciones.NoTransitablebleException;
@@ -31,12 +33,15 @@ public class Proyecto_final {
 
         Celda c = mapa.obtenerCelda(2, 1);
         Paisano p = new Paisano(c, Juego.getCivilizacionActiva());
+        
+        Celda c1 = mapa.obtenerCelda(2,2);
+        Cantera cant = new Cantera(c1, new Piedra(150));
         mapa.actualizaVisibilidad(c);
 
         mapa.imprimir();
 
         try {
-            p.mover(mapa, "norte");
+            p.mover(mapa, "sur");
         } catch (NoTransitablebleException | FueraDeMapaException | ParametroIncorrectoException | CeldaEnemigaException ex) {
             System.out.println("El personaje " + p.getNombre() + " no se puede mover en la dirección indicada: " + ex.getMessage());
         }

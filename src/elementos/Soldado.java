@@ -19,6 +19,6 @@ public class Soldado extends Personaje{
     
     public Soldado(Celda c, Civilizacion civil, int salud, int armadura, int ataque, int tipo) {
         // Los soldados no pueden recolectar ni edificar
-        super(c, civil, salud, armadura, ataque, 0, false, tipo);
+        super(c, civil, salud, armadura, ataque, false, tipo);
     }
 }

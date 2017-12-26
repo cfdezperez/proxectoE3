@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package elementos;
+package excepciones;
 
 /**
  *
  * @author celia
  */
-public class Madera extends Recurso{
-    public Madera(int cap){
-        super(Recurso.TRMADERA, cap);
+public class NoRecolectableException extends RecursosException{
+    public NoRecolectableException(String m){
+        super(m);
     }
 }
