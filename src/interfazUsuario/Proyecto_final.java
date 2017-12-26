@@ -32,7 +32,12 @@ public class Proyecto_final {
         mapa.imprimir();
 
         Celda c = mapa.obtenerCelda(2, 1);
-        Paisano p = new Paisano(c, Juego.getCivilizacionActiva());
+        Paisano p;
+        try {
+            p = new Paisano(c, Juego.getCivilizacionActiva());
+        } catch (ParametroIncorrectoException ex) {
+            System.out.println(ex.getMessage());
+        }
         
         Celda c1 = mapa.obtenerCelda(2,2);
         Cantera cant = new Cantera(c1, new Piedra(150));

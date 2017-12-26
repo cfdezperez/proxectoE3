@@ -9,7 +9,6 @@ import excepciones.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
 import vista.Celda;
-import vista.Mapa;
 import excepciones.NoRecolectableException;
 import excepciones.PersonajeLlenoException;
 import excepciones.RecursosException;
@@ -37,9 +36,94 @@ public class Paisano extends Personaje {
         this.capRecoleccionInicial = this.capRecoleccion[0];
     }
 
+        /**
+     * Capacidad recoleccion total del personaje
+     *
+     * @return int capacidad recolección total
+     */
+    public int getCapRecoleccion() {
+        return this.capRecoleccion[0];
+    }
+
+    /**
+     * Capacidad de recolección para la madera, cantidad de madera que tiene
+     *
+     * @return int capacidad madera
+     */
+    public int getMadera() {
+        return this.capRecoleccion[Recurso.TRMADERA];
+    }
+
+    /**
+     * Capacidad de recolección para la comida, cantidad de comida que tiene
+     *
+     * @return int capacidad comida
+     */
+    public int getComida() {
+        return this.capRecoleccion[Recurso.TRCOMIDA];
+    }
+
+    /**
+     * Capacidad de recolección para la piedra, cantidad de piedra que tiene
+     *
+     * @return int capacidad piedra
+     */
+    public int getPiedra() {
+        return this.capRecoleccion[Recurso.TRPIEDRA];
+    }
+    
+        public int getCRInicial() {
+        return this.capRecoleccionInicial;
+    }
+
+    public int getRecursoTipo(int tipo) {
+        switch (tipo) {
+            case Recurso.TRMADERA:
+                return capRecoleccion[Recurso.TRMADERA];
+            case Recurso.TRCOMIDA:
+                return capRecoleccion[Recurso.TRCOMIDA];
+            case Recurso.TRPIEDRA:
+                return capRecoleccion[Recurso.TRPIEDRA];
+            default:
+                System.out.println("El recurso no existe");
+                return 0;
+        }
+    }
+    
+    
+        /**
+     *
+     * @param cap
+     */
+    public void setCapRecoleccion(int cap) {
+        if (cap < 0) {
+            this.capRecoleccion[0] = 0;
+        } else {
+            this.capRecoleccion[0] = cap;
+        }
+    }
+
+    public void setCapRecoleccionTipo(int cap, int tipo) {
+        if (cap < 0) {
+            cap = 0;
+        }
+        this.capRecoleccion[tipo] = cap;
+    }
+    
+        public void setMadera(int a) {
+        this.capRecoleccion[Recurso.TRMADERA] = a;
+    }
+
+    public void setComida(int a) {
+        this.capRecoleccion[Recurso.TRCOMIDA] = a;
+    }
+
+    public void setPiedra(int a) {
+        this.capRecoleccion[Recurso.TRPIEDRA] = a;
+    }
+    
     /**
      *
-     * @param mapa
      * @param direccion
      * @throws excepciones.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
