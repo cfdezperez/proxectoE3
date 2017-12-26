@@ -31,6 +31,7 @@ public class Celda {
     private Civilizacion civilizacion;
     private boolean transitable = true;
     private boolean visible = false;
+    private Civilizacion visitadaPor;
 
     /**
      * Crea una nueva celda vacía en un mapa
@@ -40,6 +41,7 @@ public class Celda {
      * @param y Posición y de la celda
      */
     public Celda(Mapa m, int x, int y) {
+        this.visitadaPor = null;
         this.x = x;
         this.y = y;
         this.mapa = m;
@@ -132,6 +134,10 @@ public class Celda {
     public void setContRecurso(ContRecurso x){
         this.contRecurso = x;
     }
+    
+    public void setVisitadaPor(Civilizacion civ) {
+        this.visitadaPor = civ;
+    }
     //FUNCIONES
 
     /**
@@ -147,7 +153,6 @@ public class Celda {
             }
             this.listaPersonajes.add(p);
             setVisible(true);
-            p.actualizaVisibilidad(thithis, s);
             setTipo();
         } else {
             // TODO: throws new CeldaNoTransitableException
