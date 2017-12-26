@@ -256,6 +256,31 @@ public class Personaje {
 
         }
     }
+    
+        /**
+     * Haz visibles las celdas que rodean a una dada
+     *
+     * @param c La celda de la que cambiamos su visibilidad
+     */
+    public void actualizaVisibilidad(Celda c, Mapa mapa) {
+        int x = c.getX();
+        int y = c.getY();
+        if (x == 1 && y == 1) {
+            System.out.println("Estoy en la celda " + c);
+        }
+        if (x > 0) {
+            mapa.obtenerCelda(x - 1, y).setVisible(true);
+        }
+        if (x < (mapa.getTamX() - 1)) {
+            mapa.obtenerCelda(x + 1, y).setVisible(true);
+        }
+        if (y > 0) {
+            mapa.obtenerCelda(x, y - 1).setVisible(true);
+        }
+        if (y < (mapa.getTamY() - 1)) {
+            mapa.obtenerCelda(x, y + 1).setVisible(true);
+        }
+    }
 
 //    /**
 //     *
@@ -656,28 +681,4 @@ public class Personaje {
 //        }
 //    }
 
-    /**
-     * Haz visibles las celdas que rodean a una dada
-     *
-     * @param c La celda de la que cambiamos su visibilidad
-     */
-    public void actualizaVisibilidad(Celda c, Mapa mapa) {
-        int x = c.getX();
-        int y = c.getY();
-        if (x == 1 && y == 1) {
-            System.out.println("Estoy en la celda " + c);
-        }
-        if (x > 0) {
-            mapa.obtenerCelda(x - 1, y).setVisible(true);
-        }
-        if (x < (mapa.tamX - 1)) {
-            mapa.obtenerCelda(x + 1, y).setVisible(true);
-        }
-        if (y > 0) {
-            mapa.obtenerCelda(x, y - 1).setVisible(true);
-        }
-        if (y < (mapa.tamY - 1)) {
-            mapa.obtenerCelda(x, y + 1).setVisible(true);
-        }
-    }
 }

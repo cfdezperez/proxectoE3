@@ -35,9 +35,7 @@ public class Proyecto_final {
         Paisano p;
         try {
             p = new Paisano(c, Juego.getCivilizacionActiva());
-        } catch (ParametroIncorrectoException ex) {
-            System.out.println(ex.getMessage());
-        }
+        
         
         Celda c1 = mapa.obtenerCelda(2,2);
         Cantera cant = new Cantera(c1, new Piedra(150));
@@ -58,5 +56,8 @@ public class Proyecto_final {
             System.out.println("El personaje " + p.getNombre() + " no se puede mover en la dirección indicada: " + ex.getMessage());
         }
         mapa.imprimir();
+    }  catch (ParametroIncorrectoException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }

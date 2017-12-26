@@ -40,6 +40,14 @@ public class Mapa {
         }
     }
 
+    public int getTamX(){
+        return this.tamX;
+    }
+    
+    public int getTamY(){
+        return this.tamY;
+    }
+    
     /**
      * Obtiene una celda en el mapa
      *
