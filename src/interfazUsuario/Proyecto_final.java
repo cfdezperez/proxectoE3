@@ -41,7 +41,7 @@ public class Proyecto_final {
         
         Celda c1 = mapa.obtenerCelda(2,2);
         Cantera cant = new Cantera(c1, new Piedra(150));
-        mapa.actualizaVisibilidad(c);
+        mapa.actualizaVisibilidad(c, this);
 
         mapa.imprimir();
 

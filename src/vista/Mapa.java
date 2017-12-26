@@ -131,30 +131,6 @@ public class Mapa {
         }       
     }
 
-    /**
-     * Haz visibles las celdas que rodean a una dada
-     *
-     * @param c La celda de la que cambiamos su visibilidad
-     */
-    public void actualizaVisibilidad(Celda c) {
-        int x = c.getX();
-        int y = c.getY();
-        if(x==1 && y==1) {
-            System.out.println("Estoy en la celda "+c);
-        }
-        if (x > 0) {
-            this.obtenerCelda(x - 1, y).setVisible(true);
-        }
-        if (x < (this.tamX - 1)) {
-            this.obtenerCelda(x + 1, y).setVisible(true);
-        }
-        if (y > 0) {
-            this.obtenerCelda(x, y - 1).setVisible(true);
-        }
-        if (y < (this.tamY - 1)) {
-            this.obtenerCelda(x, y + 1).setVisible(true);
-        }
-    }
 
     /**
      * Imprime el mapa desde el punto de vista de la civilización activa

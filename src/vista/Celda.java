@@ -147,7 +147,7 @@ public class Celda {
             }
             this.listaPersonajes.add(p);
             setVisible(true);
-            mapa.actualizaVisibilidad(this);
+            p.actualizaVisibilidad(thithis, s);
             setTipo();
         } else {
             // TODO: throws new CeldaNoTransitableException
