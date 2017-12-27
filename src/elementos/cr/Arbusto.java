@@ -20,6 +20,6 @@ public class Arbusto extends ContRecurso{
 
     @Override
     public String toString() {
-        return("Arbusto");
+        return("\n\tArbusto\n\tCantidad de comida "+this.getRecurso().getCapacidad());
     }
 }

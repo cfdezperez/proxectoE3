@@ -10,22 +10,16 @@ import elementos.ContRecurso;
 import elementos.Personaje;
 import elementos.Recurso;
 import elementos.cr.Pradera;
-import elementos.personaje.Paisano;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.recursos.NoRecolectableException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.recursos.RecursosException;
 import excepciones.personaje.SoldadoRecException;
-import excepciones.personaje.InsuficientesRecException;
 import interfazUsuario.Juego;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import vista.Celda;
-import vista.Mapa;
 
 /**
  *
@@ -149,11 +143,13 @@ public class Grupo extends Personaje {
     /**
      *
      * @param direccion
+     * @throws excepciones.personaje.SoldadoRecException
      * @throws excepciones.celda.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.recursos.NoRecolectableException
      * @throws excepciones.personaje.PersonajeLlenoException
      */
+    @Override
     public void recolectar(String direccion) throws SoldadoRecException, RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException {
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
@@ -207,6 +203,17 @@ public class Grupo extends Personaje {
             this.capRecoleccion[Recurso.TRPIEDRA] += pa.getPiedra();
         }
         //compruebaSoldadoEnGrupo();
+    }
+    
+    @Override
+    public String toString() {
+        String s = super.toString();       
+        s += "\n\tEstá formado por " + this.personajes.size() + " personajes.";
+        s += "\n\tPersonajes que forman el grupo: ";
+        for(Personaje p: this.personajes) {
+            s += "\n\t\t"+p.getNombre();
+        }
+        return(s);
     }
 
 //    private void compruebaSoldadoEnGrupo() {

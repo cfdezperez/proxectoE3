@@ -5,6 +5,11 @@
  */
 package elementos;
 
+import elementos.personaje.Arquero;
+import elementos.personaje.Caballero;
+import elementos.personaje.Grupo;
+import elementos.personaje.Legionario;
+import elementos.personaje.Paisano;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
@@ -636,8 +641,30 @@ public abstract class Personaje {
 //    }
     @Override
     public String toString() {
-        return("Personaje "+this.getNombre()+" de la civilización "+this.getCivilizacion());
+        String s = "\n\tTipo Personaje: ";
+        if(this instanceof Paisano) {
+            s += "Paisano";
+        }
+        if(this instanceof Arquero) {
+            s += "Arquero";
+        }
+        if(this instanceof Caballero) {
+            s += "Caballero";
+        }
+        if(this instanceof Legionario) {
+            s += "Legionario";
+        }
+        if(this instanceof Grupo) {
+            s += "Grupo";
+        }
+        s = " , Nombre: "+this.getNombre();
+        s += "\n\tCivilización a la que pertenece:" + this.getCivilizacion().getNomCivilizacion();
+        s += "\n\tSalud:" + this.getSalud();
+        s += "\n\tArmadura:" + this.getArmadura();
+        s += "\n\tAtaque:" + this.getAtaque();
+        return(s);
     }
+    
 //
 //    //Borra los edificios muertos
 //    private void comprobarDestruccion(Mapa mapa) {

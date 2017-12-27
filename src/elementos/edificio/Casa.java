@@ -10,7 +10,6 @@ import elementos.Edificio;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
-import vista.Celda;
 
 /**
  *

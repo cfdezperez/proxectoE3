@@ -7,7 +7,6 @@ package elementos;
 
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
-import interfazUsuario.Juego;
 import vista.*;
 
 /**
@@ -361,7 +360,12 @@ public abstract class Edificio {
 
     @Override
     public String toString() {
-        return("Edificio "+this.getNombre()+" de la civilización "+this.getCivilizacion());
+        String s = "\n\tEdificio "+this.getNombre();
+        s += "\n\tCivilización a la que pertenece:" + this.getCivilizacion().getNomCivilizacion();
+        s += "\n\tSalud:" + this.getSalud();
+        s += "\n\tCoste de reparación en piedra:" + this.getCRP();
+        s += "\n\tCoste de reparación en madera:" + this.getCRM();
+        return(s);
     }    
 
     // Clases abstractas

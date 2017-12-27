@@ -19,6 +19,6 @@ public class Bosque extends ContRecurso {
     
     @Override
     public String toString() {
-        return("Bosque");
+        return("\n\tBosque\n\tCantidad de madera "+this.getRecurso().getCapacidad());
     }    
 }

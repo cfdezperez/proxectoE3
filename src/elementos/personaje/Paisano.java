@@ -23,7 +23,7 @@ import excepciones.recursos.RecursosException;
  * @author celia
  */
 public class Paisano extends Personaje {
-    
+
     private int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
     //2 capacidad comida, 3 capacidad piedra
     private final int capRecoleccionInicial;
@@ -34,7 +34,7 @@ public class Paisano extends Personaje {
     }
 
     public Paisano(int salud, int armadura, int ataque, int capacidad) throws ParametroIncorrectoException {
-        super(salud, armadura, ataque, true, Juego.TPAISANO);      
+        super(salud, armadura, ataque, true, Juego.TPAISANO);
         this.capRecoleccion[0] = capacidad < 0 ? 0 : capacidad;
         this.capRecoleccionInicial = this.capRecoleccion[0];
     }
@@ -44,7 +44,7 @@ public class Paisano extends Personaje {
         numeroPaisanos[civil.getIdCivilizacion()]++;
         setNombre("Paisano-" + numeroPaisanos[civil.getIdCivilizacion()]);
     }
-    
+
     /**
      * Capacidad recoleccion total del personaje
      *
@@ -80,8 +80,8 @@ public class Paisano extends Personaje {
     public int getPiedra() {
         return this.capRecoleccion[Recurso.TRPIEDRA];
     }
-    
-        public int getCRInicial() {
+
+    public int getCRInicial() {
         return this.capRecoleccionInicial;
     }
 
@@ -98,9 +98,8 @@ public class Paisano extends Personaje {
                 return 0;
         }
     }
-    
-    
-        /**
+
+    /**
      *
      * @param cap
      */
@@ -118,8 +117,8 @@ public class Paisano extends Personaje {
         }
         this.capRecoleccion[tipo] = cap;
     }
-    
-        public void setMadera(int a) {
+
+    public void setMadera(int a) {
         this.capRecoleccion[Recurso.TRMADERA] = a;
     }
 
@@ -130,7 +129,15 @@ public class Paisano extends Personaje {
     public void setPiedra(int a) {
         this.capRecoleccion[Recurso.TRPIEDRA] = a;
     }
-    
+
+    @Override
+    public String toString() {
+        String s = super.toString();
+        s += "\n\tCapacidad de recolección:" + this.getCapRecoleccion();
+        s += "\n\tDispone de " + this.getMadera() + " madera, " + this.getPiedra() + " piedra y " + this.getComida() + " comida.";
+        return (s);
+    }
+
     /**
      *
      * @param direccion
@@ -140,7 +147,7 @@ public class Paisano extends Personaje {
      * @throws excepciones.personaje.PersonajeLlenoException
      */
     @Override
-    public void recolectar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, PersonajeLlenoException, RecursosException  {
+    public void recolectar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, PersonajeLlenoException, RecursosException {
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
 
@@ -175,8 +182,8 @@ public class Paisano extends Personaje {
             throw new RecursosException("Error al recolectar");
         }
     }
-    
-       /**
+
+    /**
      *
      * @param mapa
      * @param nedificio

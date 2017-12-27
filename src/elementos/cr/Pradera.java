@@ -19,4 +19,9 @@ public class Pradera extends ContRecurso{
     public Pradera() {
         super(new Recurso(Juego.TPRADERA, 0));
     }
+    
+    @Override
+    public String toString() {
+        return("\n\tPradera no productiva");
+    } 
 }
