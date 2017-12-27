@@ -8,6 +8,7 @@ package vista;
 import elementos.Civilizacion;
 import elementos.Personaje;
 import elementos.Pradera;
+import excepciones.CeldaOcupadaException;
 import excepciones.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class Mapa {
     private List<List<Celda>> Celdas;
     private int tamX, tamY;
 
-    public Mapa(int tamX, int tamY) {
+    public Mapa(int tamX, int tamY) throws CeldaOcupadaException {
         this.tamX = tamX;
         this.tamY = tamY;
         this.Celdas = new ArrayList<List<Celda>>(tamY);
@@ -177,7 +178,7 @@ public class Mapa {
     /**
      * Mete praderas en todas las celdas vacías
      */
-    private void inicializaMapa() {
+    private void inicializaMapa() throws CeldaOcupadaException {
         for(List<Celda> fila: this.Celdas) {
             for(Celda c: fila) {
                     new Pradera(c);

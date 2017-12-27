@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.CeldaOcupadaException;
 import excepciones.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
@@ -24,11 +25,11 @@ public class Paisano extends Personaje {
     private final int capRecoleccionInicial;
     private static int[] numeroPaisanos = new int[Civilizacion.getNumDeCivilizaciones()];
 
-    public Paisano(Celda c, Civilizacion civ) throws ParametroIncorrectoException {
+    public Paisano(Celda c, Civilizacion civ) throws ParametroIncorrectoException, CeldaOcupadaException {
         this(c, civ, 100, 25, 25, 150);
     }
 
-    public Paisano(Celda c, Civilizacion civil, int salud, int armadura, int ataque, int capacidad) throws ParametroIncorrectoException {
+    public Paisano(Celda c, Civilizacion civil, int salud, int armadura, int ataque, int capacidad) throws ParametroIncorrectoException, CeldaOcupadaException {
         super(c, civil, salud, armadura, ataque, true, Juego.TPAISANO);
         numeroPaisanos[civil.getIdCivilizacion()]++;
         setNombre("Paisano-" + numeroPaisanos[civil.getIdCivilizacion()]);
@@ -130,7 +131,7 @@ public class Paisano extends Personaje {
      * @throws excepciones.NoRecolectableException
      * @throws excepciones.PersonajeLlenoException
      */
-    public void recolectar(String direccion) throws RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException {
+    public void recolectar(String direccion) throws RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, CeldaOcupadaException {
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
 

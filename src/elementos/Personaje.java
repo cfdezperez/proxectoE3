@@ -6,6 +6,7 @@
 package elementos;
 
 import excepciones.CeldaEnemigaException;
+import excepciones.CeldaOcupadaException;
 import excepciones.FueraDeMapaException;
 import excepciones.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
@@ -47,7 +48,7 @@ public class Personaje {
      * @param tipo
      * @throws excepciones.ParametroIncorrectoException
      */
-    public Personaje(Celda celda, Civilizacion civil, int salud, int armadura, int ataque, boolean capEdificacion, int tipo) throws ParametroIncorrectoException {
+    public Personaje(Celda celda, Civilizacion civil, int salud, int armadura, int ataque, boolean capEdificacion, int tipo) throws ParametroIncorrectoException, CeldaOcupadaException {
         if (salud <= 0) {
             throw new ParametroIncorrectoException("La salud no puede ser negativa o nula");
         } else {
@@ -231,7 +232,7 @@ public class Personaje {
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.CeldaEnemigaException
      */
-    public void mover(Mapa mapa, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException {
+    public void mover(Mapa mapa, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
         Celda actual = this.getCelda();
         Celda vecina = mapa.obtenerCeldaVecina(actual, direccion);
 

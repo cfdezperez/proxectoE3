@@ -41,7 +41,7 @@ public class Celda {
      * @param x Posición x de la celda
      * @param y Posición y de la celda
      */
-    public Celda(Mapa m, int x, int y) {
+    public Celda(Mapa m, int x, int y) throws CeldaOcupadaException {
         this.visitadaPor = null;
         this.x = x;
         this.y = y;
@@ -146,15 +146,15 @@ public class Celda {
      *
      * @param p Personaje a añadir
      */
-    public void anhadePersonaje(Personaje p) {
+    public void anhadePersonaje(Personaje p) throws CeldaOcupadaException {
         if (getTransitable()) {
             // Si es una pradera, la elimino
             if((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
                 this.contRecurso = null;
             }
             this.listaPersonajes.add(p);
-            setVisible(true);
-            setTipo();
+            this.setVisible(true);
+            this.setTipo();
         } else {
             // TODO: throws new CeldaNoTransitableException
             System.out.println("No puedo añadir un elemento = "+getNumElementos());
@@ -165,6 +165,7 @@ public class Celda {
      * Añade un edificio a la celda
      *
      * @param e Edificio a añadir
+     * @throws excepciones.CeldaOcupadaException
      */
     public void anhadeEdificio(Edificio e) throws CeldaOcupadaException {
         if (getTransitable()) {
@@ -174,7 +175,7 @@ public class Celda {
             }            
             if (this.edificio == null) {
                 this.edificio = e;
-                setTipo();
+                this.setTipo();
             } else {
                 throw new CeldaOcupadaException("La celda está ocupada.");
             }
@@ -204,7 +205,7 @@ public class Celda {
         return s;
     }
 
-    public void eliminarPersonaje(Personaje p) {
+    public void eliminarPersonaje(Personaje p) throws CeldaOcupadaException {
         this.listaPersonajes.remove(p);
         // Fijo el tipo después de eliminar el personaje
         this.setTipo();
@@ -220,7 +221,7 @@ public class Celda {
     /**
      * Reinicializa la celda
      */
-    public void restartCelda(){
+    public void restartCelda() throws CeldaOcupadaException{
         this.restartPersonajes();
         this.edificio = null;
         this.contRecurso = new Pradera(this);
@@ -229,7 +230,7 @@ public class Celda {
         this.transitable = true;
     }
     
-    private void setTipo() {
+    private void setTipo() throws CeldaOcupadaException {
         // Si no tiene elementos, la convierto en pradera
         if(getNumElementos() <= 0) {
             new Pradera(this);
