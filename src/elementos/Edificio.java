@@ -4,10 +4,9 @@
  * and open the template in the editor.
  */
 package elementos;
+import excepciones.CeldaOcupadaException;
 import interfazUsuario.Juego;
 import vista.*;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  *
@@ -43,14 +42,14 @@ public class Edificio {
         //Crea una ciudadela
         this(c, "Ciudadela", Mapa.TCIUDADELA);
     }*/
-    public Edificio(Celda c, String nombre, Civilizacion civil, int tipo) {
+    public Edificio(Celda c, String nombre, Civilizacion civil, int tipo) throws CeldaOcupadaException {
         //Inicializa sus atributos con unos datos predeterminados
         //Crea una ciudadela
         this(c, nombre, civil, tipo, 100, 50, 40, 50, 50, 25, 20, 10, 10);
 
     }
 
-    public Edificio(Celda c1, String nombre, Civilizacion civil, int tipo, int salud1, int CRM, int CRP, int ataq, int def, int CCC, int capAlm, int capAlojar, int capPer) {
+    public Edificio(Celda c1, String nombre, Civilizacion civil, int tipo, int salud1, int CRM, int CRP, int ataq, int def, int CCC, int capAlm, int capAlojar, int capPer) throws CeldaOcupadaException {
         if (salud1 <= 0 || CRM < 0 || CRP < 0) { //Si no tiene salud no existe
             this.estado = false;
             this.saludInicial = 0;

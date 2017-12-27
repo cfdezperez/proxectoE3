@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.CeldaOcupadaException;
 import interfazUsuario.Juego;
 import vista.Celda;
 
@@ -13,7 +14,7 @@ import vista.Celda;
  * @author celia
  */
 public class Pradera extends ContRecurso{
-    public Pradera(Celda c){
+    public Pradera(Celda c) throws CeldaOcupadaException {
         super(c, new Recurso(Juego.TPRADERA, 0));
         c.setTransitable(true);
     }

@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.CeldaOcupadaException;
 import vista.*;
 
 /**
@@ -19,7 +20,7 @@ public class ContRecurso {
     private int tipoContenedor;
 
     //CONSTRUCTORES
-    public ContRecurso(Celda c, Recurso rec) {
+    public ContRecurso(Celda c, Recurso rec) throws CeldaOcupadaException {
         this.celda = c;
         this.recurso = new Recurso(rec);
         this.tipoContenedor = this.recurso.getTipo();

@@ -25,7 +25,6 @@ public class Proyecto_final {
         String[] civs = {"Romana", "Griega"};
         Juego j = new Juego(5, 10, civs);
         Mapa mapa = j.getMapa();
-        mapa.inicializaMapa();
         mapa.imprimir();
 
         Celda c = mapa.obtenerCelda(2, 1);

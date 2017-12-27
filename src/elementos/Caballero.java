@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
 import vista.Celda;
 
@@ -15,7 +16,7 @@ import vista.Celda;
 public class Caballero extends Soldado{
     private static int [] numeroCaballeros = new int[Civilizacion.getNumDeCivilizaciones()];
     
-    public Caballero(Celda c, Civilizacion civil){
+    public Caballero(Celda c, Civilizacion civil) throws ParametroIncorrectoException{
         // TODO: Poner bien las características de los arqueros
         super(c, civil, Juego.TCABALLERO);
         numeroCaballeros[civil.getIdCivilizacion()]++;

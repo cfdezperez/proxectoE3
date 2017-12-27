@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.CeldaOcupadaException;
 import interfazUsuario.Juego;
 import vista.Celda;
 
@@ -13,7 +14,7 @@ import vista.Celda;
  * @author celia
  */
 public class Bosque extends ContRecurso{
-    public Bosque(Celda c, Recurso rec){
+    public Bosque(Celda c, Recurso rec) throws CeldaOcupadaException{
         super(c, rec);
         c.setTransitable(false);
         setTipo(Juego.TBOSQUE);

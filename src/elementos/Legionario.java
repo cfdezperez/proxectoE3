@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
 import vista.Celda;
 
@@ -14,7 +15,7 @@ import vista.Celda;
  */
 public class Legionario extends Soldado{
     private static int [] numeroLegionarios = new int[Civilizacion.getNumDeCivilizaciones()];
-    public Legionario(Celda c, String nombre, Civilizacion civil, int tipo){
+    public Legionario(Celda c, String nombre, Civilizacion civil, int tipo) throws ParametroIncorrectoException{
         super(c, civil, Juego.TLEGIONARIO);
         numeroLegionarios[civil.getIdCivilizacion()]++;        
         setNombre("Legionario-"+numeroLegionarios[civil.getIdCivilizacion()]);

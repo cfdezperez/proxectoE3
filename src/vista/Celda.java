@@ -13,6 +13,7 @@ import elementos.Civilizacion;
 import elementos.ContRecurso;
 import elementos.Edificio;
 import elementos.Pradera;
+import excepciones.CeldaOcupadaException;
 import interfazUsuario.Juego;
 
 /**
@@ -148,7 +149,7 @@ public class Celda {
     public void anhadePersonaje(Personaje p) {
         if (getTransitable()) {
             // Si es una pradera, la elimino
-            if(this.contRecurso.getTipo() == Juego.TPRADERA) {
+            if((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
                 this.contRecurso = null;
             }
             this.listaPersonajes.add(p);
@@ -165,16 +166,20 @@ public class Celda {
      *
      * @param e Edificio a añadir
      */
-    public void anhadeEdificio(Edificio e) {
+    public void anhadeEdificio(Edificio e) throws CeldaOcupadaException {
         if (getTransitable()) {
+            // Si es una pradera, la elimino
+            if((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
+                this.contRecurso = null;
+            }            
             if (this.edificio == null) {
                 this.edificio = e;
                 setTipo();
             } else {
-                // TODO: throws new CeldaOcupadaException
+                throw new CeldaOcupadaException("La celda está ocupada.");
             }
         } else {
-            // TODO: throws new CeldaNoTransitableException
+            throw new CeldaOcupadaException("La celda no es transitable.");
         }
     }
     /**
@@ -182,12 +187,12 @@ public class Celda {
      *
      * @param cr Contenedor a añadir
      */
-    public void anhadeCR(ContRecurso cr) {
+    public void anhadeCR(ContRecurso cr) throws CeldaOcupadaException {
         if ((this.listaPersonajes.isEmpty()) && (this.edificio == null)) {
             this.contRecurso = cr;
             setTipo();
         } else {
-            // TODO: throws new CeldaOcupadaException
+            throw new CeldaOcupadaException("La celda está ocupada.");
         }
     }    
 

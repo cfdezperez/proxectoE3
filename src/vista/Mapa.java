@@ -34,10 +34,11 @@ public class Mapa {
             for (int x = 0; x < tamX; x++) {//Imolas recorrendo
                 // Creamos una celda vacía
                 Celda c = new Celda(this, x, y);
-                celdasFila.add(c); //Se inicializan todas las celdas como praderas
+                celdasFila.add(c); // La añadimos a la fila de celdas
             }
             this.Celdas.add(celdasFila);
         }
+        inicializaMapa();
     }
 
     public int getTamX(){
@@ -126,18 +127,7 @@ public class Mapa {
         return vecina;
     }
     
-    /**
-     * Mete praderas en todas las celdas vacías
-     */
-    public void inicializaMapa() {
-        for(List<Celda> fila: this.Celdas) {
-            for(Celda c: fila) {
-                    new Pradera(c);
-                    c.setTransitable(true);
-                    c.setVisible(false);
-            }
-        }       
-    }
+
 
 
     /**
@@ -182,5 +172,18 @@ public class Mapa {
         }
 
         System.out.println(raya);
+    }
+    
+    /**
+     * Mete praderas en todas las celdas vacías
+     */
+    private void inicializaMapa() {
+        for(List<Celda> fila: this.Celdas) {
+            for(Celda c: fila) {
+                    new Pradera(c);
+                    c.setTransitable(true);
+                    c.setVisible(false);
+            }
+        }       
     }
 }
