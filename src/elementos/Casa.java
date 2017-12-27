@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.CeldaOcupadaException;
 import vista.Celda;
 
 /**
@@ -12,7 +13,7 @@ import vista.Celda;
  * @author celia
  */
 public class Casa extends Edificio{
-    public Casa(Celda c, String nombre, Civilizacion civil, int tipo){
+    public Casa(Celda c, String nombre, Civilizacion civil, int tipo) throws CeldaOcupadaException{
         super(c, nombre, civil, tipo);
     }
 }
