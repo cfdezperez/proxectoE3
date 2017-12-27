@@ -6,7 +6,10 @@
 package elementos;
 
 import excepciones.ParametroIncorrectoException;
-import excepciones.SolRecException;
+import excepciones.SoldadoRecException;
+import excepciones.SolConstruirException;
+import excepciones.SolRepararException;
+import excepciones.SolAlmacenarException;
 import vista.Celda;
 
 /**
@@ -24,7 +27,19 @@ public class Soldado extends Personaje{
         super(c, civil, salud, armadura, ataque, false, tipo);
     }
     
-    public void recolectar(String direccion) throws SolRecException {
-        throw new SolRecException("Un soldado no puede recolectar");
+    public void recolectar(String direccion) throws SoldadoRecException {
+        throw new SoldadoRecException("Un soldado no puede recolectar");
+    }
+    
+    public void construir(String direccion) throws SolConstruirException {
+        throw new SolConstruirException("Un soldado no puede construír");
+    }
+    
+    public void reparar(String direccion) throws SolRepararException {
+        throw new SolRepararException("Un soldado no puede reparar");
+    }
+    
+    public void almacenar(String direccion) throws SolAlmacenarException {
+        throw new SolAlmacenarException("Un soldado no puede almacenar");
     }
 }

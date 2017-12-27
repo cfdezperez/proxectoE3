@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import excepciones.InsuficientesRecException;
 import excepciones.CeldaOcupadaException;
 import excepciones.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
@@ -13,6 +14,7 @@ import vista.Celda;
 import excepciones.NoRecolectableException;
 import excepciones.PersonajeLlenoException;
 import excepciones.RecursosException;
+import vista.Mapa;
 
 /**
  *
@@ -135,7 +137,7 @@ public class Paisano extends Personaje {
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
 
-        if (vecina.getContRecurso() == null) {
+        if ((vecina.getContRecurso() instanceof Pradera) || (vecina.getContRecurso() == null)) {
             throw new NoRecolectableException("La celda no contiene un contenedor de recursos");
         }
 
@@ -166,4 +168,40 @@ public class Paisano extends Personaje {
             throw new RecursosException("Error al recolectar");
         }
     }
+    
+       /**
+     *
+     * @param mapa
+     * @param nedificio
+     * @param tipo
+     * @param direccion
+     */
+    public void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion) throws InsuficientesRecException, FueraDeMapaException {
+        
+            Celda vecina = obtenerCeldaVecina(mapa, direccion);
+            if (vecina == null) {
+                throw new FueraDeMapaException("El personaje no puede construír, se sale del mapa");
+            } else {
+                Edificio edificio = new Edificio(vecina, nedificio, this.getCivilizacion(), tipo);
+                if (this.capRecoleccion[1] >= edificio.getCRM() && this.capRecoleccion[3] >= edificio.getCRP()) {
+                    mapa.addEdificio(edificio);
+                    if (vecina.getVisible() != true) {
+                        vecina.setVisible(true);
+                        this.getCivilizacion().getCeldasCivilizacion().add(vecina);
+                    }
+                    vecina.setTransitable(false); //Ponerlo a true
+                    vecina.addNombreElemento(edificio.getNombre());
+                    //vecina.setEntrable(true);
+                    vecina.setTipoCelda(edificio.getTipo());
+                    this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - edificio.getCRM();
+                    this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - edificio.getCRP();
+                    this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
+                    System.out.println("Se ha construído " + edificio.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
+                } else {
+                    throw new InsuficientesRecException("El paisano no tiene suficientes recursos, no puede construír");
+                }
+            }
+        
+    }
+
 }

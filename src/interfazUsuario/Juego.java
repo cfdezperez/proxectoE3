@@ -67,7 +67,7 @@ public class Juego implements Comando {
      * @param nombreCivilizaciones Nombres de las civilizaciones que participan
      * en el juego
      */
-    public Juego(int tamX, int tamY, String[] nombreCivilizaciones) {
+    public Juego(int tamX, int tamY, String[] nombreCivilizaciones) throws CeldaOcupadaException {
         mapa = new Mapa(tamX, tamY);
         this.contRecursos = new HashMap<String, ContRecurso>();
         this.contador = new int[9];

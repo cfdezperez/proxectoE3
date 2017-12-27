@@ -291,45 +291,45 @@ public class Personaje {
         }
     }
 
-//    /**
-//     *
-//     * @param mapa
-//     * @param nedificio
-//     * @param tipo
-//     * @param direccion
-//     */
-//    public void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion) {
-//        if (this.tipoPersonaje != Mapa.TPAISANO) {
-//            System.out.println("Solo los paisanos pueden construir edificios.");
-//        } else {
-//            Celda vecina = obtenerCeldaVecina(mapa, direccion);
-//            if (vecina == null) {
-//                System.out.println("No se puede construír el edificio hacia el "
-//                        + direccion + ": se sale del mapa.");
-//            } else {
-//                Edificio edificio = new Edificio(vecina, nedificio, this.getCivilizacion(), tipo);
-//                if (this.capRecoleccion[1] >= edificio.getCRM() && this.capRecoleccion[3] >= edificio.getCRP()) {
-//                    mapa.addEdificio(edificio);
-//                    if (vecina.getVisible() != true) {
-//                        vecina.setVisible(true);
-//                        this.getCivilizacion().getCeldasCivilizacion().add(vecina);
-//                    }
-//                    vecina.setTransitable(false);
-//                    vecina.addNombreElemento(edificio.getNombre());
-//                    vecina.setEntrable(true);
-//                    vecina.setTipoCelda(edificio.getTipo());
-//                    this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - edificio.getCRM();
-//                    this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - edificio.getCRP();
-//                    this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
-//                    System.out.println("Se ha construído " + edificio.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
-//                } else {
-//                    System.out.println("No se puede construír el edificio: "
-//                            + "el paisano no tiene los suficientes recursos");
-//                }
-//            }
-//        }
-//    }
-//
+    /**
+     *
+     * @param mapa
+     * @param nedificio
+     * @param tipo
+     * @param direccion
+     */
+    public void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion) {
+        if (this.tipoPersonaje != Mapa.TPAISANO) {
+            System.out.println("Solo los paisanos pueden construir edificios.");
+        } else {
+            Celda vecina = obtenerCeldaVecina(mapa, direccion);
+            if (vecina == null) {
+                System.out.println("No se puede construír el edificio hacia el "
+                        + direccion + ": se sale del mapa.");
+            } else {
+                Edificio edificio = new Edificio(vecina, nedificio, this.getCivilizacion(), tipo);
+                if (this.capRecoleccion[1] >= edificio.getCRM() && this.capRecoleccion[3] >= edificio.getCRP()) {
+                    mapa.addEdificio(edificio);
+                    if (vecina.getVisible() != true) {
+                        vecina.setVisible(true);
+                        this.getCivilizacion().getCeldasCivilizacion().add(vecina);
+                    }
+                    vecina.setTransitable(false);
+                    vecina.addNombreElemento(edificio.getNombre());
+                    vecina.setEntrable(true);
+                    vecina.setTipoCelda(edificio.getTipo());
+                    this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - edificio.getCRM();
+                    this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - edificio.getCRP();
+                    this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
+                    System.out.println("Se ha construído " + edificio.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
+                } else {
+                    System.out.println("No se puede construír el edificio: "
+                            + "el paisano no tiene los suficientes recursos");
+                }
+            }
+        }
+    }
+
 //    /**
 //     *
 //     * @param mapa

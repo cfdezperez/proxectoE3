@@ -9,9 +9,15 @@ import elementos.Cantera;
 import elementos.Paisano;
 import elementos.Piedra;
 import excepciones.CeldaEnemigaException;
+import excepciones.CeldaOcupadaException;
 import excepciones.FueraDeMapaException;
+import excepciones.NoRecolectableException;
 import excepciones.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.PersonajeLlenoException;
+import excepciones.RecursosException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import vista.Celda;
 import vista.Mapa;
 
@@ -21,7 +27,7 @@ import vista.Mapa;
  */
 public class Proyecto_final {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CeldaOcupadaException {
         String[] civs = {"Romana", "Griega"};
         Juego j = new Juego(5, 10, civs);
         Mapa mapa = j.getMapa();
@@ -36,7 +42,23 @@ public class Proyecto_final {
         Cantera cant = new Cantera(c1, new Piedra(150));
 
         mapa.imprimir();
-
+            try {
+                p.recolectar("norte");
+            }catch(NoRecolectableException ex){
+                System.out.println(ex.getMessage());
+            } catch (RecursosException | PersonajeLlenoException | FueraDeMapaException ex) {
+                System.out.println("No se puede recolectar esa celda");
+            }
+            try {
+                p.recolectar("sur");
+            } catch (RecursosException | PersonajeLlenoException | FueraDeMapaException ex) {
+                System.out.println("No pudo recolectar el personaje");
+            }
+            try {
+                p.recolectar("este");
+            } catch (RecursosException | PersonajeLlenoException | FueraDeMapaException ex) {
+                System.out.println("personaje lleno, no pudo recolectar");
+            }
         try {
             p.mover(mapa, "sur");
         } catch (NoTransitablebleException | FueraDeMapaException | ParametroIncorrectoException | CeldaEnemigaException ex) {

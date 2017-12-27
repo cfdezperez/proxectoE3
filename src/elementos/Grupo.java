@@ -10,10 +10,16 @@ import excepciones.NoRecolectableException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.PersonajeLlenoException;
 import excepciones.RecursosException;
+import excepciones.SoldadoRecException;
+import excepciones.InsuficientesRecException;
 import interfazUsuario.Juego;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import vista.Celda;
+import vista.Mapa;
 
 /**
  *
@@ -21,20 +27,26 @@ import vista.Celda;
  */
 public class Grupo extends Personaje {
 
+    private List<Personaje> personajes;
     private int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
     //2 capacidad comida, 3 capacidad piedra
     private final int capRecoleccionInicial;
+    private int ataque;
+    private int defensa;
     private static int[] numeroGrupos = new int[Civilizacion.getNumDeCivilizaciones()];
 
     public Grupo(Celda c, Civilizacion civil, int salud, int armadura, int ataque, int capacidad) throws ParametroIncorrectoException {
         super(c, civil, salud, armadura, ataque, true, Juego.TGRUPO);
+        personajes = new ArrayList<Personaje>();
         numeroGrupos[civil.getIdCivilizacion()]++;
         setNombre("Grupo-" + numeroGrupos[civil.getIdCivilizacion()]);
         this.capRecoleccion[0] = capacidad < 0 ? 0 : capacidad;
         this.capRecoleccionInicial = this.capRecoleccion[0];
+        this.ataque = 0;
+        this.defensa = 0;
     }
-    
-        /**
+
+    /**
      * Capacidad recoleccion total del personaje
      *
      * @return int capacidad recolección total
@@ -69,8 +81,8 @@ public class Grupo extends Personaje {
     public int getPiedra() {
         return this.capRecoleccion[Recurso.TRPIEDRA];
     }
-    
-        public int getCRInicial() {
+
+    public int getCRInicial() {
         return this.capRecoleccionInicial;
     }
 
@@ -87,9 +99,12 @@ public class Grupo extends Personaje {
                 return 0;
         }
     }
-    
-    
-        /**
+
+    public List<Personaje> getPersonajes() {
+        return this.personajes;
+    }
+
+    /**
      *
      * @param cap
      */
@@ -107,8 +122,8 @@ public class Grupo extends Personaje {
         }
         this.capRecoleccion[tipo] = cap;
     }
-    
-        public void setMadera(int a) {
+
+    public void setMadera(int a) {
         this.capRecoleccion[Recurso.TRMADERA] = a;
     }
 
@@ -119,7 +134,7 @@ public class Grupo extends Personaje {
     public void setPiedra(int a) {
         this.capRecoleccion[Recurso.TRPIEDRA] = a;
     }
-    
+
     /**
      *
      * @param direccion
@@ -128,14 +143,19 @@ public class Grupo extends Personaje {
      * @throws excepciones.NoRecolectableException
      * @throws excepciones.PersonajeLlenoException
      */
-    public void recolectar(String direccion) throws RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException {
+    public void recolectar(String direccion) throws SoldadoRecException, RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException {
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
 
-        if (vecina.getContRecurso() == null) {
+        if ((vecina.getContRecurso() == null) || (vecina.getContRecurso() instanceof Pradera)) {
             throw new NoRecolectableException("La celda no contiene un contenedor de recursos");
         }
 
+        for (Personaje p : this.getPersonajes()) {
+            if (p instanceof Soldado) {
+                throw new SoldadoRecException("El grupo contiene uno o más soldados, no puede recolectar");
+            }
+        }
         ContRecurso cr = vecina.getContRecurso();
         //Solo va a haber un elemento en la celd que va a ser un contenedor de recurso
         //se restan de la capacidad del contenedor de recursos la capacidad 
@@ -163,19 +183,72 @@ public class Grupo extends Personaje {
             throw new RecursosException("Error al recolectar");
         }
     }
-    
-        private void compruebaSoldadoEnGrupo() {
-        Iterator it = this.getPersonajes().entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry a = (Map.Entry) it.next();
-            if (((Personaje) a.getValue()).getTipo() == Mapa.TSOLDADO) {
-                this.capEdificacion = false;
-                this.capRecoleccion[0] = 0;
-                this.capRecoleccion[Recurso.TRMADERA] = 0;
-                this.capRecoleccion[Recurso.TRCOMIDA] = 0;
-                this.capRecoleccion[Recurso.TRPIEDRA] = 0;
-                break;
+
+    public void anhadirPersonaje(Personaje p) {
+        personajes.add(p);
+        this.ataque += p.getAtaque();
+        this.defensa += p.getArmadura();
+        if (p instanceof Paisano) {
+            Paisano pa = (Paisano) p;
+            this.capRecoleccion[0] += pa.getCapRecoleccion();
+            this.capRecoleccion[Recurso.TRMADERA] += pa.getMadera();
+            this.capRecoleccion[Recurso.TRCOMIDA] += pa.getComida();
+            this.capRecoleccion[Recurso.TRPIEDRA] += pa.getPiedra();
+        }
+        //compruebaSoldadoEnGrupo();
+    }
+
+//    private void compruebaSoldadoEnGrupo() {
+//        Iterator it = this.getPersonajes().entrySet().iterator();
+//        while (it.hasNext()) {
+//            Map.Entry a = (Map.Entry) it.next();
+//            if (((Personaje) a.getValue()).getTipo() == Juego.TSOLDADO) {
+//                this.capRecoleccion[0] = 0;
+//                this.capRecoleccion[Recurso.TRMADERA] = 0;
+//                this.capRecoleccion[Recurso.TRCOMIDA] = 0;
+//                this.capRecoleccion[Recurso.TRPIEDRA] = 0;
+//                break;
+//            }
+//        }
+//    }
+    /**
+     *
+     * @param mapa
+     * @param nedificio
+     * @param tipo
+     * @param direccion
+     */
+    public void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion) throws InsuficientesRecException, FueraDeMapaException {
+
+        Celda vecina = obtenerCeldaVecina(mapa, direccion);
+        if (vecina == null) {
+            throw new FueraDeMapaException("El personaje no puede construír, se sale del mapa");
+        } else {
+
+            for (Personaje p : this.getPersonajes()) {
+                if (p instanceof Soldado) {
+                    throw new SoldadoRecException("El grupo contiene uno o más soldados, no puede recolectar");
+                }
+            }
+            Edificio edificio = new Edificio(vecina, nedificio, this.getCivilizacion(), tipo);
+            if (this.capRecoleccion[1] >= edificio.getCRM() && this.capRecoleccion[3] >= edificio.getCRP()) {
+                mapa.addEdificio(edificio);
+                if (vecina.getVisible() != true) {
+                    vecina.setVisible(true);
+                    this.getCivilizacion().getCeldasCivilizacion().add(vecina);
+                }
+                vecina.setTransitable(false); //Ponerlo a true
+                vecina.addNombreElemento(edificio.getNombre());
+                //vecina.setEntrable(true);
+                vecina.setTipoCelda(edificio.getTipo());
+                this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - edificio.getCRM();
+                this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - edificio.getCRP();
+                this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
+                System.out.println("Se ha construído " + edificio.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
+            } else {
+                throw new InsuficientesRecException("El paisano no tiene suficientes recursos, no puede construír");
             }
         }
+
     }
 }

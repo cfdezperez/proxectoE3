@@ -9,8 +9,8 @@ package excepciones;
  *
  * @author celia
  */
-public class SolRecException extends SoldadoException{
-    public SolRecException(String m){
+public class SolConstruirException extends SoldadoException{
+    public SolConstruirException(String m){
         super(m);
     }
 }
