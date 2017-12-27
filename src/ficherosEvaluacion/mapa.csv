@@ -1,0 +1,31 @@
+# Coordenada;Tipo;Codigo;Descripcion;Cantidad
+0,0;Pradera;
+0,1;Pradera;
+0,2;Pradera;
+0,3;Arbusto;Arbusto-1;Moras;100
+0,4;Pradera;
+0,5;Pradera;
+1,0;Pradera;
+1,1;Pradera;
+1,2;Pradera;
+1,3;Arbusto;Arbusto-2;Moras;100
+1,4;Pradera;
+1,5;Pradera;
+2,0;Pradera;
+2,1;Pradera;
+2,2;Pradera;
+2,3;Pradera;
+2,4;Pradera;
+2,5;Pradera;
+3,0;Bosque;Bosque-1;Bosque oscuro;100
+3,1;Cantera;Cantera-1;Cantera de plata;100
+3,2;Pradera;
+3,3;Pradera;
+3,4;Pradera;
+3,5;Pradera;
+4,0;Pradera;
+4,1;Pradera;
+4,2;Pradera;
+4,3;Pradera;
+4,4;Pradera;
+4,5;Pradera;

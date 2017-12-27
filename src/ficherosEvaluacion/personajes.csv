@@ -1,0 +1,7 @@
+# Coordenada;Tipo;Codigo;Descripcion;Ataque;Defensa;Salud;Capacidad;Grupo;Civilizacion
+2,1;Paisano;Paisano-1;John Smith;20;10;50;10;Grupo-1;Breton
+2,1;Paisano;Paisano-2;Marcus Smith;20;10;35;10;Grupo-1;Breton
+2,2;Legionario;Legionario-1;Lancelot;130;90;90;0;Grupo-2;Breton
+2,2;Arquero;Arquero-1;Rey Arturo;150;60;45;0;Grupo-2;Breton
+2,3;Arquero;Arquero-1;Duque de Weimar;120;90;45;0;Grupo-1;Sajon
+2,3;Caballero;Caballero-1;Duque de Cornualles;110;100;30;0;Grupo-1;Sajon

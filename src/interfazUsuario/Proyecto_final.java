@@ -38,7 +38,7 @@ public class Proyecto_final {
     public static void main(String[] args) {
 
         try {
-            Juego j = Menu.cargarFicheros("/home/tomas/Personal/Celia/POO");
+            Juego j = Menu.cargarFicheros("src/ficherosEvaluacion");
             j.getMapa().imprimir();
             System.out.println(j.getMapa().obtenerCelda(0, 1).mirar());
         } catch (ParametroIncorrectoException ex) {
