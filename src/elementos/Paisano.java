@@ -176,21 +176,21 @@ public class Paisano extends Personaje {
      * @param tipo
      * @param direccion
      */
-    public void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion) throws InsuficientesRecException, FueraDeMapaException {
+    public void construirEdificio(String nedificio, int tipo, String direccion) throws InsuficientesRecException, FueraDeMapaException {
         
-            Celda vecina = obtenerCeldaVecina(mapa, direccion);
+            Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
             if (vecina == null) {
                 throw new FueraDeMapaException("El personaje no puede construír, se sale del mapa");
             } else {
                 Edificio edificio = new Edificio(vecina, nedificio, this.getCivilizacion(), tipo);
                 if (this.capRecoleccion[1] >= edificio.getCRM() && this.capRecoleccion[3] >= edificio.getCRP()) {
-                    mapa.addEdificio(edificio);
+                    //this.getCelda().getMapa().addEdificio(edificio);
                     if (vecina.getVisible() != true) {
                         vecina.setVisible(true);
                         this.getCivilizacion().getCeldasCivilizacion().add(vecina);
                     }
                     vecina.setTransitable(false); //Ponerlo a true
-                    vecina.addNombreElemento(edificio.getNombre());
+                    vecina.setEdificio(edificio);
                     //vecina.setEntrable(true);
                     vecina.setTipoCelda(edificio.getTipo());
                     this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - edificio.getCRM();

@@ -132,6 +132,10 @@ public class Celda {
         this.civilizacion = civ;
     }
 
+    public void setEdificio(Edificio ed){
+        this.edificio = ed;
+    }
+    
     public void setContRecurso(ContRecurso x){
         this.contRecurso = x;
     }
