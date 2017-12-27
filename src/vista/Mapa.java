@@ -25,7 +25,12 @@ public class Mapa {
     private List<List<Celda>> Celdas;
     private int tamX, tamY;
 
-    public Mapa(int tamX, int tamY) throws CeldaOcupadaException {
+    /**
+     *
+     * @param tamX
+     * @param tamY
+     */
+    public Mapa(int tamX, int tamY) {
         this.tamX = tamX;
         this.tamY = tamY;
         this.Celdas = new ArrayList<List<Celda>>(tamY);
@@ -33,28 +38,29 @@ public class Mapa {
         for (int y = 0; y < tamY; y++) { //Creamos as celdas
             List<Celda> celdasFila = new ArrayList<>(tamX);
             for (int x = 0; x < tamX; x++) {//Imolas recorrendo
-                // Creamos una celda vacía
+                // Creamos una celda vacía (con pradera, trasitables y no visibles)
                 Celda c = new Celda(this, x, y);
+                c.restartCelda();
+                c.setVisible(false);
                 celdasFila.add(c); // La añadimos a la fila de celdas
             }
             this.Celdas.add(celdasFila);
         }
-        inicializaMapa();
     }
 
-    public int getTamX(){
+    public int getTamX() {
         return this.tamX;
     }
-    
-    public int getTamY(){
+
+    public int getTamY() {
         return this.tamY;
     }
-    
+
     /**
      * Obtiene una celda en el mapa
      *
-     * @param x Posición x de la celda
-     * @param y Posición y de la celda
+     * @param x Posición x de la celda (columna)
+     * @param y Posición y de la celda (fila)
      * @return La celda en (x,y)
      */
     public Celda obtenerCelda(int x, int y) {
@@ -127,19 +133,84 @@ public class Mapa {
         }
         return vecina;
     }
-    
-
-
 
     /**
      * Imprime el mapa desde el punto de vista de la civilización activa
      */
     public void imprimir() {
-        imprimirCivilizacion(Juego.getCivilizacionActiva());
+        imprimirVisitadasCivilizacion(Juego.getCivilizacionActiva());
     }
-    
+
+    public void imprimirVisible() {
+        String raya = "   ";
+        String cols = "   ";
+        for (int i = 0; i < tamX; i++) {
+            cols += " " + i + " ";
+        }
+        for (int i = 0; i < 3 * tamX; i++) {
+            raya += "-";
+        }
+        System.out.println(cols);
+        System.out.println(raya);
+        int row = 0;
+        // Recorremos las celdas del mapa
+        for (List<Celda> c : this.Celdas) {
+            System.out.print(row + " |");
+            row++;
+            //Vamos recorriendo cada uno de los List, que es cada fila
+            for (Celda c1 : c) {
+                if (c1.getVisible()) {
+                    Civilizacion civcelda = c1.getCivilizacion();
+                    if (civcelda != null) {
+                        System.out.print(Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
+                    } else {
+                        System.out.print(Juego.SIMBOLOS[0][c1.getTipoCelda()]);
+                    }
+                } else {
+                    System.out.print("   ");
+                }
+            }
+            System.out.println("|");
+        }
+        System.out.println(raya);
+    }
+
+    public void imprimirVisitadasCivilizacion(Civilizacion civil) {
+        String raya = "   ";
+        String cols = "   ";
+        for (int i = 0; i < tamX; i++) {
+            cols += " " + i + " ";
+        }
+        for (int i = 0; i < 3 * tamX; i++) {
+            raya += "-";
+        }
+        System.out.println(cols);
+        System.out.println(raya);
+        int row = 0;
+        // Recorremos las celdas del mapa
+        for (List<Celda> c : this.Celdas) {
+            System.out.print(row + " |");
+            row++;
+            //Vamos recorriendo cada uno de los List, que es cada fila
+            for (Celda c1 : c) {
+                if (c1.getVisible()) {
+                    if (c1.getVisitadaPor() == civil) {
+                        System.out.print(Juego.SIMBOLOS[civil.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
+                    } else {
+                        System.out.print("   ");
+                    }
+                } else {
+                    System.out.print("   ");
+                }
+            }
+            System.out.println("|");
+        }
+        System.out.println(raya);
+    }
+
     /**
      * Imprime el mapa desde el punto de vista de una civilización
+     *
      * @param civil La civilización que queremos ver
      */
     public void imprimirCivilizacion(Civilizacion civil) {
@@ -153,7 +224,6 @@ public class Mapa {
             System.out.print("|");
             //Vamos recorriendo cada uno de los List, que es cada fila
             for (Celda c1 : c) {
-
                 if (c1.getVisible()) {
                     Civilizacion civcelda = c1.getCivilizacion();
                     if (civcelda == civil || civcelda == null) {
@@ -173,18 +243,5 @@ public class Mapa {
         }
 
         System.out.println(raya);
-    }
-    
-    /**
-     * Mete praderas en todas las celdas vacías
-     */
-    private void inicializaMapa() throws CeldaOcupadaException {
-        for(List<Celda> fila: this.Celdas) {
-            for(Celda c: fila) {
-                    new Pradera(c);
-                    c.setTransitable(true);
-                    c.setVisible(false);
-            }
-        }       
     }
 }

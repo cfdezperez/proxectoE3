@@ -8,21 +8,21 @@ package elementos;
 import excepciones.CeldaEnemigaException;
 import excepciones.CeldaOcupadaException;
 import excepciones.FueraDeMapaException;
+import excepciones.NoRecolectableException;
 import excepciones.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.PersonajeLlenoException;
+import excepciones.RecursosException;
+import excepciones.SoldadoRecException;
 import vista.Celda;
 import interfazUsuario.Juego;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import vista.Mapa;
 
 /**
  *
  * @author celia
  */
-public class Personaje {
+public abstract class Personaje {
 
     private Celda celda;
     private String nombre = null;
@@ -39,8 +39,6 @@ public class Personaje {
     /**
      * Crea un personaje en una celda y asociado a una civilización
      *
-     * @param celda Celda donde se situará el personaje
-     * @param civil Civilización a la que pertenece
      * @param salud Salud inicial del personaje
      * @param armadura Capacidad de defensa inicial
      * @param ataque Capacidad de ataque inicial
@@ -48,12 +46,11 @@ public class Personaje {
      * @param tipo
      * @throws excepciones.ParametroIncorrectoException
      */
-    public Personaje(Celda celda, Civilizacion civil, int salud, int armadura, int ataque, boolean capEdificacion, int tipo) throws ParametroIncorrectoException, CeldaOcupadaException {
+    public Personaje(int salud, int armadura, int ataque, boolean capEdificacion, int tipo) throws ParametroIncorrectoException {
         if (salud <= 0) {
             throw new ParametroIncorrectoException("La salud no puede ser negativa o nula");
         } else {
-            this.celda = celda;
-            this.civilizacion = civil;
+            //this.celda = celda;
             this.estado = true;
             this.salud = salud;
             this.saludInicial = salud;
@@ -63,15 +60,16 @@ public class Personaje {
             this.tipoPersonaje = tipo;
             // No estamos en ningun grupo
             this.estarGrupo = false;
-            this.actualizaVisibilidad();
-            
+            //this.actualizaVisibilidad();
+
             // Añadimos el personaje a la celda y cambiamos las características de la misma
-            this.celda.anhadePersonaje(this);
-            this.celda.setCivilizacion(Juego.getCivilizacionActiva());
-            this.celda.setTransitable(true);
-            this.celda.setVisible(true);
-
-
+//            this.celda.anhadePersonaje(this);
+//            this.celda.setCivilizacion(Juego.getCivilizacionActiva());
+//            this.celda.setTransitable(true);
+//            this.celda.setVisible(true);
+//            
+//            // Añadimos el personaje a la civilizacion
+//            this.civilizacion.anhadePersonaje(this);
         }
     }
 
@@ -165,6 +163,13 @@ public class Personaje {
     }
 
     /**
+     * Establece la civilización del personaje
+     */
+    public void setCivilizacion(Civilizacion civ) {
+        this.civilizacion = civ;
+    }
+
+    /**
      * Cambia la celda en la que está situado el personaje
      *
      * @param c La nueva celda del personaje
@@ -210,13 +215,9 @@ public class Personaje {
         this.estado = estado;
     }
 
-
-
     public void setEstarGrupo(boolean grupo) {
         this.estarGrupo = grupo;
     }
-
-
 
     public void setTipo(int tipo) {
         this.tipoPersonaje = tipo;
@@ -231,6 +232,7 @@ public class Personaje {
      * @throws excepciones.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.CeldaEnemigaException
+     * @throws excepciones.CeldaOcupadaException
      */
     public void mover(Mapa mapa, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
         Celda actual = this.getCelda();
@@ -249,7 +251,7 @@ public class Personaje {
             vecina.setCivilizacion(Juego.getCivilizacionActiva());
             // Actualiza la visibilidad
             this.actualizaVisibilidad();
-            
+
             // Si la celda vecina tiene un edificio, indicamos que ya no está vacío
             Edificio e = vecina.getEdificio();
             if (e != null) {
@@ -260,90 +262,80 @@ public class Personaje {
 
         }
     }
-    
-   /**
+
+    /**
      * Haz visibles las celdas que rodean al personaje
      *
      */
-    private void actualizaVisibilidad() {
+    public void actualizaVisibilidad() {
         Celda c = this.getCelda();
         Mapa mapa = c.getMapa();
         int x = c.getX();
         int y = c.getY();
-        if (x == 1 && y == 1) {
-            System.out.println("Estoy en la celda " + c);
-        }
+
+        mapa.obtenerCelda(x, y).setVisible(true);
+        mapa.obtenerCelda(x, y).setVisitadaPor(this.civilizacion);
+        Celda vecina;
         if (x > 0) {
-            mapa.obtenerCelda(x - 1, y).setVisible(true);
-            mapa.obtenerCelda(x - 1, y).setVisitadaPor(this.civilizacion);
+            vecina = mapa.obtenerCelda(x - 1, y);
+            vecina.setVisible(true);
+            // Si la celda vecina no tiene personajes, la marcamos como visitada
+            // por la civilización actual
+            if (vecina.getPersonajes().isEmpty()) {
+                vecina.setVisitadaPor(this.civilizacion);
+            }
         }
         if (x < (mapa.getTamX() - 1)) {
-            mapa.obtenerCelda(x + 1, y).setVisible(true);
-            mapa.obtenerCelda(x + 1, y).setVisitadaPor(this.civilizacion);
+            vecina = mapa.obtenerCelda(x + 1, y);
+            vecina.setVisible(true);
+            // Si la celda vecina no tiene personajes, la marcamos como visitada
+            // por la civilización actual
+            if (vecina.getPersonajes().isEmpty()) {
+                vecina.setVisitadaPor(this.civilizacion);
+            }
         }
         if (y > 0) {
-            mapa.obtenerCelda(x, y - 1).setVisible(true);
-            mapa.obtenerCelda(x, y - 1).setVisitadaPor(this.civilizacion);
+            vecina = mapa.obtenerCelda(x, y - 1);
+            vecina.setVisible(true);
+            // Si la celda vecina no tiene personajes, la marcamos como visitada
+            // por la civilización actual
+            if (vecina.getPersonajes().isEmpty()) {
+                vecina.setVisitadaPor(this.civilizacion);
+            }
         }
         if (y < (mapa.getTamY() - 1)) {
-            mapa.obtenerCelda(x, y + 1).setVisible(true);
-            mapa.obtenerCelda(x, y + 1).setVisitadaPor(this.civilizacion);
-        }
-    }
-
-    public abstract void recolectar(String direccion);
-    
-    /**
-     *
-     * @param mapa
-     * @param nedificio
-     * @param tipo
-     * @param direccion
-     */
-    public abstract void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion);
-
-    /**
-     *
-     * @param mapa
-     * @param direccion
-     */
-    public void reparar(Mapa mapa, String direccion) {
-        if (this.tipoPersonaje != Mapa.TPAISANO) {
-            System.out.println("Solo los paisanos pueden reparar.");
-        } else {
-            Celda vecina = obtenerCeldaVecina(mapa, direccion);
-            if (vecina == null) {
-                System.out.println("No se puede reparar den dirección "
-                        + direccion + ": se sale del mapa.");
-            } else {
-                for (String s : vecina.getNombreElementos()) {
-                    if (mapa.getCivActiva().getEdCivilizacion().containsKey(s)) {  // La celda contiene un edificio
-                        Edificio e = mapa.getCivActiva().getEdCivilizacion().get(s);
-                        System.out.println("RECURSO PERSONAJE MADERA: " + this.capRecoleccion[Recurso.TRMADERA] + " RECURSO EDIFICIO EXIGE MADERA " + e.getCRM());
-                        System.out.println("RECURSO PERSONAJE PIEDRA: " + this.capRecoleccion[Recurso.TRPIEDRA] + " RECURSO EDIFICIO EXIGE PIEDRA " + e.getCRP());
-                        if (this.capRecoleccion[Recurso.TRMADERA] >= e.getCRM() && this.capRecoleccion[Recurso.TRPIEDRA] >= e.getCRP()) {
-                            if (e.getSalud() != e.getSaludInicial()) {
-                                e.reiniciarSalud(); //edificio recobra la salud
-                                this.capRecoleccion[Recurso.TRMADERA] -= e.getCRM();
-                                this.capRecoleccion[Recurso.TRPIEDRA] -= e.getCRP();
-                                this.capRecoleccion[0] -= (e.getCRM() + e.getCRP());
-                                System.out.println("Reparado el edificio " + e.getNombre());
-                                System.out.println("Coste de la reparacion: " + (this.capRecoleccion[Recurso.TRMADERA] - e.getCRM()) + " de madera y " + (this.capRecoleccion[0] - e.getCRP()) + " de piedra");
-
-                            } else {
-                                System.out.println("El edificio no necesita ser reparadoa, b"
-                                        + "");
-                            }
-                        } else {
-                            System.out.println("El paisano no tiene los suficientes recursos");
-                        }
-                    } else {
-                        System.out.println("No hay ningún edificio que reparar en esta posición");
-                    }
-                }
+            vecina = mapa.obtenerCelda(x, y + 1);
+            vecina.setVisible(true);
+            // Si la celda vecina no tiene personajes, la marcamos como visitada
+            // por la civilización actual
+            if (vecina.getPersonajes().isEmpty()) {
+                vecina.setVisitadaPor(this.civilizacion);
             }
         }
     }
+
+    /**
+     *
+     * @param direccion
+     * @throws RecursosException
+     * @throws PersonajeLlenoException
+     * @throws FueraDeMapaException
+     * @throws ParametroIncorrectoException
+     * @throws NoRecolectableException
+     * @throws CeldaOcupadaException
+     * @throws SoldadoRecException
+     */
+    public abstract void recolectar(String direccion) throws RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, CeldaOcupadaException, SoldadoRecException;
+
+    //public abstract void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion);
+    /**
+     * Se encarga de fijar el nombre a partir del tipo de personaje y la
+     * civilización a la que pertenece
+     *
+     * @param civil Civilización a la que pertenece
+     */
+    public abstract void inicializaNombre(Civilizacion civil);
+
 //
 //
 //    /**
@@ -642,6 +634,10 @@ public class Personaje {
 //        }
 //        return civ;
 //    }
+    @Override
+    public String toString() {
+        return("Personaje "+this.getNombre()+" de la civilización "+this.getCivilizacion());
+    }
 //
 //    //Borra los edificios muertos
 //    private void comprobarDestruccion(Mapa mapa) {
@@ -661,5 +657,4 @@ public class Personaje {
 //            }
 //        }
 //    }
-
 }

@@ -5,18 +5,18 @@
  */
 package elementos;
 
-import excepciones.CeldaOcupadaException;
-import interfazUsuario.Juego;
-import vista.Celda;
-
 /**
  *
  * @author celia
  */
 public class Arbusto extends ContRecurso{
-    public Arbusto(Celda c, Recurso rec) throws CeldaOcupadaException {
-        super(c, rec);
-        c.setTransitable(true);
-        setTipo(Juego.TARBUSTO);        
+    public Arbusto(Recurso rec) {
+        super(rec);       
+    }
+
+
+    @Override
+    public String toString() {
+        return("Arbusto");
     }
 }

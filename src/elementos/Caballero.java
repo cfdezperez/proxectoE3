@@ -13,13 +13,22 @@ import vista.Celda;
  *
  * @author celia
  */
-public class Caballero extends Soldado{
-    private static int [] numeroCaballeros = new int[Civilizacion.getNumDeCivilizaciones()];
-    
-    public Caballero(Celda c, Civilizacion civil) throws ParametroIncorrectoException{
-        // TODO: Poner bien las características de los arqueros
-        super(c, civil, Juego.TCABALLERO);
-        numeroCaballeros[civil.getIdCivilizacion()]++;
-        setNombre("Caballero-"+numeroCaballeros[civil.getIdCivilizacion()]);
+public class Caballero extends Soldado {
+
+    private static int[] numeroCaballeros = new int[Civilizacion.getNumDeCivilizaciones()];
+
+    public Caballero() throws ParametroIncorrectoException {
+        super(Juego.TCABALLERO);
     }
+
+    public Caballero(int salud, int armadura, int ataque) throws ParametroIncorrectoException {
+        super(salud, armadura, ataque, Juego.TCABALLERO);
+    }
+
+    @Override
+    public void inicializaNombre(Civilizacion civil) {
+        numeroCaballeros[civil.getIdCivilizacion()]++;
+        setNombre("Caballero-" + numeroCaballeros[civil.getIdCivilizacion()]);
+    }
+   
 }

@@ -9,9 +9,8 @@ package excepciones;
  *
  * @author celia
  */
-public class FueraDeMapaException extends MoverException {
+public class FueraDeMapaException extends CeldaException {
     public FueraDeMapaException(String m) {
         super(m);
     }
-    
 }

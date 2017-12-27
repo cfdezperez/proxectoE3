@@ -14,8 +14,7 @@ import vista.Celda;
  * @author celia
  */
 public class Pradera extends ContRecurso{
-    public Pradera(Celda c) throws CeldaOcupadaException {
-        super(c, new Recurso(Juego.TPRADERA, 0));
-        c.setTransitable(true);
+    public Pradera() {
+        super(new Recurso(Juego.TPRADERA, 0));
     }
 }

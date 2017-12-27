@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 package elementos;
+
 import excepciones.CeldaOcupadaException;
+import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
 import vista.*;
 
@@ -12,7 +14,8 @@ import vista.*;
  *
  * @author celia
  */
-public class Edificio {
+public abstract class Edificio {
+
     private Celda celda;
     private String nombre;
     private int tipoEdificio; //1 es ciudadela, 2 es Casa y 3 Cuartel
@@ -24,17 +27,16 @@ public class Edificio {
     private int costeReparacionPiedra;
     private int ataque;
     private int defensa;
-    private boolean crearPaisanos;
+    private boolean crearPaisanos = false;
     private int costeCrearComida;
     private int[] capAlmacenamiento = new int[4];
-    private boolean capAlmacenar;
-    private boolean capAlojar;
+    private boolean capAlmacenar = false;
+    private boolean capAlojar = false;
     private static int capAlojamientoTotal = 0;
     private int capAlojamiento;
-    private boolean crearSoldados;
+    private boolean crearSoldados = false;
     private int capPersonajes;
     private boolean estarVacio;
-
 
     //CONSTRUCTORES
     /*public Edificio(Celda c) {
@@ -42,26 +44,33 @@ public class Edificio {
         //Crea una ciudadela
         this(c, "Ciudadela", Mapa.TCIUDADELA);
     }*/
-    public Edificio(Celda c, String nombre, Civilizacion civil, int tipo) throws CeldaOcupadaException {
+    public Edificio(int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
         //Inicializa sus atributos con unos datos predeterminados
-        //Crea una ciudadela
-        this(c, nombre, civil, tipo, 100, 50, 40, 50, 50, 25, 20, 10, 10);
+        this(100, 50, 40, 50, 50, 25, 20, tipo);
 
     }
-
-    public Edificio(Celda c1, String nombre, Civilizacion civil, int tipo, int salud1, int CRM, int CRP, int ataq, int def, int CCC, int capAlm, int capAlojar, int capPer) throws CeldaOcupadaException {
+    /**
+     * Creamos un edificio
+     * 
+     * @param salud1 Salud del edificio
+     * @param CRM
+     * @param CRP
+     * @param ataq
+     * @param def
+     * @param CCC
+     * @param capAlm
+     * @throws CeldaOcupadaException
+     * @throws ParametroIncorrectoException 
+     */
+    public Edificio(int salud1, int CRM, int CRP, int ataq, int def, int CCC, int capAlm, int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
         if (salud1 <= 0 || CRM < 0 || CRP < 0) { //Si no tiene salud no existe
-            this.estado = false;
-            this.saludInicial = 0;
-            System.out.println("No se pueden indicar valores negativos o salud nula.\n");
-        } else if (tipo != Juego.TCIUDADELA && tipo != Juego.TCASA && tipo != Juego.TCUARTEL) {
-            this.estado = false;
-            this.saludInicial = 0;
-            System.out.println("El tipo de edificio no existe.\n");
+            //this.estado = false;
+            //this.saludInicial = 0;
+            throw new ParametroIncorrectoException("La salud no puede ser negativa o nula");
         } else {
-            this.celda = c1;
-            this.nombre = nombre;
-            this.civilizacion = civil;
+            //this.celda = c1;
+            //this.nombre = nombre;
+            //this.civilizacion = civil;
             this.tipoEdificio = tipo;
             this.estado = true;
             this.salud = salud1;
@@ -72,27 +81,27 @@ public class Edificio {
             this.defensa = def;
             this.costeCrearComida = CCC;
             this.capAlmacenamiento[0] = capAlm;
-            this.capPersonajes = capPer;
             this.estarVacio = true;
-            
-            this.celda.anhadeEdificio(this);
-            this.celda.setCivilizacion(Juego.getCivilizacionActiva());
-            this.celda.setTransitable(true);
-            
+
+            //this.celda.anhadeEdificio(this);
+            //this.celda.setCivilizacion(Juego.getCivilizacionActiva());
+            //this.celda.setTransitable(true);
             // Si es una ciudadela, puede crear paisanos
-            if (this.tipoEdificio == Juego.TCIUDADELA) {
-                this.crearPaisanos = true;
-                this.capAlmacenar = true;
-            } // Si es un cuartel puede crear soldados
-            else if (this.tipoEdificio == Juego.TCUARTEL) {
-                this.crearSoldados = true;
-            } else {
-                this.crearPaisanos = false;
-                this.crearSoldados = false;
-                this.capAlojar = true;
-                this.capAlojamiento = capAlojar;
-                Edificio.capAlojamientoTotal += this.capAlojamiento;
-            }
+//            if (this.tipoEdificio == Juego.TCIUDADELA) {
+//                this.crearPaisanos = true;
+//                this.capAlmacenar = true;
+//            } // Si es un cuartel puede crear soldados
+//            else if (this.tipoEdificio == Juego.TCUARTEL) {
+//                this.crearSoldados = true;
+//            } else {
+//                this.crearPaisanos = false;
+//                this.crearSoldados = false;
+//                this.capAlojar = true;
+//                this.capAlojamiento = capAlojar;
+//                Edificio.capAlojamientoTotal += this.capAlojamiento;
+//            }
+            // Añade eficifio a la civilizacion
+            //this.civilizacion.anhadeEdificio(this);
         }
     }
 
@@ -121,10 +130,10 @@ public class Edificio {
         return this.salud;
     }
 
-    public int getSaludInicial(){
+    public int getSaludInicial() {
         return this.saludInicial;
     }
-    
+
     public int getCRM() {
         return this.costeReparacionMadera;
     }
@@ -185,14 +194,18 @@ public class Edificio {
         return this.capPersonajes;
     }
 
-    public void setCelda(Celda c) {
-            this.celda = c;
-    }
-
-    public boolean getEstarVacio(){
+    public boolean getEstarVacio() {
         return this.estarVacio;
     }
-    
+
+    public void setCelda(Celda c) {
+        this.celda = c;
+    }
+
+    public void setNombre(String n) {
+        this.nombre = n;
+    }
+
     //No se define un setTipoCelda() ni un setTipo() pues no se puede cambiar el tipo de edificio despues de creado
     public void setSalud(int s) {
         if (s <= 0) {
@@ -201,6 +214,22 @@ public class Edificio {
         } else {
             this.salud = s;
         }
+    }
+
+    public void setCivilizacion(Civilizacion civ) {
+        this.civilizacion = civ;
+    }
+
+    public final void setCrearPaisanos(boolean b) {
+        this.crearPaisanos = b;
+    }
+
+    public final void setCrearSoldados(boolean b) {
+        this.crearSoldados = b;
+    }
+
+    public final void setCapAlmacenar(boolean b) {
+        this.capAlmacenar = b;
     }
 
     public void setCRM(int CRM) {
@@ -293,17 +322,27 @@ public class Edificio {
         }
     }
 
-    public void setCapAlojamiento(int capAlojar) {
+    public final void setCapAlojar(boolean b) {
+        this.capAlojar = b;
+    }
+    
+    public final void setCapAlojamiento(int capAlojar) throws ParametroIncorrectoException {
         if (this.capAlojar == true) {
             if (capAlojar < 0) {
-                System.out.println("No es posible esa capacidad");
+                throw new ParametroIncorrectoException("La capacidad de alojamiento no puede ser negativa");
             } else {
                 this.capAlojamiento = capAlojar;
             }
+        } else {
+            this.capAlojamiento = 0;
         }
     }
+    
+    public static final void addCapAlojamientoTotal(int cap) {
+        Edificio.capAlojamientoTotal += cap;
+    }
 
-    public void setCapPersonajes(int numPer) {
+    public final void setCapPersonajes(int numPer) {
         if (numPer < 0) {
             this.capPersonajes = 0; //PUEDE NO DEJAR ENTRAR A NINGUN PERSONAJE 
             this.estado = false;
@@ -312,13 +351,27 @@ public class Edificio {
         }
     }
 
-    public void setEstarVacio(boolean a){
-        this.estarVacio=a;
+    public void setEstarVacio(boolean a) {
+        this.estarVacio = a;
     }
-    
+
     public void reiniciarSalud() {
         this.salud = this.saludInicial;
     }
+
+    @Override
+    public String toString() {
+        return("Edificio "+this.getNombre()+" de la civilización "+this.getCivilizacion());
+    }    
+
+    // Clases abstractas
+    /**
+     * Se encarga de fijar el nombre a partir del tipo de personaje y la
+     * civilización a la que pertenece
+     *
+     * @param civil Civilización a la que pertenece
+     */
+    public abstract void inicializaNombre(Civilizacion civil);
 
 //    public void crear(Mapa mapa) {
 //        int x = this.getCelda().getX();

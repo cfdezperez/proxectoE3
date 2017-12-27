@@ -5,18 +5,17 @@
  */
 package elementos;
 
-import excepciones.CeldaOcupadaException;
-import interfazUsuario.Juego;
-import vista.Celda;
-
 /**
  *
  * @author celia
  */
-public class Bosque extends ContRecurso{
-    public Bosque(Celda c, Recurso rec) throws CeldaOcupadaException{
-        super(c, rec);
-        c.setTransitable(false);
-        setTipo(Juego.TBOSQUE);
+public class Bosque extends ContRecurso {
+    public Bosque(Recurso rec) {
+        super(rec);
     }
+    
+    @Override
+    public String toString() {
+        return("Bosque");
+    }    
 }

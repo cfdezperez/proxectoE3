@@ -13,6 +13,7 @@ import elementos.Civilizacion;
 import elementos.ContRecurso;
 import elementos.Edificio;
 import elementos.Pradera;
+import excepciones.CeldaEnemigaException;
 import excepciones.CeldaOcupadaException;
 import interfazUsuario.Juego;
 
@@ -26,7 +27,7 @@ public class Celda {
     private int x, y;   // Posición del elemento en la pantalla
     private Mapa mapa;
     private int tipoCelda;
-    private List<Personaje> listaPersonajes = new ArrayList<Personaje>();
+    private List<Personaje> listaPersonajes;
     private Edificio edificio = null;
     private ContRecurso contRecurso = null;
     private Civilizacion civilizacion;
@@ -36,17 +37,17 @@ public class Celda {
 
     /**
      * Crea una nueva celda vacía en un mapa
-     * 
+     *
      * @param m El mapa donde colocamos la celda
      * @param x Posición x de la celda
      * @param y Posición y de la celda
      */
-    public Celda(Mapa m, int x, int y) throws CeldaOcupadaException {
+    public Celda(Mapa m, int x, int y) {
         this.visitadaPor = null;
         this.x = x;
         this.y = y;
         this.mapa = m;
-        setTipo();
+        this.civilizacion = null;
     }
 
     //GETTERS Y SETTERS
@@ -57,7 +58,7 @@ public class Celda {
     public int getY() {
         return this.y;
     }
-    
+
     public Mapa getMapa() {
         return this.mapa;
     }
@@ -87,17 +88,21 @@ public class Celda {
     public boolean getVisible() {
         return this.visible;
     }
-    
+
     public Edificio getEdificio() {
         return this.edificio;
     }
-    
+
     public ContRecurso getContRecurso() {
         return this.contRecurso;
     }
-    
+
     public List<Personaje> getPersonajes() {
         return this.listaPersonajes;
+    }
+    
+    public Civilizacion getVisitadaPor() {
+        return this.visitadaPor;
     }
 
     public void setX(int x_ej) {
@@ -132,14 +137,10 @@ public class Celda {
         this.civilizacion = civ;
     }
 
-    public void setEdificio(Edificio ed){
-        this.edificio = ed;
-    }
-    
-    public void setContRecurso(ContRecurso x){
+    public void setContRecurso(ContRecurso x) {
         this.contRecurso = x;
     }
-    
+
     public void setVisitadaPor(Civilizacion civ) {
         this.visitadaPor = civ;
     }
@@ -150,18 +151,30 @@ public class Celda {
      *
      * @param p Personaje a añadir
      */
-    public void anhadePersonaje(Personaje p) throws CeldaOcupadaException {
+    public void anhadePersonaje(Personaje p) throws CeldaEnemigaException {
         if (getTransitable()) {
             // Si es una pradera, la elimino
-            if((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
+            if ((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
                 this.contRecurso = null;
             }
+            // Si la celda pertenece a otra civilización, tiro una excepción
+            if ((this.getCivilizacion() != null) && (this.getCivilizacion() != p.getCivilizacion())) {
+                throw new CeldaEnemigaException("La celda está ocupada por el enemigo");
+            }
+            // Añado el personaje a la lista de personajes
             this.listaPersonajes.add(p);
+            p.setCelda(this);
+            // Haz visible esta celda y las que la rodean
             this.setVisible(true);
+            p.actualizaVisibilidad();
+
+            // Haz la celda transitable, ponle la civilizacion del personaje y corrige el tipo
+            this.setTransitable(true);
+            this.setCivilizacion(p.getCivilizacion());
             this.setTipo();
         } else {
             // TODO: throws new CeldaNoTransitableException
-            System.out.println("No puedo añadir un elemento = "+getNumElementos());
+            System.out.println("No puedo añadir un elemento = " + getNumElementos());
         }
     }
 
@@ -171,14 +184,22 @@ public class Celda {
      * @param e Edificio a añadir
      * @throws excepciones.CeldaOcupadaException
      */
-    public void anhadeEdificio(Edificio e) throws CeldaOcupadaException {
+    public void anhadeEdificio(Edificio e) throws CeldaOcupadaException, CeldaEnemigaException {
         if (getTransitable()) {
             // Si es una pradera, la elimino
-            if((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
+            if ((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
                 this.contRecurso = null;
-            }            
+            }
+            // Si la celda pertenece a otra civilización, tiro una excepción
+            if ((this.getCivilizacion() != null) && (this.getCivilizacion() != e.getCivilizacion())) {
+                throw new CeldaEnemigaException("La celda está ocupada por el enemigo");
+            }
             if (this.edificio == null) {
                 this.edificio = e;
+                e.setCelda(this);
+                // Haz la celda transitable, ponle la civilizacion del personaje y corrige el tipo
+                this.setTransitable(true);
+                this.setCivilizacion(e.getCivilizacion());
                 this.setTipo();
             } else {
                 throw new CeldaOcupadaException("La celda está ocupada.");
@@ -187,21 +208,30 @@ public class Celda {
             throw new CeldaOcupadaException("La celda no es transitable.");
         }
     }
+
     /**
      * Añade un contenedor de recursos a la celda
      *
      * @param cr Contenedor a añadir
+     * @throws excepciones.CeldaOcupadaException
      */
     public void anhadeCR(ContRecurso cr) throws CeldaOcupadaException {
         if ((this.listaPersonajes.isEmpty()) && (this.edificio == null)) {
             this.contRecurso = cr;
+            cr.setCelda(this);
+            this.civilizacion = null;
+            // Solo las praderas son transitables
+            if (cr instanceof Pradera) {
+                this.transitable = true;
+            } else {
+                this.transitable = false;
+            }
             setTipo();
         } else {
-            throw new CeldaOcupadaException("La celda está ocupada.");
+            throw new CeldaOcupadaException("No se puede añadir el contenedor, la celda está ocupada.");
         }
-    }    
+    }
 
-    
     //Devuelve una cadena con las coordenadas de la celdas
     @Override
     public String toString() {
@@ -216,6 +246,27 @@ public class Celda {
     }
 
     /**
+     * Devuelve un String con información sobre el contenido de la celda
+     * 
+     */
+    public String mirar() {
+        String s = "Celda en fila "+getY()+" columna "+getX()+"\n";
+        s += "Contenido:\n";
+        // Si hay un CR no puede haber nada más
+        if(this.contRecurso != null) {
+            s += "\t" + this.contRecurso.toString()+ "\n";
+        } else {
+            if(this.edificio != null) {
+                s += "\t" + this.edificio.toString() + "\n";
+            }
+            for(Personaje p: listaPersonajes) {
+                s += "\t" + p.toString()+ "\n";
+            }
+        }
+        return s;
+    }
+    
+    /**
      * Reinicializa la lista de personajes de la celda
      */
     public void restartPersonajes() {
@@ -225,25 +276,25 @@ public class Celda {
     /**
      * Reinicializa la celda
      */
-    public void restartCelda() throws CeldaOcupadaException{
+    public void restartCelda() {
         this.restartPersonajes();
         this.edificio = null;
-        this.contRecurso = new Pradera(this);
+        Pradera pr = new Pradera();
+        this.contRecurso = pr;
+        pr.setCelda(this);
         this.tipoCelda = Juego.TPRADERA;
         this.civilizacion = null;
         this.transitable = true;
     }
-    
-    private void setTipo() throws CeldaOcupadaException {
+
+    private void setTipo() {
         // Si no tiene elementos, la convierto en pradera
-        if(getNumElementos() <= 0) {
-            new Pradera(this);
-            this.setVisible(true);
+        if (getNumElementos() <= 0) {
+            restartCelda();
         } else if (getNumElementos() > 1) { // Queda más de un elemento
             this.setTipoCelda(Juego.TVARIOS);
-        }
-        else { // Si queda solo un tipo de elemento, miramos si es un CR, edificio o un personaje
-            if(this.contRecurso != null) {
+        } else { // Si queda solo un tipo de elemento, miramos si es un CR, edificio o un personaje
+            if (this.contRecurso != null) {
                 this.setTipoCelda(this.contRecurso.getTipo());
             } else if (this.edificio != null) {
                 this.setTipoCelda(this.edificio.getTipo());

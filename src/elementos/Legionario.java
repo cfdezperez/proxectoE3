@@ -15,9 +15,18 @@ import vista.Celda;
  */
 public class Legionario extends Soldado{
     private static int [] numeroLegionarios = new int[Civilizacion.getNumDeCivilizaciones()];
-    public Legionario(Celda c, String nombre, Civilizacion civil, int tipo) throws ParametroIncorrectoException{
-        super(c, civil, Juego.TLEGIONARIO);
+    
+    public Legionario() throws ParametroIncorrectoException{
+        super(Juego.TLEGIONARIO);
+    }
+    
+    public Legionario(int salud, int armadura, int ataque) throws ParametroIncorrectoException {
+        super(salud, armadura, ataque, Juego.TLEGIONARIO);
+    }
+    
+    @Override
+    public void inicializaNombre(Civilizacion civil) {
         numeroLegionarios[civil.getIdCivilizacion()]++;        
-        setNombre("Legionario-"+numeroLegionarios[civil.getIdCivilizacion()]);
+        setNombre("Legionario-"+numeroLegionarios[civil.getIdCivilizacion()]);        
     }
 }

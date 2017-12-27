@@ -6,7 +6,7 @@
 package excepciones;
 
 
-public class CeldaException extends PersonajeException {
+public class CeldaException extends Exception {
     public CeldaException(String m) {
         super(m);
     }

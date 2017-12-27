@@ -20,12 +20,12 @@ public class ContRecurso {
     private int tipoContenedor;
 
     //CONSTRUCTORES
-    public ContRecurso(Celda c, Recurso rec) throws CeldaOcupadaException {
-        this.celda = c;
+    public ContRecurso(Recurso rec) {
+        //this.celda = c;
         this.recurso = new Recurso(rec);
         this.tipoContenedor = this.recurso.getTipo();
-        c.setCivilizacion(null);
-        c.anhadeCR(this);
+        //c.setCivilizacion(null);
+        //c.anhadeCR(this);
     }
 
     //GETTERS Y SETTERS    
@@ -62,5 +62,8 @@ public class ContRecurso {
             System.out.println("No se puede modificar el recurso del contenedor\n");
         }
     }
-
+    
+    public void setCelda(Celda c) {
+        this.celda = c;
+    }
 }

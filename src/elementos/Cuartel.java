@@ -6,14 +6,36 @@
 package elementos;
 
 import excepciones.CeldaOcupadaException;
-import vista.Celda;
+import excepciones.ParametroIncorrectoException;
+import interfazUsuario.Juego;
 
 /**
  *
  * @author celia
  */
 public class Cuartel extends Edificio{
-    public Cuartel(Celda c, String nombre, Civilizacion civil, int tipo) throws CeldaOcupadaException{
-        super(c, nombre, civil, tipo);
+    private static int[] numeroCuarteles = new int[Civilizacion.getNumDeCivilizaciones()];
+
+    public Cuartel() throws CeldaOcupadaException, ParametroIncorrectoException {
+        this(10);
+    }
+    
+    public Cuartel(int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
+        this(100, 50, 40, 50, 50, 25, 20, capPer);
+    }
+    
+    public Cuartel(int salud, int CRM, int CRP, int ataq, int def, int CCC, int capAl, int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
+        super(salud, CRM, CRP, ataq, def, CCC, capAl, Juego.TCUARTEL);
+        // Una ciudadela puede crear paisanos y almacednar
+        setCrearPaisanos(false);
+        setCapPersonajes(capPer);
+        setCrearSoldados(true);
+        setCapAlmacenar(false);        
+    }
+    
+    @Override
+    public void inicializaNombre(Civilizacion civil) {
+        numeroCuarteles[civil.getIdCivilizacion()]++;
+        setNombre("Cuartel-" + numeroCuarteles[civil.getIdCivilizacion()]);
     }
 }
