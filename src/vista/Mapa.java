@@ -7,9 +7,9 @@ package vista;
 
 import elementos.Civilizacion;
 import elementos.Personaje;
-import elementos.Pradera;
-import excepciones.CeldaOcupadaException;
-import excepciones.FueraDeMapaException;
+import elementos.cr.Pradera;
+import excepciones.celda.CeldaOcupadaException;
+import excepciones.celda.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +78,7 @@ public class Mapa {
      * @param actual La celda actual
      * @param direccion La dirección a buscar
      * @return La celda vecina
-     * @throws excepciones.FueraDeMapaException
+     * @throws excepciones.celda.FueraDeMapaException
      */
     public Celda obtenerCeldaVecina(Celda actual, String direccion) throws FueraDeMapaException, ParametroIncorrectoException {
         return obtenerCeldaVecina(actual, direccion, 1);
@@ -92,7 +92,7 @@ public class Mapa {
      * @param direccion La dirección a buscar
      * @distancia La distancia a la que se encuentra la vecina
      * @return La celda vecina
-     * @throws excepciones.FueraDeMapaException
+     * @throws excepciones.celda.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
      */
     public Celda obtenerCeldaVecina(Celda actual, String direccion, int distancia) throws FueraDeMapaException, ParametroIncorrectoException {

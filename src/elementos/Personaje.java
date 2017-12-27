@@ -5,15 +5,15 @@
  */
 package elementos;
 
-import excepciones.CeldaEnemigaException;
-import excepciones.CeldaOcupadaException;
-import excepciones.FueraDeMapaException;
-import excepciones.NoRecolectableException;
-import excepciones.NoTransitablebleException;
+import excepciones.celda.CeldaEnemigaException;
+import excepciones.celda.CeldaOcupadaException;
+import excepciones.celda.FueraDeMapaException;
+import excepciones.recursos.NoRecolectableException;
+import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
-import excepciones.PersonajeLlenoException;
-import excepciones.RecursosException;
-import excepciones.SoldadoRecException;
+import excepciones.personaje.PersonajeLlenoException;
+import excepciones.recursos.RecursosException;
+import excepciones.personaje.SoldadoRecException;
 import vista.Celda;
 import interfazUsuario.Juego;
 import vista.Mapa;
@@ -228,11 +228,11 @@ public abstract class Personaje {
      *
      * @param mapa
      * @param direccion
-     * @throws excepciones.NoTransitablebleException
-     * @throws excepciones.FueraDeMapaException
+     * @throws excepciones.celda.NoTransitablebleException
+     * @throws excepciones.celda.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
-     * @throws excepciones.CeldaEnemigaException
-     * @throws excepciones.CeldaOcupadaException
+     * @throws excepciones.celda.CeldaEnemigaException
+     * @throws excepciones.celda.CeldaOcupadaException
      */
     public void mover(Mapa mapa, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
         Celda actual = this.getCelda();

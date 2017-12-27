@@ -10,9 +10,9 @@ package interfazUsuario;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import excepciones.CeldaEnemigaException;
-import excepciones.CeldaOcupadaException;
-import excepciones.FueraDeMapaException;
+import excepciones.celda.CeldaEnemigaException;
+import excepciones.celda.CeldaOcupadaException;
+import excepciones.celda.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import java.io.File;
 import java.util.ArrayList;

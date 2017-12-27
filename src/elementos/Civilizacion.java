@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import elementos.personaje.Grupo;
 import java.util.HashMap;
 import java.util.Map;
 

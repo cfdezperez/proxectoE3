@@ -12,9 +12,9 @@ import java.util.List;
 import elementos.Civilizacion;
 import elementos.ContRecurso;
 import elementos.Edificio;
-import elementos.Pradera;
-import excepciones.CeldaEnemigaException;
-import excepciones.CeldaOcupadaException;
+import elementos.cr.Pradera;
+import excepciones.celda.CeldaEnemigaException;
+import excepciones.celda.CeldaOcupadaException;
 import interfazUsuario.Juego;
 
 /**
@@ -182,7 +182,7 @@ public class Celda {
      * Añade un edificio a la celda
      *
      * @param e Edificio a añadir
-     * @throws excepciones.CeldaOcupadaException
+     * @throws excepciones.celda.CeldaOcupadaException
      */
     public void anhadeEdificio(Edificio e) throws CeldaOcupadaException, CeldaEnemigaException {
         if (getTransitable()) {
@@ -213,7 +213,7 @@ public class Celda {
      * Añade un contenedor de recursos a la celda
      *
      * @param cr Contenedor a añadir
-     * @throws excepciones.CeldaOcupadaException
+     * @throws excepciones.celda.CeldaOcupadaException
      */
     public void anhadeCR(ContRecurso cr) throws CeldaOcupadaException {
         if ((this.listaPersonajes.isEmpty()) && (this.edificio == null)) {

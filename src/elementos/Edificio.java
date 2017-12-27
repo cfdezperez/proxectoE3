@@ -5,7 +5,7 @@
  */
 package elementos;
 
-import excepciones.CeldaOcupadaException;
+import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
 import vista.*;

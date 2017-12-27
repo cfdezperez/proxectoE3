@@ -5,10 +5,10 @@
  */
 package interfazUsuario;
 
-import excepciones.CeldaEnemigaException;
-import excepciones.CeldaOcupadaException;
-import excepciones.FueraDeMapaException;
-import excepciones.NoTransitablebleException;
+import excepciones.celda.CeldaEnemigaException;
+import excepciones.celda.CeldaOcupadaException;
+import excepciones.celda.FueraDeMapaException;
+import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
 
 /**
