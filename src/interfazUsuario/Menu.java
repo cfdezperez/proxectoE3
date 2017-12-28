@@ -21,8 +21,6 @@ import excepciones.recursos.RecursosException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -66,7 +64,12 @@ public class Menu {
                     } else {
                         consola.imprimir("Creamos mapa por defecto (tamaño 10x10)");
                         juego = new Juego(10, 10, nombreCivilizaciones);
-                        juego.juegoPorDefecto();
+                        try {
+                            juego.juegoPorDefecto();
+                        } catch(CeldaException | ParametroIncorrectoException ex) {
+                            consola.imprimir("Error creando el mapa por defecto: "+ex.getMessage()+". Salimos.");
+                            System.exit(-1);
+                        }
                         juego.getMapa().imprimir();
                         flag = false;
                     }

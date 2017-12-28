@@ -459,31 +459,6 @@ public class Juego implements Comando {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public void desligar(String nPersonaje, String nGrupo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void desagrupar(String nGrupo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void defender(String nPersonaje, String direccion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void atacar(String nPersonaje, String direccion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void reparar(String nPersonaje, String direccion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public void juegoPorDefecto() throws CeldaOcupadaException, ParametroIncorrectoException, CeldaEnemigaException {
         // Obtiene una lista con las dos civilizaciones
         List<Civilizacion> civs = new ArrayList<Civilizacion>(civilizaciones.values());
@@ -536,7 +511,7 @@ public class Juego implements Comando {
         anhadePersonaje(new Paisano(), m.obtenerCelda(7, 5), civ1);
         anhadeEdificio(new Ciudadela(), m.obtenerCelda(7, 6), civ1);
         anhadeCR(new Bosque(new Madera(80)), m.obtenerCelda(7, 9));
-        
+
         // Columna 8
         anhadeCR(new Arbusto(new Comida(10)), m.obtenerCelda(8, 0));
         anhadeEdificio(new Casa(), m.obtenerCelda(8, 5), civ1);
@@ -568,6 +543,31 @@ public class Juego implements Comando {
         e.inicializaNombre(civ);
         civ.anhadeEdificio(e);
         c.anhadeEdificio(e);
+    }
+
+    @Override
+    public void desligar(String nPersonaje, String nGrupo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void desagrupar(String nGrupo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void defender(String nPersonaje, String direccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void atacar(String nPersonaje, String direccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reparar(String nPersonaje, String direccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
