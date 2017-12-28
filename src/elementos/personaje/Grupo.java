@@ -159,7 +159,6 @@ public class Grupo extends Personaje {
      * @throws excepciones.recursos.NoRecolectableException
      * @throws excepciones.personaje.PersonajeLlenoException
      */
-    @Override
     public void recolectar(String direccion) throws SoldadoRecException, RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException {
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
@@ -215,7 +214,7 @@ public class Grupo extends Personaje {
         //compruebaSoldadoEnGrupo();
     }
     
-    @Override
+    
     public String toString() {
         String s = super.toString();       
         s += "\n\tEstá formado por " + this.personajes.size() + " personajes.";
