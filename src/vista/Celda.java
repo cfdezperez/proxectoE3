@@ -13,8 +13,12 @@ import elementos.Civilizacion;
 import elementos.ContRecurso;
 import elementos.Edificio;
 import elementos.cr.Pradera;
+import elementos.personaje.Grupo;
+import elementos.personaje.Soldado;
+import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
+import excepciones.personaje.NoAgrupableException;
 import interfazUsuario.Juego;
 
 /**
@@ -100,7 +104,7 @@ public class Celda {
     public List<Personaje> getPersonajes() {
         return this.listaPersonajes;
     }
-    
+
     public Civilizacion getVisitadaPor() {
         return this.visitadaPor;
     }
@@ -232,14 +236,42 @@ public class Celda {
         }
     }
 
-    //Devuelve una cadena con las coordenadas de la celdas
+    public String agrupar() throws ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException {
+        if (this.getPersonajes().size() <= 1) {
+            throw new NoAgrupableException("No hay personajes suficientes para agrupar");
+        }
+        // Crea e inicializa el grupo
+        Grupo grupo = new Grupo();
+        grupo.inicializaNombre(Juego.getCivilizacionActiva());
+        Juego.getCivilizacionActiva().anhadeGrupo(grupo);
+
+        // Recorre la lista de personajes
+        for (Personaje p : this.getPersonajes()) {
+            grupo.anhadirPersonaje(p);
+            p.setGrupo(grupo);
+            this.eliminarPersonaje(p);
+        }
+
+        this.anhadePersonaje(grupo);
+        this.setTipo();
+        
+        
+        String s = "Se ha creado el " + grupo.getNombre() + " de la civilización " + Juego.getCivilizacionActiva() + grupo;
+        return s;
+    }
+
+    /**
+     * Devuelve una cadena con las coordenadas de la celdas
+     *
+     * @return Las coordenadas de la celda
+     */
     @Override
     public String toString() {
         String s = "(" + this.getY() + "," + this.getX() + ")";
         return s;
     }
 
-    public void eliminarPersonaje(Personaje p) throws CeldaOcupadaException {
+    public void eliminarPersonaje(Personaje p) {
         this.listaPersonajes.remove(p);
         // Fijo el tipo después de eliminar el personaje
         this.setTipo();
@@ -247,25 +279,25 @@ public class Celda {
 
     /**
      * Devuelve un String con información sobre el contenido de la celda
-     * 
+     *
      */
     public String mirar() {
-        String s = "\nCelda en fila "+getY()+" columna "+getX();
+        String s = "\nCelda en fila " + getY() + " columna " + getX();
         s += "\nContenido:";
         // Si hay un CR no puede haber nada más
-        if(this.contRecurso != null) {
+        if (this.contRecurso != null) {
             s += this.contRecurso.toString();
         } else {
-            if(this.edificio != null) {
+            if (this.edificio != null) {
                 s += "\t" + this.edificio.toString() + "\n";
             }
-            for(Personaje p: listaPersonajes) {
-                s += "\t" + p.toString()+ "\n";
+            for (Personaje p : listaPersonajes) {
+                s += "\t" + p.toString() + "\n";
             }
         }
         return s;
     }
-    
+
     /**
      * Reinicializa la lista de personajes de la celda
      */

@@ -19,6 +19,7 @@ import excepciones.ParametroIncorrectoException;
 import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
+import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.personaje.SolAlmacenarException;
@@ -47,6 +48,7 @@ public abstract class Personaje {
     private int ataque;
     private boolean capEdificacion;
     private boolean estarGrupo;
+    private Grupo grupo;
 
     /**
      * Crea un personaje en una celda y asociado a una civilización
@@ -72,6 +74,7 @@ public abstract class Personaje {
             this.tipoPersonaje = tipo;
             // No estamos en ningun grupo
             this.estarGrupo = false;
+            grupo = null;
             //this.actualizaVisibilidad();
 
             // Añadimos el personaje a la celda y cambiamos las características de la misma
@@ -164,6 +167,14 @@ public abstract class Personaje {
     public boolean getCapEdificacion() {
         return this.capEdificacion;
     }
+    
+    public Grupo getGrupo() throws EstarEnGrupoException {
+        if(estarGrupo) {
+           return this.grupo;
+        } else {
+            throw new EstarEnGrupoException("El personaje "+getNombre()+" no está en ningún grupo");
+        }
+    }
 
     /**
      * Establece el nombre del personaje
@@ -230,6 +241,11 @@ public abstract class Personaje {
     public void setEstarGrupo(boolean grupo) {
         this.estarGrupo = grupo;
     }
+    
+    public void setGrupo(Grupo g) {
+        this.estarGrupo = true;
+        this.grupo = g;     
+    }
 
     public void setTipo(int tipo) {
         this.tipoPersonaje = tipo;
@@ -245,8 +261,14 @@ public abstract class Personaje {
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.celda.CeldaEnemigaException
      * @throws excepciones.celda.CeldaOcupadaException
+     * @throws excepciones.personaje.EstarEnGrupoException
      */
-    public void mover(Mapa mapa, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
+    public void mover(Mapa mapa, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException {
+
+        if(getEstarGrupo()) {
+            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
+        } 
+        
         Celda actual = this.getCelda();
         Celda vecina = mapa.obtenerCeldaVecina(actual, direccion);
 
@@ -329,6 +351,7 @@ public abstract class Personaje {
     /**
      *
      * @param direccion
+     * @throws excepciones.personaje.EstarEnGrupoException
      * @throws RecursosException
      * @throws PersonajeLlenoException
      * @throws FueraDeMapaException
@@ -337,7 +360,7 @@ public abstract class Personaje {
      * @throws CeldaOcupadaException
      * @throws SoldadoRecException
      */
-    public abstract void recolectar(String direccion) throws RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, CeldaOcupadaException, SoldadoRecException;
+    public abstract void recolectar(String direccion) throws EstarEnGrupoException, RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, CeldaOcupadaException, SoldadoRecException;
 
     //public abstract void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion);
     /**
@@ -348,11 +371,11 @@ public abstract class Personaje {
      */
     public abstract void inicializaNombre(Civilizacion civil);
 
-    public abstract void construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException;
+    public abstract void construirEdificio(String nedificio, String direccion) throws EstarEnGrupoException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException;
     
-    public abstract void reparar(String direccion) throws SolRepararException, FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;
+    public abstract void reparar(String direccion) throws EstarEnGrupoException, SolRepararException, FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;
 
-    public abstract void almacenar(String direccion) throws SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException;
+    public abstract void almacenar(String direccion) throws EstarEnGrupoException, SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException;
     
 //
 //

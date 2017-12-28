@@ -6,13 +6,11 @@
 package elementos.personaje;
 
 import elementos.Personaje;
-import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.personaje.SoldadoRecException;
 import excepciones.personaje.SolConstruirException;
 import excepciones.personaje.SolRepararException;
 import excepciones.personaje.SolAlmacenarException;
-import vista.Celda;
 
 /**
  *

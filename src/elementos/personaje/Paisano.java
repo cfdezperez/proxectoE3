@@ -21,6 +21,7 @@ import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
+import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import interfazUsuario.Juego;
 import vista.Celda;
@@ -158,7 +159,10 @@ public class Paisano extends Personaje {
      * @throws excepciones.personaje.PersonajeLlenoException
      */
     @Override
-    public void recolectar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, PersonajeLlenoException, RecursosException {
+    public void recolectar(String direccion) throws EstarEnGrupoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, PersonajeLlenoException, RecursosException {
+        if(getEstarGrupo()) {
+            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
+        } 
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
 
@@ -203,9 +207,14 @@ public class Paisano extends Personaje {
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.celda.CeldaOcupadaException
      * @throws excepciones.celda.CeldaEnemigaException
+     * @throws excepciones.personaje.EstarEnGrupoException
      */
-    public void construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException {
-
+    @Override
+    public void construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException {
+        if(getEstarGrupo()) {
+            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
+        }
+        
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
         Edificio ed = null;
 
@@ -238,7 +247,13 @@ public class Paisano extends Personaje {
 
     }
 
-    public void reparar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException {
+    @Override
+    public void reparar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException {
+
+        if(getEstarGrupo()) {
+            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
+        } 
+
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
 
         if (vecina.getEdificio() != null) {  // La celda contiene un edificio
@@ -273,7 +288,12 @@ public class Paisano extends Personaje {
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.celda.NoAlmacenableException
      */
-    public void almacenar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException {
+    @Override
+    public void almacenar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException {
+        if(getEstarGrupo()) {
+            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
+        } 
+
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
 
         if (vecina.getEdificio() != null) {  // La celda contiene un edificio

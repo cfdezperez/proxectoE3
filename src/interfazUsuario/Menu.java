@@ -17,7 +17,9 @@ import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.edificio.EdificioException;
+import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
+import excepciones.personaje.NoAgrupableException;
 import excepciones.personaje.PersonajeException;
 import excepciones.personaje.SolRepararException;
 import excepciones.recursos.RecursosException;
@@ -144,6 +146,8 @@ public class Menu {
                             juego.mover(orden[1], orden[2]);
                         } catch (CeldaException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no se puede mover al" + orden[2] + ": " + ex.getMessage());
+                        } catch (EstarEnGrupoException ex) {
+                            consola.imprimir("El personaje " + orden[1] + " no se puede mover: " + ex.getMessage());
                         }
                         break;
 
@@ -212,6 +216,8 @@ public class Menu {
                             juego.reparar(orden[1], orden[2].toLowerCase());
                         } catch (SolRepararException | FueraDeMapaException | InsuficientesRecException | EdificioException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no puede reparar en la dirección " + orden[2] + ": " + ex.getMessage());
+                        } catch (EstarEnGrupoException ex) {
+                            consola.imprimir("El personaje " + orden[1] + " no puede reparar: " + ex.getMessage());
                         }
 
                         break;
@@ -270,11 +276,13 @@ public class Menu {
                             continue;
                         }
                         try {
-                            juego.agrupar(orden[1]);
+                            consola.imprimir(juego.agrupar(orden[1]));
                         } catch (NumberFormatException ex) {
                             consola.imprimir("Coordenanas mal indicadas");
-                        } catch (FueraDeMapaException ex) {
+                        } catch (FueraDeMapaException | CeldaEnemigaException ex) {
                             consola.imprimir("Celda incorrecta: " + ex.getMessage());
+                        } catch (NoAgrupableException ex) {
+                            consola.imprimir("Imposible agrupar: "+ex.getMessage());
                         }
                         break;
 

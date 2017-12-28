@@ -31,7 +31,9 @@ import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
+import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
+import excepciones.personaje.NoAgrupableException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.personaje.SolConstruirException;
 import excepciones.personaje.SolRepararException;
@@ -179,7 +181,7 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void mover(String nombre, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
+    public void mover(String nombre, String direccion) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
         Juego.civilizacionActiva.getPersonaje(nombre).mover(mapa, direccion);
     }
 
@@ -232,7 +234,7 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void construir(String Personaje, String nEdificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException {
+    public void construir(String Personaje, String nEdificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException, EstarEnGrupoException {
         Personaje p = civilizacionActiva.getPersonaje(Personaje);
         p.construirEdificio(nEdificio, direccion);
     }
@@ -240,7 +242,7 @@ public class Juego implements Comando {
     @Override
     public void recolectar(String nPersonaje, String direccion) throws
             PersonajeLlenoException, SoldadoRecException, RecursosException,
-            FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException {
+            FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException, EstarEnGrupoException {
         getCivilizacionActiva().getPersonaje(nPersonaje).recolectar(direccion);
     }
 
@@ -260,7 +262,18 @@ public class Juego implements Comando {
         this.getMapa().imprimirCivilizacion(getCivilizacion(nCivilizacion));
     }
     
-
+    @Override
+    public String agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException, 
+            ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException {
+        String[] fc = coordenadasCelda.split("");
+        int f = Integer.parseInt(fc[1]);
+        int c = Integer.parseInt(fc[3]);
+        if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
+            throw new FueraDeMapaException("La celda no está en el mapa");
+        }
+        return this.getMapa().obtenerCelda(c, f).agrupar();
+    }
+    
     // Métodos privados
     private void creaCivilizaciones(List<List<String>> personajes, List<List<String>> edificios) throws FueraDeMapaException {
         // Creamos las civilizaciones
@@ -459,7 +472,7 @@ public class Juego implements Comando {
     
     @Override
     public void reparar(String nPersonaje, String direccion) throws SolRepararException, FueraDeMapaException, 
-            ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException {
+            ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException {
         getCivilizacionActiva().getPersonaje(nPersonaje).reparar(direccion);
     }
 
@@ -576,17 +589,6 @@ public class Juego implements Comando {
 
     @Override
     public void atacar(String nPersonaje, String direccion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException {
-        String[] fc = coordenadasCelda.split("");
-        int f = Integer.parseInt(fc[1]);
-        int c = Integer.parseInt(fc[3]);
-        if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
-            throw new FueraDeMapaException("La celda no está en el mapa");
-        }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
