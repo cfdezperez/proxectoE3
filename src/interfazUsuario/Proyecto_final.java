@@ -5,7 +5,6 @@
  */
 package interfazUsuario;
 
-import elementos.personaje.Arquero;
 import elementos.cr.Bosque;
 import elementos.cr.Cantera;
 import elementos.edificio.Ciudadela;
@@ -18,13 +17,11 @@ import excepciones.celda.CeldaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.recursos.NoRecolectableException;
-import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.recursos.RecursosException;
-import excepciones.personaje.SoldadoRecException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import vista.Celda;
