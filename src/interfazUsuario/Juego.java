@@ -24,12 +24,16 @@ import elementos.recursos.Madera;
 import elementos.personaje.Paisano;
 import elementos.Personaje;
 import elementos.recursos.Piedra;
-import elementos.Recurso;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.personaje.InsuficientesRecException;
+import excepciones.personaje.PersonajeLlenoException;
+import excepciones.personaje.SolConstruirException;
+import excepciones.personaje.SoldadoRecException;
+import excepciones.recursos.RecursosException;
 import java.util.ArrayList;
 import java.util.List;
 import vista.Celda;
@@ -104,6 +108,10 @@ public class Juego implements Comando {
      * Coordenada;Tipo;Codigo;Descripcion;Ataque;Defensa;Salud;Capacidad;Grupo;Civilizacion
      * @param edificios
      * @param recursos # Coordenada;Tipo;Codigo;Descripcion;Cantidad
+     * @throws excepciones.celda.FueraDeMapaException
+     * @throws excepciones.ParametroIncorrectoException
+     * @throws excepciones.celda.CeldaOcupadaException
+     * @throws excepciones.celda.CeldaEnemigaException
      */
     public Juego(List<List<String>> personajes, List<List<String>> edificios, List<List<String>> recursos) throws FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException, CeldaEnemigaException {
         this.civilizaciones = new HashMap<String, Civilizacion>(2);
@@ -122,7 +130,7 @@ public class Juego implements Comando {
         }
 
         // Creo el mapa con todo praderas
-        mapa = new Mapa(maxX+1, maxY+1);
+        mapa = new Mapa(maxX + 1, maxY + 1);
 
         // Creo las civilizaciones
         creaCivilizaciones(personajes, edificios);
@@ -135,7 +143,6 @@ public class Juego implements Comando {
 
         // Creo los grupos
 //        creaGruposDeFichero(personajes);
-
         // Le meto los edificios
         introduceEdificios(edificios);
     }
@@ -148,7 +155,8 @@ public class Juego implements Comando {
      * Devuelve una civilización a partir de un nombre
      *
      * @param nombre El nombre de la civilización
-     * @return
+     * @return La civilicación asociada a ese nombre
+     * @throws excepciones.ParametroIncorrectoException
      */
     public Civilizacion getCivilizacion(String nombre) throws ParametroIncorrectoException {
         if (civilizaciones.containsKey(nombre)) {
@@ -167,8 +175,81 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void mover(String nombre, int direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
-        Juego.civilizacionActiva.getPersonaje(nombre).mover(mapa, nombre);
+    public void mover(String nombre, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
+        Juego.civilizacionActiva.getPersonaje(nombre).mover(mapa, direccion);
+    }
+
+    @Override
+    public void listar(String tipo) throws ParametroIncorrectoException {
+        switch (tipo.toLowerCase()) {
+            case "personajes":
+                getCivilizacionActiva().listarPersonajes();
+            case "edificios":
+                getCivilizacionActiva().listarEdificios();
+        }
+    }
+
+    @Override
+    public String describir(String nombre) throws ParametroIncorrectoException {
+        if (getCivilizacionActiva().getMapaPersonajes().containsKey(nombre)) {
+            return (getCivilizacionActiva().getMapaPersonajes().get(nombre).toString());
+        } else if (getCivilizacionActiva().getEdCivilizacion().containsKey(nombre)) {
+            return (getCivilizacionActiva().getEdCivilizacion().get(nombre).toString());
+        } else {
+            throw new ParametroIncorrectoException(nombre + " no corresponde a un personaje ni a un edificio.");
+        }
+    }
+
+    @Override
+    public String describir(String nombre, String civilizacion) throws ParametroIncorrectoException {
+        Civilizacion civ = this.getCivilizacion(civilizacion);
+        if (civ.getMapaPersonajes().containsKey(nombre)) {
+            return (civ.getMapaPersonajes().get(nombre).toString());
+        } else if (civ.getEdCivilizacion().containsKey(nombre)) {
+            return (civ.getEdCivilizacion().get(nombre).toString());
+        } else {
+            throw new ParametroIncorrectoException(nombre + " no corresponde a un personaje ni a un edificio.");
+        }
+    }
+
+    @Override
+    public String mirar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException {
+        String[] fc = coordenadasCelda.split("");
+        int f = Integer.parseInt(fc[1]);
+        int c = Integer.parseInt(fc[3]);
+        if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
+            throw new FueraDeMapaException("La celda no está en el mapa");
+        }
+        return ((mapa.obtenerCelda(c, f)).mirar());
+    }
+
+    @Override
+    public void construir(String Personaje, String nEdificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException {
+        Personaje p = civilizacionActiva.getPersonaje(Personaje);
+        p.construirEdificio(nEdificio, direccion);
+    }
+
+    @Override
+    public void recolectar(String nPersonaje, String direccion) throws
+            PersonajeLlenoException, SoldadoRecException, RecursosException,
+            FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException {
+        getCivilizacionActiva().getPersonaje(nPersonaje).recolectar(direccion);
+    }
+
+    @Override
+    public void cambiarCivilizacion(String nCivilizacion) throws ParametroIncorrectoException {
+        Juego.civilizacionActiva = this.getCivilizacion(nCivilizacion);
+    }
+
+    @Override
+    public void imprimirCivilizacion() throws ParametroIncorrectoException {
+        this.getMapa().imprimirCivilizacion(getCivilizacionActiva());
+        imprimirCivilizacion(getCivilizacionActiva().getNomCivilizacion());
+    }
+
+    @Override
+    public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException {
+        this.getMapa().imprimirCivilizacion(getCivilizacion(nCivilizacion));
     }
 
     // Métodos privados
@@ -181,7 +262,7 @@ public class Juego implements Comando {
             int y = new Integer(edificio.get(0).split(",")[0]);
             int x = new Integer(edificio.get(0).split(",")[1]);
             if (x < 0 || y < 0 || x >= mapa.getTamX() || y >= mapa.getTamY()) {
-                throw new FueraDeMapaException("La posición ("+x+", "+y+") del edificio " + edificio.get(2) + " se sale del mapa");
+                throw new FueraDeMapaException("La posición (" + x + ", " + y + ") del edificio " + edificio.get(2) + " se sale del mapa");
             } else {
                 String nombreCivilizacion = edificio.get(4);
                 // Creamos la civilizacion
@@ -202,7 +283,7 @@ public class Juego implements Comando {
             int y = new Integer(personaje.get(0).split(",")[0]);
             int x = new Integer(personaje.get(0).split(",")[1]);
             if (x < 0 || y < 0 || x >= mapa.getTamX() || y >= mapa.getTamY()) {
-                throw new FueraDeMapaException("La posición ("+x+", "+y+") del personaje " + personaje.get(2) + " se sale del mapa");
+                throw new FueraDeMapaException("La posición (" + x + ", " + y + ") del personaje " + personaje.get(2) + " se sale del mapa");
             } else {
                 String nombreCivilizacion = personaje.get(9);
                 // Creamos la civilizacion si no existe
@@ -256,7 +337,7 @@ public class Juego implements Comando {
             int y = new Integer(edificio.get(0).split(",")[0]);
             int x = new Integer(edificio.get(0).split(",")[1]);
             if (x < 0 || y < 0 || x >= mapa.getTamX() || y >= mapa.getTamY()) {
-                throw new FueraDeMapaException("La posición ("+x+", "+y+") del edificio " + edificio.get(2) + " se sale del mapa");
+                throw new FueraDeMapaException("La posición (" + x + ", " + y + ") del edificio " + edificio.get(2) + " se sale del mapa");
             } else {
                 String tipo = edificio.get(1);
                 String codigo = edificio.get(2);
@@ -295,7 +376,7 @@ public class Juego implements Comando {
             int y = new Integer(personaje.get(0).split(",")[0]);
             int x = new Integer(personaje.get(0).split(",")[1]);
             if (x < 0 || y < 0 || x >= mapa.getTamX() || y >= mapa.getTamY()) {
-                throw new FueraDeMapaException("La posición ("+x+", "+y+") del personaje " + personaje.get(2) + " se sale del mapa");
+                throw new FueraDeMapaException("La posición (" + x + ", " + y + ") del personaje " + personaje.get(2) + " se sale del mapa");
             } else {
                 String tipo = personaje.get(1);
                 String codigo = personaje.get(2);
@@ -356,4 +437,137 @@ public class Juego implements Comando {
 //            }
 //        }
 //    }
+
+    @Override
+    public void crear(String nEdificio, String tipoPersonaje) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void almacenar(String nPersonaje, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException {
+        String[] fc = coordenadasCelda.split("");
+        int f = Integer.parseInt(fc[1]);
+        int c = Integer.parseInt(fc[3]);
+        if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
+            throw new FueraDeMapaException("La celda no está en el mapa");
+        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void juegoPorDefecto() throws CeldaOcupadaException, ParametroIncorrectoException, CeldaEnemigaException {
+        // Obtiene una lista con las dos civilizaciones
+        List<Civilizacion> civs = new ArrayList<Civilizacion>(civilizaciones.values());
+        Civilizacion civ0 = civs.get(0);
+        Civilizacion civ1 = civs.get(1);
+        Mapa m = getMapa();
+
+        // Añadimos elementos por columnas
+        // columna 0 (primera coordenada = columna, segunda = fila)
+        // Bosque en (0, 0) con 10 Madera
+        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(0, 0));
+        // Arbusto en (0, 4) con 5 Comida
+        anhadeCR(new Arbusto(new Comida(5)), m.obtenerCelda(0, 4));
+        // Arbusto en (0, 9) con 5 Comida
+        anhadeCR(new Arbusto(new Comida(5)), m.obtenerCelda(0, 9));
+
+        // Columna 1
+        anhadeEdificio(new Ciudadela(), m.obtenerCelda(1, 1), civ0);
+        anhadePersonaje(new Paisano(), m.obtenerCelda(1, 2), civ0);
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(1, 6));
+        anhadeCR(new Bosque(new Madera(100)), m.obtenerCelda(1, 7));
+        anhadeCR(new Arbusto(new Comida(20)), m.obtenerCelda(1, 9));
+
+        // Columna 2
+        anhadeEdificio(new Casa(), m.obtenerCelda(2, 2), civ0);
+        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(2, 4));
+        anhadeCR(new Arbusto(new Comida(10)), m.obtenerCelda(2, 9));
+
+        // Columna 3
+        anhadeCR(new Cantera(new Piedra(80)), m.obtenerCelda(3, 0));
+        anhadeCR(new Cantera(new Piedra(20)), m.obtenerCelda(3, 4));
+
+        // Columna 4
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(4, 6));
+
+        // Columna 5
+        anhadeCR(new Bosque(new Madera(80)), m.obtenerCelda(5, 1));
+        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(5, 2));
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(5, 5));
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(5, 6));
+
+        // Columna 6
+        anhadeCR(new Bosque(new Madera(20)), m.obtenerCelda(6, 1));
+        anhadeCR(new Bosque(new Madera(60)), m.obtenerCelda(6, 2));
+        anhadeCR(new Arbusto(new Comida(20)), m.obtenerCelda(6, 8));
+        anhadeCR(new Arbusto(new Comida(40)), m.obtenerCelda(6, 9));
+
+        // Columna 7
+        anhadeEdificio(new Cuartel(), m.obtenerCelda(7, 4), civ1);
+        anhadePersonaje(new Paisano(), m.obtenerCelda(7, 5), civ1);
+        anhadeEdificio(new Ciudadela(), m.obtenerCelda(7, 6), civ1);
+        anhadeCR(new Bosque(new Madera(80)), m.obtenerCelda(7, 9));
+
+        // Columna 8
+        anhadeCR(new Arbusto(new Comida(10)), m.obtenerCelda(8, 0));
+        anhadeEdificio(new Casa(), m.obtenerCelda(8, 5), civ1);
+
+        // Columna 9
+        anhadeCR(new Arbusto(new Comida(40)), m.obtenerCelda(9, 8));
+        anhadeCR(new Cantera(new Piedra(100)), m.obtenerCelda(9, 2));
+        anhadeCR(new Bosque(new Madera(90)), m.obtenerCelda(9, 3));
+        anhadeCR(new Bosque(new Madera(30)), m.obtenerCelda(9, 4));
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(9, 7));
+        anhadeCR(new Cantera(new Piedra(80)), m.obtenerCelda(9, 8));
+        anhadeCR(new Cantera(new Piedra(20)), m.obtenerCelda(9, 9));
+    }
+
+    // Método auxiliar para añadir un CR a una celda
+    private void anhadeCR(ContRecurso cr, Celda c) throws CeldaOcupadaException {
+        c.anhadeCR(cr);
+    }
+
+    // Método auxiliar para añadir un personaje a una civilización y a una celda
+    private void anhadePersonaje(Personaje p, Celda c, Civilizacion civ) throws CeldaEnemigaException {
+        p.inicializaNombre(civ);
+        civ.anhadePersonaje(p);
+        c.anhadePersonaje(p);
+    }
+
+    // Método auxiliar para añadir un edificio a una civilización y a una celda    
+    private void anhadeEdificio(Edificio e, Celda c, Civilizacion civ) throws CeldaOcupadaException, CeldaEnemigaException {
+        e.inicializaNombre(civ);
+        civ.anhadeEdificio(e);
+        c.anhadeEdificio(e);
+    }
+
+    @Override
+    public void desligar(String nPersonaje, String nGrupo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void desagrupar(String nGrupo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void defender(String nPersonaje, String direccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void atacar(String nPersonaje, String direccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reparar(String nPersonaje, String direccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

@@ -24,26 +24,21 @@ public class Lectura {
      */
     private List<List<String>> elementos;
 
-    public Lectura(String file) {
-        try {
-            Scanner leer = new Scanner(new File(file.trim()));
-            String linea = "";
-            elementos = new ArrayList<List<String>>();
-            // Leemos las lineas
-            while (leer.hasNext()) {
-                linea = leer.nextLine();
-                if (!linea.startsWith("#")) { // Me salto los comentarios
-                    String[] campos = linea.split(";");
-                    List<String> elemento = new ArrayList<String>();
-                    for (String s : campos) {
-                        elemento.add(s);
-                    }
-                    elementos.add(elemento);
+    public Lectura(String file) throws FileNotFoundException {
+        Scanner leer = new Scanner(new File(file.trim()));
+        String linea;
+        elementos = new ArrayList<List<String>>();
+        // Leemos las lineas
+        while (leer.hasNext()) {
+            linea = leer.nextLine();
+            if (!linea.startsWith("#")) { // Me salto los comentarios
+                String[] campos = linea.split(";");
+                List<String> elemento = new ArrayList<String>();
+                for (String s : campos) {
+                    elemento.add(s);
                 }
-                // Codigo
+                elementos.add(elemento);
             }
-        } catch (FileNotFoundException excep) {
-            System.out.println("El directorio indicado no es correcto");
         }
     }
 

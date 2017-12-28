@@ -5,7 +5,6 @@
  */
 package interfazUsuario;
 
-import elementos.personaje.Arquero;
 import elementos.cr.Bosque;
 import elementos.cr.Cantera;
 import elementos.edificio.Ciudadela;
@@ -18,13 +17,12 @@ import excepciones.celda.CeldaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.recursos.NoRecolectableException;
-import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.recursos.RecursosException;
-import excepciones.personaje.SoldadoRecException;
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import vista.Celda;
@@ -36,7 +34,7 @@ import vista.Mapa;
  */
 public class Proyecto_final {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 
         try {
             Juego j = Menu.cargarFicheros("src/ficherosEvaluacion");
