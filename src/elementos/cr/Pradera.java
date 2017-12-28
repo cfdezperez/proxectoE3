@@ -22,6 +22,6 @@ public class Pradera extends ContRecurso{
     
     @Override
     public String toString() {
-        return("\n\tPradera no productiva");
+        return("\n\tContenedor de recursos de tipo Pradera, no productiva");
     } 
 }

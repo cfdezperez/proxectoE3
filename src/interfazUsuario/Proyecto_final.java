@@ -41,7 +41,7 @@ public class Proyecto_final {
             Juego j = Menu.cargarFicheros("src/ficherosEvaluacion");
             j.getMapa().imprimir();
             //Se introduce primero la columna, que será x y luego la fila que será y
-            System.out.println(j.getMapa().obtenerCelda(1, 2).mirar());
+            System.out.println(j.getMapa().obtenerCelda(0, 2).mirar());
         } catch (ParametroIncorrectoException ex) {
             Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FueraDeMapaException ex) {

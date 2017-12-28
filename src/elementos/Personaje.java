@@ -641,7 +641,7 @@ public abstract class Personaje {
 //    }
     @Override
     public String toString() {
-        String s = "\n\tTipo Personaje: ";
+        String s = "\n\tTipo personaje: ";
         if(this instanceof Paisano) {
             s += "Paisano";
         }
@@ -657,11 +657,11 @@ public abstract class Personaje {
         if(this instanceof Grupo) {
             s += "Grupo";
         }
-        s = " , Nombre: "+this.getNombre();
-        s += "\n\tCivilización a la que pertenece:" + this.getCivilizacion().getNomCivilizacion();
-        s += "\n\tSalud:" + this.getSalud();
-        s += "\n\tArmadura:" + this.getArmadura();
-        s += "\n\tAtaque:" + this.getAtaque();
+        s += ", Nombre: "+this.getNombre();
+        s += "\n\tCivilización a la que pertenece: " + this.getCivilizacion().getNomCivilizacion();
+        s += "\n\tSalud: " + this.getSalud();
+        s += "\n\tArmadura: " + this.getArmadura();
+        s += "\n\tAtaque: " + this.getAtaque();
         return(s);
     }
     

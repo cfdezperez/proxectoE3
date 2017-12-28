@@ -133,7 +133,7 @@ public class Paisano extends Personaje {
     @Override
     public String toString() {
         String s = super.toString();
-        s += "\n\tCapacidad de recolección:" + this.getCapRecoleccion();
+        s += "\n\tCapacidad de recolección: " + this.getCapRecoleccion();
         s += "\n\tDispone de " + this.getMadera() + " madera, " + this.getPiedra() + " piedra y " + this.getComida() + " comida.";
         return (s);
     }

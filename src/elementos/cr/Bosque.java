@@ -19,6 +19,6 @@ public class Bosque extends ContRecurso {
     
     @Override
     public String toString() {
-        return("\n\tBosque\n\tCantidad de madera "+this.getRecurso().getCapacidad());
+        return("\n\tContenedor de recursos de tipo Bosque\n\tCantidad de madera "+this.getRecurso().getCapacidad());
     }    
 }

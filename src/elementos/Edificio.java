@@ -5,6 +5,9 @@
  */
 package elementos;
 
+import elementos.edificio.Casa;
+import elementos.edificio.Ciudadela;
+import elementos.edificio.Cuartel;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
 import vista.*;
@@ -360,11 +363,21 @@ public abstract class Edificio {
 
     @Override
     public String toString() {
-        String s = "\n\tEdificio "+this.getNombre();
-        s += "\n\tCivilización a la que pertenece:" + this.getCivilizacion().getNomCivilizacion();
-        s += "\n\tSalud:" + this.getSalud();
-        s += "\n\tCoste de reparación en piedra:" + this.getCRP();
-        s += "\n\tCoste de reparación en madera:" + this.getCRM();
+        String s = "\n\tTipo edicifio: ";
+        if(this instanceof Casa) {
+            s += "Casa";
+        }
+        if(this instanceof Ciudadela) {
+            s += "Ciudadela";
+        }
+        if(this instanceof Cuartel) {
+            s += "Cuartel";
+        }
+        s += ", Nombre: "+this.getNombre();
+        s += "\n\tCivilización a la que pertenece: " + this.getCivilizacion().getNomCivilizacion();
+        s += "\n\tSalud: " + this.getSalud();
+        s += "\n\tCoste de reparación en piedra: " + this.getCRP();
+        s += "\n\tCoste de reparación en madera: " + this.getCRM();
         return(s);
     }    
 

@@ -19,6 +19,6 @@ public class Cantera extends ContRecurso{
     
     @Override
     public String toString() {
-        return("\n\tCantera\n\tCantidad de piedra "+this.getRecurso().getCapacidad());
+        return("\n\tContenedor de recursos de tipo Cantera\n\tCantidad de piedra "+this.getRecurso().getCapacidad());
     }    
 }

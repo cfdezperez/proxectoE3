@@ -250,8 +250,8 @@ public class Celda {
      * 
      */
     public String mirar() {
-        String s = "Celda en fila "+getY()+" columna "+getX();
-        s += "Contenido:\n";
+        String s = "\nCelda en fila "+getY()+" columna "+getX();
+        s += "\nContenido:";
         // Si hay un CR no puede haber nada más
         if(this.contRecurso != null) {
             s += this.contRecurso.toString();
