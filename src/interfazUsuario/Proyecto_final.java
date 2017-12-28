@@ -22,6 +22,7 @@ import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.recursos.RecursosException;
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import vista.Celda;
@@ -33,7 +34,7 @@ import vista.Mapa;
  */
 public class Proyecto_final {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 
         try {
             Juego j = Menu.cargarFicheros("src/ficherosEvaluacion");
