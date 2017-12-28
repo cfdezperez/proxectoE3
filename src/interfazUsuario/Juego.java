@@ -34,6 +34,7 @@ import excepciones.personaje.PersonajeLlenoException;
 import excepciones.personaje.SolConstruirException;
 import excepciones.personaje.SoldadoRecException;
 import excepciones.recursos.RecursosException;
+import java.util.ArrayList;
 import java.util.List;
 import vista.Celda;
 import vista.Mapa;
@@ -142,7 +143,6 @@ public class Juego implements Comando {
 
         // Creo los grupos
 //        creaGruposDeFichero(personajes);
-
         // Le meto los edificios
         introduceEdificios(edificios);
     }
@@ -217,10 +217,10 @@ public class Juego implements Comando {
         String[] fc = coordenadasCelda.split("");
         int f = Integer.parseInt(fc[1]);
         int c = Integer.parseInt(fc[3]);
-        if((f < 0) | (c < 0) | (f >= (getMapa().getTamY()-1)) | (c >= (getMapa().getTamX()-1))) {
+        if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
             throw new FueraDeMapaException("La celda no está en el mapa");
         }
-        return((mapa.obtenerCelda(c, f)).mirar());
+        return ((mapa.obtenerCelda(c, f)).mirar());
     }
 
     @Override
@@ -228,22 +228,22 @@ public class Juego implements Comando {
         Personaje p = civilizacionActiva.getPersonaje(Personaje);
         p.construirEdificio(nEdificio, direccion);
     }
-    
+
     @Override
     public void recolectar(String nPersonaje, String direccion) throws
-            PersonajeLlenoException, SoldadoRecException, RecursosException, 
+            PersonajeLlenoException, SoldadoRecException, RecursosException,
             FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException {
         getCivilizacionActiva().getPersonaje(nPersonaje).recolectar(direccion);
     }
-    
+
     @Override
     public void cambiarCivilizacion(String nCivilizacion) throws ParametroIncorrectoException {
         Juego.civilizacionActiva = this.getCivilizacion(nCivilizacion);
     }
-    
+
     @Override
     public void imprimirCivilizacion() throws ParametroIncorrectoException {
-        this.getMapa().imprimirCivilizacion(getCivilizacionActiva());        
+        this.getMapa().imprimirCivilizacion(getCivilizacionActiva());
         imprimirCivilizacion(getCivilizacionActiva().getNomCivilizacion());
     }
 
@@ -251,7 +251,7 @@ public class Juego implements Comando {
     public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException {
         this.getMapa().imprimirCivilizacion(getCivilizacion(nCivilizacion));
     }
-    
+
     // Métodos privados
     private void creaCivilizaciones(List<List<String>> personajes, List<List<String>> edificios) throws FueraDeMapaException {
         // Creamos las civilizaciones
@@ -443,7 +443,6 @@ public class Juego implements Comando {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
     @Override
     public void almacenar(String nPersonaje, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -454,7 +453,7 @@ public class Juego implements Comando {
         String[] fc = coordenadasCelda.split("");
         int f = Integer.parseInt(fc[1]);
         int c = Integer.parseInt(fc[3]);
-        if((f < 0) | (c < 0) | (f >= (getMapa().getTamY()-1)) | (c >= (getMapa().getTamX()-1))) {
+        if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
             throw new FueraDeMapaException("La celda no está en el mapa");
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -485,5 +484,90 @@ public class Juego implements Comando {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public void juegoPorDefecto() throws CeldaOcupadaException, ParametroIncorrectoException, CeldaEnemigaException {
+        // Obtiene una lista con las dos civilizaciones
+        List<Civilizacion> civs = new ArrayList<Civilizacion>(civilizaciones.values());
+        Civilizacion civ0 = civs.get(0);
+        Civilizacion civ1 = civs.get(1);
+        Mapa m = getMapa();
+
+        // Añadimos elementos por columnas
+        // columna 0 (primera coordenada = columna, segunda = fila)
+        // Bosque en (0, 0) con 10 Madera
+        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(0, 0));
+        // Arbusto en (0, 4) con 5 Comida
+        anhadeCR(new Arbusto(new Comida(5)), m.obtenerCelda(0, 4));
+        // Arbusto en (0, 9) con 5 Comida
+        anhadeCR(new Arbusto(new Comida(5)), m.obtenerCelda(0, 9));
+
+        // Columna 1
+        anhadeEdificio(new Ciudadela(), m.obtenerCelda(1, 1), civ0);
+        anhadePersonaje(new Paisano(), m.obtenerCelda(1, 2), civ0);
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(1, 6));
+        anhadeCR(new Bosque(new Madera(100)), m.obtenerCelda(1, 7));
+        anhadeCR(new Arbusto(new Comida(20)), m.obtenerCelda(1, 9));
+
+        // Columna 2
+        anhadeEdificio(new Casa(), m.obtenerCelda(2, 2), civ0);
+        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(2, 4));
+        anhadeCR(new Arbusto(new Comida(10)), m.obtenerCelda(2, 9));
+
+        // Columna 3
+        anhadeCR(new Cantera(new Piedra(80)), m.obtenerCelda(3, 0));
+        anhadeCR(new Cantera(new Piedra(20)), m.obtenerCelda(3, 4));
+
+        // Columna 4
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(4, 6));
+
+        // Columna 5
+        anhadeCR(new Bosque(new Madera(80)), m.obtenerCelda(5, 1));
+        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(5, 2));
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(5, 5));
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(5, 6));
+
+        // Columna 6
+        anhadeCR(new Bosque(new Madera(20)), m.obtenerCelda(6, 1));
+        anhadeCR(new Bosque(new Madera(60)), m.obtenerCelda(6, 2));
+        anhadeCR(new Arbusto(new Comida(20)), m.obtenerCelda(6, 8));
+        anhadeCR(new Arbusto(new Comida(40)), m.obtenerCelda(6, 9));
+
+        // Columna 7
+        anhadeEdificio(new Cuartel(), m.obtenerCelda(7, 4), civ1);
+        anhadePersonaje(new Paisano(), m.obtenerCelda(7, 5), civ1);
+        anhadeEdificio(new Ciudadela(), m.obtenerCelda(7, 6), civ1);
+        anhadeCR(new Bosque(new Madera(80)), m.obtenerCelda(7, 9));
+        
+        // Columna 8
+        anhadeCR(new Arbusto(new Comida(10)), m.obtenerCelda(8, 0));
+        anhadeEdificio(new Casa(), m.obtenerCelda(8, 5), civ1);
+
+        // Columna 9
+        anhadeCR(new Arbusto(new Comida(40)), m.obtenerCelda(9, 8));
+        anhadeCR(new Cantera(new Piedra(100)), m.obtenerCelda(9, 2));
+        anhadeCR(new Bosque(new Madera(90)), m.obtenerCelda(9, 3));
+        anhadeCR(new Bosque(new Madera(30)), m.obtenerCelda(9, 4));
+        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(9, 7));
+        anhadeCR(new Cantera(new Piedra(80)), m.obtenerCelda(9, 8));
+        anhadeCR(new Cantera(new Piedra(20)), m.obtenerCelda(9, 9));
+    }
+
+    // Método auxiliar para añadir un CR a una celda
+    private void anhadeCR(ContRecurso cr, Celda c) throws CeldaOcupadaException {
+        c.anhadeCR(cr);
+    }
+
+    // Método auxiliar para añadir un personaje a una civilización y a una celda
+    private void anhadePersonaje(Personaje p, Celda c, Civilizacion civ) throws CeldaEnemigaException {
+        p.inicializaNombre(civ);
+        civ.anhadePersonaje(p);
+        c.anhadePersonaje(p);
+    }
+
+    // Método auxiliar para añadir un edificio a una civilización y a una celda    
+    private void anhadeEdificio(Edificio e, Celda c, Civilizacion civ) throws CeldaOcupadaException, CeldaEnemigaException {
+        e.inicializaNombre(civ);
+        civ.anhadeEdificio(e);
+        c.anhadeEdificio(e);
+    }
 
 }

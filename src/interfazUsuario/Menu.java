@@ -66,6 +66,7 @@ public class Menu {
                     } else {
                         consola.imprimir("Creamos mapa por defecto (tamaño 10x10)");
                         juego = new Juego(10, 10, nombreCivilizaciones);
+                        juego.juegoPorDefecto();
                         juego.getMapa().imprimir();
                         flag = false;
                     }
