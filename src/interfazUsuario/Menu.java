@@ -16,11 +16,16 @@ import excepciones.celda.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaException;
 import excepciones.celda.NoTransitablebleException;
+import excepciones.edificio.EdificioException;
+import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeException;
+import excepciones.personaje.SolRepararException;
 import excepciones.recursos.RecursosException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -66,8 +71,8 @@ public class Menu {
                         juego = new Juego(10, 10, nombreCivilizaciones);
                         try {
                             juego.juegoPorDefecto();
-                        } catch(CeldaException | ParametroIncorrectoException ex) {
-                            consola.imprimir("Error creando el mapa por defecto: "+ex.getMessage()+". Salimos.");
+                        } catch (CeldaException | ParametroIncorrectoException ex) {
+                            consola.imprimir("Error creando el mapa por defecto: " + ex.getMessage() + ". Salimos.");
                             System.exit(-1);
                         }
                         juego.getMapa().imprimir();
@@ -111,7 +116,7 @@ public class Menu {
                             consola.imprimir("Debes indicar lo que quieres listar.");
                             continue;
                         }
-                        juego.listar(orden[1]);
+                        consola.imprimir(juego.listar(orden[1]));
 
                         break;
 
@@ -203,7 +208,12 @@ public class Menu {
                                     + orden[1] + " repare.");
                             continue;
                         }
-                        juego.reparar(orden[1], orden[2].toLowerCase());
+                        try {
+                            juego.reparar(orden[1], orden[2].toLowerCase());
+                        } catch (SolRepararException | FueraDeMapaException | InsuficientesRecException | EdificioException ex) {
+                            consola.imprimir("El personaje " + orden[1] + " no puede reparar en la dirección " + orden[2] + ": " + ex.getMessage());
+                        }
+
                         break;
 
                     case "crear":

@@ -154,40 +154,36 @@ public class Civilizacion {
         return (this.getNomCivilizacion());
     }
 
-    public void listarPersonajes() {
+    public String listarPersonajes() {
+        String s = "Personajes de la civilizacion " + this.getNomCivilizacion() + ":\n";
         Iterator it = this.getMapaPersonajes().entrySet().iterator();
-
-        System.out.println("Personajes de la civilizacion " + this.getNomCivilizacion() + ":");
-
         while (it.hasNext()) {
             Map.Entry e = (Map.Entry) it.next();
-            System.out.println("\t" + e.getKey() + " " + ((Personaje) e.getValue()).getCelda());
+            s += "\t" + e.getKey() + " " + ((Personaje) e.getValue()).getCelda();
         }
+        return s;
     }
 
-    public void listarEdificios() {
+    public String listarEdificios() {
+        String s = "Edificios de la civilizacion " + this.getNomCivilizacion() + ":\n";
         Iterator it = this.getEdCivilizacion().entrySet().iterator();
-        System.out.println("Edificios de la civilizacion " + this.getNomCivilizacion() + ":");
+
         while (it.hasNext()) {
             Map.Entry e = (Map.Entry) it.next();
-            System.out.println("\t" + e.getKey() + " " + ((Edificio) e.getValue()).getCelda());
+            s += "\t" + e.getKey() + " " + ((Edificio) e.getValue()).getCelda();
         }
+        
+        return s;
     }
 
-    public void listarCivilizaciones() {
-        Iterator it = this.Civilizaciones.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry e = (Map.Entry) it.next();
-            System.out.println(e.getKey());
-        }
-    }
 
-    public void listarGrupos() {
+    public String listarGrupos() {
+        String s = "Grupos de la civilizacion " + this.getNomCivilizacion() + ":\n";
         Iterator it = this.getGrupoCivilizacion().entrySet().iterator();
-        System.out.println("Grupos de la civilizacion " + this.getNomCivilizacion() + ":");
         while (it.hasNext()) {
             Map.Entry e = (Map.Entry) it.next();
-            System.out.println(e.getKey());
+            s += "\t" + e.getKey() + " " + ((Grupo) e.getValue()).getCelda();
         }
+        return s;
     }
 }

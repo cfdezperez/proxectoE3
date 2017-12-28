@@ -29,12 +29,16 @@ import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.edificio.EdificioException;
+import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.personaje.SolConstruirException;
+import excepciones.personaje.SolRepararException;
 import excepciones.personaje.SoldadoRecException;
 import excepciones.recursos.RecursosException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import vista.Celda;
 import vista.Mapa;
@@ -180,12 +184,16 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void listar(String tipo) throws ParametroIncorrectoException {
+    public String listar(String tipo) throws ParametroIncorrectoException {
         switch (tipo.toLowerCase()) {
             case "personajes":
-                getCivilizacionActiva().listarPersonajes();
+                return getCivilizacionActiva().listarPersonajes();
             case "edificios":
-                getCivilizacionActiva().listarEdificios();
+                return getCivilizacionActiva().listarEdificios();
+            case "civilizaciones":
+                return listarCivilizaciones();
+            default:
+                throw new ParametroIncorrectoException("Elementos a listar desconocidos.");
         }
     }
 
@@ -251,6 +259,7 @@ public class Juego implements Comando {
     public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException {
         this.getMapa().imprimirCivilizacion(getCivilizacion(nCivilizacion));
     }
+    
 
     // Métodos privados
     private void creaCivilizaciones(List<List<String>> personajes, List<List<String>> edificios) throws FueraDeMapaException {
@@ -447,16 +456,11 @@ public class Juego implements Comando {
     public void almacenar(String nPersonaje, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     @Override
-    public void agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException {
-        String[] fc = coordenadasCelda.split("");
-        int f = Integer.parseInt(fc[1]);
-        int c = Integer.parseInt(fc[3]);
-        if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
-            throw new FueraDeMapaException("La celda no está en el mapa");
-        }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void reparar(String nPersonaje, String direccion) throws SolRepararException, FueraDeMapaException, 
+            ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException {
+        getCivilizacionActiva().getPersonaje(nPersonaje).reparar(direccion);
     }
 
     public void juegoPorDefecto() throws CeldaOcupadaException, ParametroIncorrectoException, CeldaEnemigaException {
@@ -544,6 +548,16 @@ public class Juego implements Comando {
         civ.anhadeEdificio(e);
         c.anhadeEdificio(e);
     }
+    
+    private String listarCivilizaciones() {
+        String s = "Civilizaciones:\n";
+        Iterator it = this.civilizaciones.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            s += "\t"+e.getKey();
+        }
+        return s;
+    }
 
     @Override
     public void desligar(String nPersonaje, String nGrupo) {
@@ -566,7 +580,13 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void reparar(String nPersonaje, String direccion) {
+    public void agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException {
+        String[] fc = coordenadasCelda.split("");
+        int f = Integer.parseInt(fc[1]);
+        int c = Integer.parseInt(fc[3]);
+        if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
+            throw new FueraDeMapaException("La celda no está en el mapa");
+        }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -10,9 +10,12 @@ import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.edificio.EdificioException;
+import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.personaje.SolConstruirException;
+import excepciones.personaje.SolRepararException;
 import excepciones.personaje.SoldadoRecException;
 import excepciones.recursos.RecursosException;
 
@@ -22,7 +25,7 @@ import excepciones.recursos.RecursosException;
  */
 public interface Comando {
     public void mover(String nPersonaje, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
-    public void listar(String tipo) throws ParametroIncorrectoException;
+    public String listar(String tipo) throws ParametroIncorrectoException;
     public String describir(String nombre) throws ParametroIncorrectoException;
     public String describir(String nombre, String Civilizacion) throws ParametroIncorrectoException;
     public String mirar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException;
@@ -38,7 +41,8 @@ public interface Comando {
     public void agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException;
     public void desligar(String nPersonaje, String nGrupo);
     public void desagrupar(String nGrupo);
-    public void reparar(String nPersonaje, String direccion);    
+    public void reparar(String nPersonaje, String direccion) throws SolRepararException, FueraDeMapaException, 
+            ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;    
     public void defender(String nPersonaje, String direccion);
     public void atacar(String nPersonaje, String direccion);
 }
