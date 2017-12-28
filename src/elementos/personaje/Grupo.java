@@ -7,12 +7,19 @@ package elementos.personaje;
 
 import elementos.Civilizacion;
 import elementos.ContRecurso;
+import elementos.Edificio;
 import elementos.Personaje;
 import elementos.Recurso;
 import elementos.cr.Pradera;
+import elementos.edificio.Casa;
+import elementos.edificio.Ciudadela;
+import elementos.edificio.Cuartel;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.recursos.NoRecolectableException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.celda.CeldaEnemigaException;
+import excepciones.celda.CeldaOcupadaException;
+import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.recursos.RecursosException;
 import excepciones.personaje.SoldadoRecException;
@@ -229,44 +236,46 @@ public class Grupo extends Personaje {
 //            }
 //        }
 //    }
-    /**
-     *
-     * @param mapa
-     * @param nedificio
-     * @param tipo
-     * @param direccion
-     */
-//    public void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion) throws InsuficientesRecException, FueraDeMapaException {
+//        /**
+//     *
+//     * @param nedificio: nombre edificio(casa, ciudadela o cuartel)
+//     * @param direccion
+//     * @throws excepciones.personaje.InsuficientesRecException
+//     * @throws excepciones.celda.FueraDeMapaException
+//     * @throws excepciones.ParametroIncorrectoException
+//     * @throws excepciones.celda.CeldaOcupadaException
+//     */
+//    public void construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException {
 //
-//        Celda vecina = obtenerCeldaVecina(mapa, direccion);
-//        if (vecina == null) {
-//            throw new FueraDeMapaException("El personaje no puede construír, se sale del mapa");
-//        } else {
-//
-//            for (Personaje p : this.getPersonajes()) {
-//                if (p instanceof Soldado) {
-//                    throw new SoldadoRecException("El grupo contiene uno o más soldados, no puede recolectar");
-//                }
-//            }
-//            Edificio edificio = new Edificio(vecina, nedificio, this.getCivilizacion(), tipo);
-//            if (this.capRecoleccion[1] >= edificio.getCRM() && this.capRecoleccion[3] >= edificio.getCRP()) {
-//                mapa.addEdificio(edificio);
-//                if (vecina.getVisible() != true) {
-//                    vecina.setVisible(true);
-//                    this.getCivilizacion().getCeldasCivilizacion().add(vecina);
-//                }
-//                vecina.setTransitable(false); //Ponerlo a true
-//                vecina.addNombreElemento(edificio.getNombre());
-//                //vecina.setEntrable(true);
-//                vecina.setTipoCelda(edificio.getTipo());
-//                this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - edificio.getCRM();
-//                this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - edificio.getCRP();
-//                this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
-//                System.out.println("Se ha construído " + edificio.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
-//            } else {
-//                throw new InsuficientesRecException("El paisano no tiene suficientes recursos, no puede construír");
-//            }
+//        Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
+//        Edificio ed = null;
+//        
+//        switch (nedificio) {
+//            case "ciudadela":
+//                ed = new Ciudadela();
+//                break;
+//            case "cuartel":
+//                ed = new Cuartel();
+//                break;
+//            case "casa":
+//                ed = new Casa();
+//                break;
+//            default:
+//                throw new ParametroIncorrectoException("Tipo de edificio desconocido");
 //        }
+//        if (this.capRecoleccion[1] >= ed.getCRM() && this.capRecoleccion[3] >= ed.getCRP()) {
+//                    ed.inicializaNombre(Juego.getCivilizacionActiva());
+//                    Juego.getCivilizacionActiva().anhadeEdificio(ed);
+//                    vecina.anhadeEdificio(ed);
+//                    vecina.setVisible(true);
+//                    vecina.setTransitable(true); //Ponerlo a true
+//                    this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - ed.getCRM();
+//                    this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - ed.getCRP();
+//                    this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
+//                    System.out.println("Se ha construído " + ed.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
+//                } else {
+//                    throw new InsuficientesRecException("El paisano no tiene suficientes recursos, no puede construír");
+//                }
 //
 //    }
 }
