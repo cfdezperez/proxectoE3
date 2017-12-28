@@ -16,9 +16,14 @@ import excepciones.celda.FueraDeMapaException;
 import excepciones.recursos.NoRecolectableException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.celda.NoAlmacenableException;
+import excepciones.edificio.EdificioException;
+import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeLlenoException;
+import excepciones.personaje.SolAlmacenarException;
 import excepciones.personaje.SolConstruirException;
+import excepciones.personaje.SolRepararException;
 import excepciones.recursos.RecursosException;
 import excepciones.personaje.SoldadoRecException;
 import vista.Celda;
@@ -344,80 +349,11 @@ public abstract class Personaje {
     public abstract void inicializaNombre(Civilizacion civil);
 
     public abstract void construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException;
-//
-//
-//    /**
-//     *
-//     * @param mapa
-//     * @param direccion
-//     */
-//    public void almacenar(Mapa mapa, String direccion) {
-//        if (this.tipoPersonaje != Mapa.TPAISANO) {
-//            System.out.println("Solo los paisanos pueden almacenar.");
-//        } else {
-//            Celda vecina = obtenerCeldaVecina(mapa, direccion);
-//            if (vecina == null) {
-//                System.out.println("No se puede almacenar hacia el "
-//                        + direccion + ": se sale del mapa.");
-//            } else {
-//                for (String s : vecina.getNombreElementos()) {
-//                    if (mapa.getCivActiva().getEdCivilizacion().containsKey(s)) {  // La celda contiene un edificio
-//                        Edificio e = mapa.getCivActiva().getEdCivilizacion().get(s);
-//                        if (e.getTipo() == Mapa.TCASA) {
-//                            System.out.println("El edificio seleccionado no puede almacenar.");
-//                        } else {
-//                            e.setCapAlmacenamientoTotal(e.getCapAlmacenamiento()[0] + this.capRecoleccion[0]);
-//                            e.setMadera(e.getCapAlmacenamiento()[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRMADERA]);
-//                            e.setComida(e.getCapAlmacenamiento()[Recurso.TRCOMIDA] + this.capRecoleccion[Recurso.TRCOMIDA]);
-//                            e.setPiedra(e.getCapAlmacenamiento()[Recurso.TRPIEDRA] + this.capRecoleccion[Recurso.TRPIEDRA]);
-//                            //todo lo que tiene el personaje se le pasa a la ciudadela
-//                            System.out.println("Almacenado " + this.capRecoleccion[Recurso.TRMADERA]
-//                                    + " madera, " + this.capRecoleccion[Recurso.TRCOMIDA]
-//                                    + " comida, y " + this.capRecoleccion[Recurso.TRPIEDRA]
-//                                    + " piedra en el edificio " + direccion.toUpperCase());
-//                            // Restauramos las capacidades del paisano
-//                            this.capRecoleccion[0] = this.capRecoleccionInicial; //capacidad recoleccion vuelve a ser la inicial
-//                            this.capRecoleccion[Recurso.TRMADERA] = 0;
-//                            this.capRecoleccion[Recurso.TRCOMIDA] = 0;
-//                            this.capRecoleccion[Recurso.TRPIEDRA] = 0;
-//                        }
-//                    } else {
-//                        String mensaje;
-//                        switch (vecina.getTipoCelda()) {
-//                            case Mapa.TCASA:
-//                                mensaje = "una casa";
-//                                break;
-//                            case Mapa.TCUARTEL:
-//                                mensaje = "un cuartel";
-//                                break;
-//                            case Mapa.TPAISANO:
-//                                mensaje = "un paisano";
-//                                break;
-//                            case Mapa.TSOLDADO:
-//                                mensaje = "un soldado";
-//                                break;
-//                            case Mapa.TPRADERA:
-//                                mensaje = "una pradera";
-//                                break;
-//                            case Mapa.TARBUSTO:
-//                                mensaje = "un arbusto";
-//                                break;
-//                            case Mapa.TBOSQUE:
-//                                mensaje = "un bosque";
-//                                break;
-//                            case Mapa.TCANTERA:
-//                                mensaje = "una cantera";
-//                                break;
-//                            default:
-//                                mensaje = "esa celda";
-//                        }
-//                        System.out.println("El " + this.nombre
-//                                + " no puede almacenar en " + mensaje + ".");
-//                    }
-//                }
-//            }
-//        }
-//    }
+    
+    public abstract void reparar(String direccion) throws SolRepararException, FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;
+
+    public abstract void almacenar(String direccion) throws SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException;
+    
 //
 //
 //

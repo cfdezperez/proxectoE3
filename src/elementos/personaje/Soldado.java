@@ -43,10 +43,12 @@ public abstract class Soldado extends Personaje {
         throw new SolConstruirException("Un soldado no puede construír");
     }
     
+    @Override
     public void reparar(String direccion) throws SolRepararException {
         throw new SolRepararException("Un soldado no puede reparar");
     }
     
+    @Override
     public void almacenar(String direccion) throws SolAlmacenarException {
         throw new SolAlmacenarException("Un soldado no puede almacenar");
     }

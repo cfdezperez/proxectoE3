@@ -18,12 +18,16 @@ import excepciones.celda.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
+import excepciones.celda.NoAlmacenableException;
+import excepciones.edificio.EdificioException;
+import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.InsuficientesRecException;
 import interfazUsuario.Juego;
 import vista.Celda;
 import excepciones.recursos.NoRecolectableException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.recursos.RecursosException;
+import vista.Mapa;
 
 /**
  *
@@ -204,7 +208,7 @@ public class Paisano extends Personaje {
 
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
         Edificio ed = null;
-        
+
         switch (nedificio) {
             case "ciudadela":
                 ed = new Ciudadela();
@@ -219,51 +223,82 @@ public class Paisano extends Personaje {
                 throw new ParametroIncorrectoException("Tipo de edificio desconocido");
         }
         if (this.capRecoleccion[1] >= ed.getCRM() && this.capRecoleccion[3] >= ed.getCRP()) {
-                    ed.inicializaNombre(Juego.getCivilizacionActiva());
-                    Juego.getCivilizacionActiva().anhadeEdificio(ed);
-                    vecina.anhadeEdificio(ed);
-                    vecina.setVisible(true);
-                    vecina.setTransitable(true); //Ponerlo a true
-                    this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - ed.getCRM();
-                    this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - ed.getCRP();
-                    this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
-                    System.out.println("Se ha construído " + ed.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
-                } else {
-                    throw new InsuficientesRecException("El paisano no tiene suficientes recursos, no puede construír");
-                }
+            ed.inicializaNombre(Juego.getCivilizacionActiva());
+            Juego.getCivilizacionActiva().anhadeEdificio(ed);
+            vecina.anhadeEdificio(ed);
+            vecina.setVisible(true);
+            vecina.setTransitable(true); //Ponerlo a true
+            this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - ed.getCRM();
+            this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - ed.getCRP();
+            this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
+            System.out.println("Se ha construído " + ed.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
+        } else {
+            throw new InsuficientesRecException("El paisano no tiene suficientes recursos, no puede construír");
+        }
 
     }
-//    public void reparar(Mapa mapa, String direccion) {
-//            Celda vecina = obtenerCeldaVecina(mapa, direccion);
-//            if (vecina == null) {
-//                System.out.println("No se puede reparar den dirección "
-//                        + direccion + ": se sale del mapa.");
-//            } else {
-//                for (String s : vecina.getNombreElementos()) {
-//                    if (mapa.getCivActiva().getEdCivilizacion().containsKey(s)) {  // La celda contiene un edificio
-//                        Edificio e = mapa.getCivActiva().getEdCivilizacion().get(s);
-//                        System.out.println("RECURSO PERSONAJE MADERA: " + this.capRecoleccion[Recurso.TRMADERA] + " RECURSO EDIFICIO EXIGE MADERA " + e.getCRM());
-//                        System.out.println("RECURSO PERSONAJE PIEDRA: " + this.capRecoleccion[Recurso.TRPIEDRA] + " RECURSO EDIFICIO EXIGE PIEDRA " + e.getCRP());
-//                        if (this.capRecoleccion[Recurso.TRMADERA] >= e.getCRM() && this.capRecoleccion[Recurso.TRPIEDRA] >= e.getCRP()) {
-//                            if (e.getSalud() != e.getSaludInicial()) {
-//                                e.reiniciarSalud(); //edificio recobra la salud
-//                                this.capRecoleccion[Recurso.TRMADERA] -= e.getCRM();
-//                                this.capRecoleccion[Recurso.TRPIEDRA] -= e.getCRP();
-//                                this.capRecoleccion[0] -= (e.getCRM() + e.getCRP());
-//                                System.out.println("Reparado el edificio " + e.getNombre());
-//                                System.out.println("Coste de la reparacion: " + (this.capRecoleccion[Recurso.TRMADERA] - e.getCRM()) + " de madera y " + (this.capRecoleccion[0] - e.getCRP()) + " de piedra");
-//
-//                            } else {
-//                                System.out.println("El edificio no necesita ser reparadoa, b"
-//                                        + "");
-//                            }
-//                        } else {
-//                            System.out.println("El paisano no tiene los suficientes recursos");
-//                        }
-//                    } else {
-//                        System.out.println("No hay ningún edificio que reparar en esta posición");
-//                    }
-//                }
-//            }
-//    }
+
+    public void reparar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException {
+        Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
+
+        if (vecina.getEdificio() != null) {  // La celda contiene un edificio
+            Edificio e = this.getCelda().getEdificio();
+            System.out.println("RECURSO PERSONAJE MADERA: " + this.capRecoleccion[Recurso.TRMADERA] + " RECURSO EDIFICIO EXIGE MADERA " + e.getCRM());
+            System.out.println("RECURSO PERSONAJE PIEDRA: " + this.capRecoleccion[Recurso.TRPIEDRA] + " RECURSO EDIFICIO EXIGE PIEDRA " + e.getCRP());
+            if (this.capRecoleccion[Recurso.TRMADERA] >= e.getCRM() && this.capRecoleccion[Recurso.TRPIEDRA] >= e.getCRP()) {
+                if (e.getSalud() != e.getSaludInicial()) {
+                    e.reiniciarSalud(); //edificio recobra la salud
+                    this.capRecoleccion[Recurso.TRMADERA] -= e.getCRM();
+                    this.capRecoleccion[Recurso.TRPIEDRA] -= e.getCRP();
+                    this.capRecoleccion[0] -= (e.getCRM() + e.getCRP());
+                    System.out.println("Reparado el edificio " + e.getNombre());
+                    System.out.println("Coste de la reparacion: " + (this.capRecoleccion[Recurso.TRMADERA] - e.getCRM()) + " de madera y " + (this.capRecoleccion[0] - e.getCRP()) + " de piedra");
+
+                } else {
+                    throw new NoNecRepararException("El edificio no necesita ser reparado");
+                }
+            } else {
+                throw new InsuficientesRecException("El paisano no tiene los suficientes recursos para reparar");
+            }
+        } else {
+            throw new EdificioException("No hay ningún edificio que reparar en esta posición");
+        }
+
+    }
+
+    /**
+     *
+     * @param direccion
+     * @throws excepciones.celda.FueraDeMapaException
+     * @throws excepciones.ParametroIncorrectoException
+     * @throws excepciones.celda.NoAlmacenableException
+     */
+    public void almacenar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException {
+        Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
+
+        if (vecina.getEdificio() != null) {  // La celda contiene un edificio
+            Edificio e = this.getCelda().getEdificio();
+            if (e instanceof Casa) {
+                throw new NoAlmacenableException("Una casa no puede almacenar");
+            } else {
+                e.setCapAlmacenamientoTotal(e.getCapAlmacenamiento()[0] + this.capRecoleccion[0]);
+                e.setMadera(e.getCapAlmacenamiento()[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRMADERA]);
+                e.setComida(e.getCapAlmacenamiento()[Recurso.TRCOMIDA] + this.capRecoleccion[Recurso.TRCOMIDA]);
+                e.setPiedra(e.getCapAlmacenamiento()[Recurso.TRPIEDRA] + this.capRecoleccion[Recurso.TRPIEDRA]);
+                //todo lo que tiene el personaje se le pasa a la ciudadela
+                System.out.println("Almacenado " + this.capRecoleccion[Recurso.TRMADERA]
+                        + " madera, " + this.capRecoleccion[Recurso.TRCOMIDA]
+                        + " comida, y " + this.capRecoleccion[Recurso.TRPIEDRA]
+                        + " piedra en el edificio " + direccion.toUpperCase());
+                // Restauramos las capacidades del paisano
+                this.capRecoleccion[0] = this.capRecoleccionInicial; //capacidad recoleccion vuelve a ser la inicial
+                this.capRecoleccion[Recurso.TRMADERA] = 0;
+                this.capRecoleccion[Recurso.TRCOMIDA] = 0;
+                this.capRecoleccion[Recurso.TRPIEDRA] = 0;
+            }
+        } else {
+            throw new NoAlmacenableException("En esa celda no se puede almacenar");
+        }
+
+    }
 }
