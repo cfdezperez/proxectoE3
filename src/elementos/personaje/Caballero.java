@@ -8,7 +8,6 @@ package elementos.personaje;
 import elementos.Civilizacion;
 import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
-import vista.Celda;
 
 /**
  *

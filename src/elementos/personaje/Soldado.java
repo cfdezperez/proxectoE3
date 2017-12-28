@@ -38,7 +38,8 @@ public abstract class Soldado extends Personaje {
         throw new SoldadoRecException("Un soldado no puede recolectar");
     }
     
-    public void construir(String direccion) throws SolConstruirException {
+    @Override
+    public void construirEdificio(String nedificio, String direccion) throws SolConstruirException {
         throw new SolConstruirException("Un soldado no puede construír");
     }
     
