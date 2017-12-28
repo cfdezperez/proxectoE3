@@ -6,6 +6,7 @@
 package elementos;
 
 import elementos.personaje.Grupo;
+import excepciones.ParametroIncorrectoException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -114,9 +115,13 @@ public class Civilizacion {
      * @param nombre Nombre del personaje
      * @return El personaje
      */
-    public Personaje getPersonaje(String nombre) {
-        Personaje p = Personajes.get(nombre);
-        return p;
+    public Personaje getPersonaje(String nombre) throws ParametroIncorrectoException {
+        if(Personajes.containsKey(nombre)) {
+            return Personajes.get(nombre);
+        } else {
+            throw new ParametroIncorrectoException("El personaje "+nombre+
+                    " no existe en la civilización "+this.getNomCivilizacion());
+        }
     }
 
     /**
