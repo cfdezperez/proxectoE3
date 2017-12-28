@@ -198,6 +198,7 @@ public class Paisano extends Personaje {
      * @throws excepciones.celda.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.celda.CeldaOcupadaException
+     * @throws excepciones.celda.CeldaEnemigaException
      */
     public void construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException {
 

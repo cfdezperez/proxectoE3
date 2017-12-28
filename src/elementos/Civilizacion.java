@@ -7,12 +7,12 @@ package elementos;
 
 import elementos.personaje.Grupo;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-
 
 /**
  * Clase para las civilizaciones que participan en el juego
- * 
+ *
  * @author celia
  */
 public class Civilizacion {
@@ -107,9 +107,10 @@ public class Civilizacion {
         return this.Personajes.size();
 
     }
-    
+
     /**
      * Devuelve un personaje de la civilización dado su nombre
+     *
      * @param nombre Nombre del personaje
      * @return El personaje
      */
@@ -117,33 +118,76 @@ public class Civilizacion {
         Personaje p = Personajes.get(nombre);
         return p;
     }
-    
+
     /**
      * Añade un personaje a la civilizacion
+     *
      * @param p Personaje a añadir
      */
     public void anhadePersonaje(Personaje p) {
         p.setCivilizacion(this);
         this.Personajes.put(p.getNombre(), p);
     }
+
     /**
      * Añade un edificio a la civilizacion
+     *
      * @param e Edificio a añadir
      */
     public void anhadeEdificio(Edificio e) {
         e.setCivilizacion(this);
         this.Edificios.put(e.getNombre(), e);
     }
+
     /**
      * Añade un grupo a la civilizacion
+     *
      * @param g Grupo a añadir
      */
     public void anhadeGrupo(Grupo g) {
         g.setCivilizacion(this);
         this.Grupos.put(g.getNombre(), g);
-    }        
+    }
+
     @Override
     public String toString() {
-        return(this.getNomCivilizacion());
-    }    
+        return (this.getNomCivilizacion());
+    }
+
+    public void listarPersonajes() {
+        Iterator it = this.getMapaPersonajes().entrySet().iterator();
+
+        System.out.println("Personajes de la civilizacion " + this.getNomCivilizacion() + ":");
+
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            System.out.println("\t" + e.getKey() + " " + ((Personaje) e.getValue()).getCelda());
+        }
+    }
+
+    public void listarEdificios() {
+        Iterator it = this.getEdCivilizacion().entrySet().iterator();
+        System.out.println("Edificios de la civilizacion " + this.getNomCivilizacion() + ":");
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            System.out.println("\t" + e.getKey() + " " + ((Edificio) e.getValue()).getCelda());
+        }
+    }
+
+    public void listarCivilizaciones() {
+        Iterator it = this.Civilizaciones.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            System.out.println(e.getKey());
+        }
+    }
+
+    public void listarGrupos() {
+        Iterator it = this.getGrupoCivilizacion().entrySet().iterator();
+        System.out.println("Grupos de la civilizacion " + this.getNomCivilizacion() + ":");
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            System.out.println(e.getKey());
+        }
+    }
 }

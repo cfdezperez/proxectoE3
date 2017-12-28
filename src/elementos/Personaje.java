@@ -16,6 +16,7 @@ import excepciones.celda.FueraDeMapaException;
 import excepciones.recursos.NoRecolectableException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.recursos.RecursosException;
 import excepciones.personaje.SoldadoRecException;
@@ -341,6 +342,7 @@ public abstract class Personaje {
      */
     public abstract void inicializaNombre(Civilizacion civil);
 
+    public abstract void construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException;
 //
 //
 //    /**
