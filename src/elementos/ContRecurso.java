@@ -20,12 +20,14 @@ public abstract class ContRecurso {
     private Recurso recurso;
     private String nombre;
     private int tipoContenedor;
+    private boolean transitable;
 
     //CONSTRUCTORES
     public ContRecurso(Recurso rec) {
         //this.celda = c;
         this.recurso = new Recurso(rec);
         this.tipoContenedor = this.recurso.getTipo();
+        this.transitable=false;
         //c.setCivilizacion(null);
         //c.anhadeCR(this);
     }
@@ -47,6 +49,9 @@ public abstract class ContRecurso {
         return this.tipoContenedor;
     }
 
+    public boolean getTransitable(){
+        return this.transitable;
+    }
 
     //Solo se puede cambiar el recurso o tipo cuando llega a 0 y se transforma en pradera
     public void setRecurso(int tipo) throws RecursosException {
@@ -67,6 +72,10 @@ public abstract class ContRecurso {
     
     public void setCelda(Celda c) {
         this.celda = c;
+    }
+    
+    public void setTransitable(boolean a){
+        this.transitable=a;
     }
     
     public abstract void procesar() throws NoProcesableException;
