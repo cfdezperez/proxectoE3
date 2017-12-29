@@ -28,6 +28,8 @@ import excepciones.recursos.RecursosException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -329,7 +331,17 @@ public class Menu {
                             consola.imprimir("Debes indicar la dirección hacia donde defender " + orden[1]+"\n");
                             continue;
                         }
-                        juego.defender(orden[1], orden[2].toLowerCase());
+                {
+                    try {
+                        consola.imprimir(juego.defender(orden[1], orden[2].toLowerCase()));
+                    } catch (CeldaEnemigaException ex) {
+                        consola.imprimir(ex.getMessage());
+                    } catch (NoTransitablebleException | CeldaOcupadaException | EstarEnGrupoException | EdificioException ex) {
+                        consola.imprimir(ex.getMessage());
+                    } catch (CeldaException ex) {
+                        consola.imprimir(ex.getMessage());
+                    }
+                }
 
                         break;
 

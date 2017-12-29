@@ -16,6 +16,7 @@ import excepciones.celda.FueraDeMapaException;
 import excepciones.recursos.NoRecolectableException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.celda.CeldaException;
 import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
@@ -400,67 +401,33 @@ public abstract class Personaje {
     public abstract String almacenar(String direccion) throws InsuficientesRecException, SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException;
 
     
-//
-//
-//
-//
-//
-//
-//
-//    public void defender(Mapa mapa, String direccion) {
-//        Celda vecina = obtenerCeldaVecina(mapa, direccion); //igual que en mirar comprueba que la direccion sea válida
-//
-//        if (vecina == null) {
-//            System.out.println("No se puede mover el personaje hacia el "
-//                    + direccion + ": se sale del mapa.");
-//        } else {
-//            if (vecina.getNumElementos() != 0) {
-//
-//                //Una celda con un edificio solo tendría ese edificio, no más elementos
-//                //Si los personajes entran en el edificio no cuentan como elementos dela celda
-//                if (mapa.getCivActiva().getEdCivilizacion().containsKey(vecina.getNombreElementos().get(0))) {  // La celda contiene un edificio
-//                    Edificio e = mapa.getCivActiva().getEdCivilizacion().get(vecina.getNombreElementos().get(0));
-//                    if ((e.getTipo() != Mapa.TCIUDADELA) && (e.getTipo() != Mapa.TCASA) && (e.getTipo() != Mapa.TCUARTEL)) { //en c no funciona con mas de un and aqui no se
-//                        System.out.println("El edificio seleccionado ni una casa, ni una ciudadela ni un cuartel.");
-//                    } else {
-//                        if (e.getCapPersonajes() > 0) {
-//                            mover(mapa, vecina, direccion);
-//                            e.setDefensa(this.getArmadura());
-//                            e.setCapPersonajes(e.getCapPersonajes() - 1);
-//                            this.setSalud(this.saludInicial);
-//                            System.out.println("El " + this.getNombre() + " ha entrado en el " + e.getNombre() + " (capacidad restante edificio es " + e.getCapPersonajes() + ")");
-//                        } else {
-//                            System.out.println("El " + e.getNombre() + " ya está al maximo de su capacidad, el " + this.getNombre() + " no ha podido entrar en el edificio.");
-//                        }
-//
-//                    }
-//                } else { //la celda no contiene un edificio
-//                    System.out.println("LLEGA AQUI");
-//                    String mensaje;
-//                    switch (vecina.getTipoCelda()) {
-//                        case Mapa.TARBUSTO:
-//                            mensaje = "un arbusto";
-//                            break;
-//                        case Mapa.TBOSQUE:
-//                            mensaje = "un bosque";
-//                            break;
-//                        case Mapa.TCANTERA:
-//                            mensaje = "una cantera";
-//                            break;
-//                        case Mapa.TPRADERA:
-//                            mensaje = "una pradera";
-//                            break;
-//                        default:
-//                            mensaje = "esa celda";
-//                    }
-//                    System.out.println("El " + this.nombre
-//                            + " no puede defender " + mensaje + ".");
-//                }
-//            } else {
-//                System.out.println("La celda es una pradera, no se puede defender");
-//            }
-//        }
-//    }
+
+    public String defender(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, CeldaOcupadaException, EstarEnGrupoException, EdificioException, CeldaException {
+        String s;
+        Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion); //igual que en mirar comprueba que la direccion sea válida
+
+            if (vecina.getEdificio() != null) {// La celda contiene un edificio
+                //Una celda con un edificio solo tendría ese edificio, no más elementos
+                    Edificio e = vecina.getEdificio();
+                    if(vecina.getCivilizacion() != this.getCivilizacion()){
+                        throw new CeldaEnemigaException("El edificio pertenece a la civilización enemiga\n");
+                    }else{
+                        if (e.getCapPersonajes() > 0) {
+                            mover(this.getCelda().getMapa(), direccion);
+                            e.setDefensa(this.getArmadura());
+                            e.setCapPersonajes(e.getCapPersonajes() - 1);
+                            this.setSalud(this.saludInicial); 
+                            s = "El " + this.getNombre() + " ha entrado en el " + e.getNombre() + " (capacidad restante edificio es " + e.getCapPersonajes() + ")\n";
+                            
+                        } else {
+                           throw new EdificioException("El edificio está al máximo de capacidad de personajes, no puede entrar\n");
+                        
+                        }
+                    }
+                } else { //la celda no contiene un edificio
+                    throw new CeldaException("La celda no contiene un edificio, no se puede defender\n");
+                }  return s;      
+    }
 //    
 //    public void atacar(Mapa mapa, String direccion) {
 //        Celda vecina = obtenerCeldaVecina(mapa, direccion); 
