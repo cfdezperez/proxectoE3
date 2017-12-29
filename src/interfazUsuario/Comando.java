@@ -26,7 +26,7 @@ import excepciones.recursos.RecursosException;
  * @author tomas
  */
 public interface Comando {
-    public void mover(String nPersonaje, String direccion) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
+    public void mover(String nPersonaje, String direccion, int distancia) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
     public String listar(String tipo) throws ParametroIncorrectoException;
     public String describir(String nombre) throws ParametroIncorrectoException;
     public String describir(String nombre, String Civilizacion) throws ParametroIncorrectoException;

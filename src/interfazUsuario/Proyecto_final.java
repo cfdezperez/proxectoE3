@@ -5,28 +5,7 @@
  */
 package interfazUsuario;
 
-import elementos.cr.Bosque;
-import elementos.cr.Cantera;
-import elementos.edificio.Ciudadela;
-import elementos.Civilizacion;
-import elementos.recursos.Madera;
-import elementos.personaje.Paisano;
-import elementos.recursos.Piedra;
-import excepciones.celda.CeldaEnemigaException;
-import excepciones.celda.CeldaException;
-import excepciones.celda.CeldaOcupadaException;
-import excepciones.celda.FueraDeMapaException;
-import excepciones.recursos.NoRecolectableException;
-import excepciones.ParametroIncorrectoException;
-import excepciones.personaje.InsuficientesRecException;
-import excepciones.personaje.PersonajeException;
-import excepciones.personaje.PersonajeLlenoException;
-import excepciones.recursos.RecursosException;
-import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import vista.Celda;
-import vista.Mapa;
+
 
 /**
  *
@@ -34,39 +13,39 @@ import vista.Mapa;
  */
 public class Proyecto_final {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
+        Menu.start();
 
-        try {
-            Juego j = Menu.cargarFicheros("src/ficherosEvaluacion");
-            j.getMapa().imprimir();
-            //Se introduce primero la columna, que será x y luego la fila que será y
-            System.out.println(j.getMapa().obtenerCelda(0, 2).mirar());
-        } catch (ParametroIncorrectoException ex) {
-            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FueraDeMapaException ex) {
-            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CeldaOcupadaException ex) {
-            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CeldaEnemigaException ex) {
-            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        String[] civs = {"Romana", "Griega"};
-        Juego j = new Juego(5, 10, civs);
-        Mapa mapa = j.getMapa();
-        mapa.imprimir();
-
-        Celda c = mapa.obtenerCelda(2, 1);
-        // Creo un Paisano, le pongo nombre automático, lo añado a la celda y a la civilizacion
-        Paisano p = null;
-        try {
-            p = new Paisano();
-            p.inicializaNombre(Juego.getCivilizacionActiva());
-            Juego.getCivilizacionActiva().anhadePersonaje(p);
-            c.anhadePersonaje(p);
-        } catch (CeldaEnemigaException | ParametroIncorrectoException ex) {
-            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+//        try {
+//            Juego j = Menu.cargarFicheros("src/ficherosEvaluacion");
+//            j.getMapa().imprimir();
+//            //Se introduce primero la columna, que será x y luego la fila que será y
+//            System.out.println(j.getMapa().obtenerCelda(0, 2).mirar());
+//        } catch (ParametroIncorrectoException ex) {
+//            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (FueraDeMapaException ex) {
+//            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (CeldaOcupadaException ex) {
+//            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (CeldaEnemigaException ex) {
+//            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        String[] civs = {"Romana", "Griega"};
+//        Juego j = new Juego(5, 10, civs);
+//        Mapa mapa = j.getMapa();
+//        mapa.imprimir();
+//
+//        Celda c = mapa.obtenerCelda(2, 1);
+//        // Creo un Paisano, le pongo nombre automático, lo añado a la celda y a la civilizacion
+//        Paisano p = null;
+//        try {
+//            p = new Paisano();
+//            p.inicializaNombre(Juego.getCivilizacionActiva());
+//            Juego.getCivilizacionActiva().anhadePersonaje(p);
+//            c.anhadePersonaje(p);
+//        } catch (CeldaEnemigaException | ParametroIncorrectoException ex) {
+//            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 //        // Creo un arquero, le pongo nombre automático, lo añado a la celda y a la civilizacion
 //        c = mapa.obtenerCelda(3, 1);
 //        Arquero ar = null;
@@ -78,25 +57,24 @@ public class Proyecto_final {
 //        } catch (CeldaEnemigaException | ParametroIncorrectoException ex) {
 //            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-
         // Creo una cantera
-        try {
-            c = mapa.obtenerCelda(2, 2);
-            Cantera cant = new Cantera(new Piedra(50));
-            c.anhadeCR(cant);
-        } catch (CeldaOcupadaException ex) {
-            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        // Creo una bosque
-        c = mapa.obtenerCelda(3, 1);
-        Bosque bos = new Bosque(new Madera(50));
-        try {
-            c.anhadeCR(bos);
-        } catch (CeldaOcupadaException ex) {
-            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        mapa.imprimir();
+//        try {
+//            c = mapa.obtenerCelda(2, 2);
+//            Cantera cant = new Cantera(new Piedra(50));
+//            c.anhadeCR(cant);
+//        } catch (CeldaOcupadaException ex) {
+//            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        // Creo una bosque
+//        c = mapa.obtenerCelda(3, 1);
+//        Bosque bos = new Bosque(new Madera(50));
+//        try {
+//            c.anhadeCR(bos);
+//        } catch (CeldaOcupadaException ex) {
+//            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        mapa.imprimir();
 //        try {
 //            p.mover(mapa, "sur");
 //        } catch (NoTransitablebleException | FueraDeMapaException ex) {
@@ -108,51 +86,47 @@ public class Proyecto_final {
 //        } catch (CeldaOcupadaException ex) {
 //            Logger.getLogger(Proyecto_final.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-
-        try {
-            p.recolectar("norte");
-        } catch (NoRecolectableException ex) {
-            System.out.println("No recolecto al norte: " + ex.getMessage());
-        } catch (RecursosException | PersonajeLlenoException | FueraDeMapaException | ParametroIncorrectoException ex) {
-            System.out.println("No recolecto al norte: " + ex.getMessage());
-        }
-        try {
-            p.recolectar("sur");
-        } catch (RecursosException | PersonajeLlenoException | FueraDeMapaException | ParametroIncorrectoException ex) {
-            System.out.println("No recolecto al sur: " + ex.getMessage());
-        }
-        try {
-            p.recolectar("este");
-        } catch (RecursosException | CeldaException | PersonajeException | ParametroIncorrectoException ex) {
-            System.out.println("No recolecto al este: " + ex.getMessage());
-        }
-        
-        
-        try {
-            p.construirEdificio("casa", "este");
-        } catch (InsuficientesRecException | ParametroIncorrectoException | CeldaOcupadaException | FueraDeMapaException | CeldaEnemigaException ex) {
-            System.out.println(ex.getMessage());
-        }
-        
-        try {
-            p.construirEdificio("casa", "norte");
-        } catch (InsuficientesRecException | ParametroIncorrectoException | CeldaOcupadaException | FueraDeMapaException | CeldaEnemigaException ex) {
-            System.out.println(ex.getMessage());
-        }
-        
+//        try {
+//            p.recolectar("norte");
+//        } catch (NoRecolectableException ex) {
+//            System.out.println("No recolecto al norte: " + ex.getMessage());
+//        } catch (RecursosException | PersonajeLlenoException | FueraDeMapaException | ParametroIncorrectoException ex) {
+//            System.out.println("No recolecto al norte: " + ex.getMessage());
+//        }
+//        try {
+//            p.recolectar("sur");
+//        } catch (RecursosException | PersonajeLlenoException | FueraDeMapaException | ParametroIncorrectoException ex) {
+//            System.out.println("No recolecto al sur: " + ex.getMessage());
+//        }
+//        try {
+//            p.recolectar("este");
+//        } catch (RecursosException | CeldaException | PersonajeException | ParametroIncorrectoException ex) {
+//            System.out.println("No recolecto al este: " + ex.getMessage());
+//        }
+//        
+//        
+//        try {
+//            p.construirEdificio("casa", "este");
+//        } catch (InsuficientesRecException | ParametroIncorrectoException | CeldaOcupadaException | FueraDeMapaException | CeldaEnemigaException ex) {
+//            System.out.println(ex.getMessage());
+//        }
+//        
+//        try {
+//            p.construirEdificio("casa", "norte");
+//        } catch (InsuficientesRecException | ParametroIncorrectoException | CeldaOcupadaException | FueraDeMapaException | CeldaEnemigaException ex) {
+//            System.out.println(ex.getMessage());
+//        }
 //        try {
 //            p.mover(mapa, "sur");
 //        } catch (NoTransitablebleException | FueraDeMapaException | ParametroIncorrectoException | CeldaEnemigaException | CeldaOcupadaException ex) {
 //            System.out.println("El personaje " + p.getNombre() + " no se puede mover en la dirección indicada: " + ex.getMessage());
 //        }
-        mapa.imprimir();
-
+//        mapa.imprimir();
 //        try {
 //            ar.recolectar("este");
 //        } catch (SoldadoRecException ex) {
 //            System.out.println(ex.getMessage());
 //        }
-
 //        try {
 //            p.mover(mapa, "norte");
 //            p.mover(mapa, "este");
@@ -190,21 +164,18 @@ public class Proyecto_final {
 //        } catch (NoTransitablebleException | FueraDeMapaException | ParametroIncorrectoException | CeldaEnemigaException | CeldaOcupadaException ex) {
 //            System.out.println("El personaje " + ar.getNombre() + " no se puede mover en la dirección indicada: " + ex.getMessage());
 //        }
-
-        try {
-            // Creo una Ciudadela
-            Ciudadela ciud = new Ciudadela();
-            Civilizacion gr = j.getCivilizacion("Griega");
-            ciud.inicializaNombre(gr);
-            gr.anhadeEdificio(ciud);
-            mapa.obtenerCelda(2, 3).anhadeEdificio(ciud);
-            mapa.imprimirVisitadasCivilizacion(j.getCivilizacion("Griega"));
-
-        } catch (ParametroIncorrectoException | CeldaOcupadaException | CeldaEnemigaException ex) {
-            System.out.println("Error creando ciudadela: " + ex.getMessage());
-        }
-
+//
+//        try {
+//            // Creo una Ciudadela
+//            Ciudadela ciud = new Ciudadela();
+//            Civilizacion gr = j.getCivilizacion("Griega");
+//            ciud.inicializaNombre(gr);
+//            gr.anhadeEdificio(ciud);
+//            mapa.obtenerCelda(2, 3).anhadeEdificio(ciud);
+//            mapa.imprimirVisitadasCivilizacion(j.getCivilizacion("Griega"));
+//
+//        } catch (ParametroIncorrectoException | CeldaOcupadaException | CeldaEnemigaException ex) {
+//            System.out.println("Error creando ciudadela: " + ex.getMessage());
+//        }
     }
-
-    }
-
+}

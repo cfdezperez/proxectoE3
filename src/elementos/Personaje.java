@@ -253,9 +253,11 @@ public abstract class Personaje {
 
     //FUNCIONES
     /**
-     *
-     * @param mapa
-     * @param direccion
+     * Mueve el personaje una celda hacia una dirección
+     * 
+     * @param mapa El mapa en el que nos movemos
+     * @param direccion La dirección hacia la que nos movemos (norte, sur, esye u oeste)
+     * 
      * @throws excepciones.celda.NoTransitablebleException
      * @throws excepciones.celda.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
@@ -263,14 +265,31 @@ public abstract class Personaje {
      * @throws excepciones.celda.CeldaOcupadaException
      * @throws excepciones.personaje.EstarEnGrupoException
      */
-    public void mover(Mapa mapa, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException {
+    public void mover(Mapa mapa, String direccion)  throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException {
+        mover(mapa, direccion, 1);
+    }
+    /**
+     * Mueve el personaje varias celdas hacia una dirección
+     * 
+     * @param mapa El mapa en el que nos movemos
+     * @param direccion La dirección hacia la que nos movemos (norte, sur, esye u oeste)
+     * @param distancia El número de celdas a las que avanzamos
+     * 
+     * @throws excepciones.celda.NoTransitablebleException
+     * @throws excepciones.celda.FueraDeMapaException
+     * @throws excepciones.ParametroIncorrectoException
+     * @throws excepciones.celda.CeldaEnemigaException
+     * @throws excepciones.celda.CeldaOcupadaException
+     * @throws excepciones.personaje.EstarEnGrupoException
+     */    
+    public void mover(Mapa mapa, String direccion, int distancia) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException {
 
         if(getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
         } 
         
         Celda actual = this.getCelda();
-        Celda vecina = mapa.obtenerCeldaVecina(actual, direccion);
+        Celda vecina = mapa.obtenerCeldaVecina(actual, direccion, distancia);
 
         if (!vecina.getTransitable()) {
             throw new NoTransitablebleException("La celda no permite la entrada.");

@@ -181,8 +181,16 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void mover(String nombre, String direccion) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
-        Juego.civilizacionActiva.getPersonaje(nombre).mover(mapa, direccion);
+    public void mover(String nombre, String direccion, int distancia) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
+        Personaje p = Juego.civilizacionActiva.getPersonaje(nombre);
+        if(p instanceof Caballero) {
+            p.mover(mapa, direccion, distancia);
+        } else if(distancia != 1) {
+            throw new ParametroIncorrectoException("Solo los caballeros pueden avanzar más de una celda.");
+        } else {
+            p.mover(mapa, direccion);
+        }
+        getMapa().imprimir();
     }
 
     @Override
@@ -249,17 +257,17 @@ public class Juego implements Comando {
     @Override
     public void cambiarCivilizacion(String nCivilizacion) throws ParametroIncorrectoException {
         Juego.civilizacionActiva = this.getCivilizacion(nCivilizacion);
+        getMapa().imprimir();
     }
 
     @Override
     public void imprimirCivilizacion() throws ParametroIncorrectoException {
-        this.getMapa().imprimirCivilizacion(getCivilizacionActiva());
-        imprimirCivilizacion(getCivilizacionActiva().getNomCivilizacion());
+        this.getMapa().imprimirVisitadasCivilizacion(getCivilizacionActiva());
     }
 
     @Override
     public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException {
-        this.getMapa().imprimirCivilizacion(getCivilizacion(nCivilizacion));
+        this.getMapa().imprimirVisitadasCivilizacion(getCivilizacion(nCivilizacion));
     }
     
     @Override
@@ -507,6 +515,7 @@ public class Juego implements Comando {
         // Columna 3
         anhadeCR(new Cantera(new Piedra(80)), m.obtenerCelda(3, 0));
         anhadeCR(new Cantera(new Piedra(20)), m.obtenerCelda(3, 4));
+        anhadePersonaje(new Caballero(), m.obtenerCelda(3, 8), civ1);
 
         // Columna 4
         anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(4, 6));

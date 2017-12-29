@@ -90,6 +90,7 @@ public class Mapa {
      *
      * @param actual La celda actual
      * @param direccion La dirección a buscar
+     * @param distancia La distancia a la que moverse
      * @distancia La distancia a la que se encuentra la vecina
      * @return La celda vecina
      * @throws excepciones.celda.FueraDeMapaException

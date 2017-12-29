@@ -15,7 +15,7 @@ public class ConsolaNormal implements Consola {
     Scanner escanear = new Scanner(System.in);
     @Override
     public void imprimir(String s) {
-        System.out.println(s);
+        System.out.print(s);
     }
 
     @Override
