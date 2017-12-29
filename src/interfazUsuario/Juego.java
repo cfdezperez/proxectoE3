@@ -248,6 +248,7 @@ public class Juego implements Comando {
     public void construir(String Personaje, String nEdificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException, EstarEnGrupoException {
         Personaje p = civilizacionActiva.getPersonaje(Personaje);
         p.construirEdificio(nEdificio, direccion);
+        getMapa().imprimir();
     }
 
     @Override
@@ -255,6 +256,7 @@ public class Juego implements Comando {
             PersonajeLlenoException, SoldadoRecException, RecursosException,
             FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException, EstarEnGrupoException {
         getCivilizacionActiva().getPersonaje(nPersonaje).recolectar(direccion);
+        getMapa().imprimir();
     }
 
     @Override
@@ -282,7 +284,55 @@ public class Juego implements Comando {
         if ((f < 0) | (c < 0) | (f >= (getMapa().getTamY() - 1)) | (c >= (getMapa().getTamX() - 1))) {
             throw new FueraDeMapaException("La celda no está en el mapa");
         }
+        getMapa().imprimir();
         return this.getMapa().obtenerCelda(c, f).agrupar();
+    }
+    
+    @Override
+    public void crear(String nEdificio, String tipoPersonaje) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //getMapa().imprimir();
+    }
+
+    @Override
+    public void almacenar(String nPersonaje, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void reparar(String nPersonaje, String direccion) throws SolRepararException, FueraDeMapaException, 
+            ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException {
+        getCivilizacionActiva().getPersonaje(nPersonaje).reparar(direccion);
+        getMapa().imprimir();
+    }
+
+        @Override
+    public void desligar(String nPersonaje, String nGrupo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //getMapa().imprimir();
+    }
+
+    @Override
+    public void desagrupar(String nGrupo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //getMapa().imprimir();
+    }
+
+    @Override
+    public void defender(String nPersonaje, String direccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //getMapa().imprimir();
+    }
+
+    @Override
+    public void atacar(String nPersonaje, String direccion) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //getMapa().imprimir();
+    }
+    
+    @Override
+    public void salir() {
+        getMapa().salir();
     }
     
     // Métodos privados
@@ -471,27 +521,6 @@ public class Juego implements Comando {
 //            }
 //        }
 //    }
-
-    @Override
-    public void crear(String nEdificio, String tipoPersonaje) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void almacenar(String nPersonaje, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public void reparar(String nPersonaje, String direccion) throws SolRepararException, FueraDeMapaException, 
-            ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException {
-        getCivilizacionActiva().getPersonaje(nPersonaje).reparar(direccion);
-    }
-
-    @Override
-    public void salir() {
-        getMapa().salir();
-    }
     
     public void juegoPorDefecto() throws CeldaOcupadaException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException {
         // Obtiene una lista con las dos civilizaciones
@@ -590,24 +619,6 @@ public class Juego implements Comando {
         return s;
     }
 
-    @Override
-    public void desligar(String nPersonaje, String nGrupo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public void desagrupar(String nGrupo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void defender(String nPersonaje, String direccion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void atacar(String nPersonaje, String direccion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }
