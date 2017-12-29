@@ -318,6 +318,7 @@ public class Celda {
         this.tipoCelda = Juego.TPRADERA;
         this.civilizacion = null;
         this.transitable = true;
+        
     }
 
     private void setTipo() {

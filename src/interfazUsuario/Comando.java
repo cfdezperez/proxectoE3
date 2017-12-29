@@ -10,12 +10,14 @@ import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.NoAgrupableException;
 import excepciones.personaje.PersonajeLlenoException;
+import excepciones.personaje.SolAlmacenarException;
 import excepciones.personaje.SolConstruirException;
 import excepciones.personaje.SolRepararException;
 import excepciones.personaje.SoldadoRecException;
@@ -38,7 +40,7 @@ public interface Comando {
     public String recolectar(String nPersonaje, String direccion) throws 
             EstarEnGrupoException, PersonajeLlenoException, SoldadoRecException, RecursosException, FueraDeMapaException, 
             ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
-    public String almacenar(String nPersonaje, String direccion) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
+    public String almacenar(String nPersonaje, String direccion) throws InsuficientesRecException, NoAlmacenableException, SolAlmacenarException, EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
     public void cambiarCivilizacion(String nCivilizacion) throws ParametroIncorrectoException;
     public void imprimirCivilizacion() throws ParametroIncorrectoException;
     public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException;

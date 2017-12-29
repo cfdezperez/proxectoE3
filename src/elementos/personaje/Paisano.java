@@ -287,13 +287,14 @@ public class Paisano extends Personaje {
      *
      * @param direccion
      * @return 
+     * @throws excepciones.personaje.InsuficientesRecException
      * @throws excepciones.celda.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.celda.NoAlmacenableException
      * @throws excepciones.personaje.EstarEnGrupoException
      */
     @Override
-    public String almacenar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException {
+    public String almacenar(String direccion) throws InsuficientesRecException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException {
         if(getEstarGrupo()) {
             throw new EstarEnGrupoException("El paisano puede almacenar, ya que está en el grupo "+getGrupo());
         } 
@@ -302,10 +303,13 @@ public class Paisano extends Personaje {
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
 
         if (vecina.getEdificio() != null) {  // La celda contiene un edificio
-            Edificio e = this.getCelda().getEdificio();
+            Edificio e = vecina.getEdificio();
             if (e instanceof Casa) {
                 throw new NoAlmacenableException("Una casa no puede almacenar");
             } else {
+                if(this.getCapRecoleccion() == (this.getCRInicial())){
+                    throw new InsuficientesRecException("El paisano no tiene recursos que almacenar");
+                }else{
                 e.setCapAlmacenamientoTotal(e.getCapAlmacenamiento()[0] + this.capRecoleccion[0]);
                 e.setMadera(e.getCapAlmacenamiento()[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRMADERA]);
                 e.setComida(e.getCapAlmacenamiento()[Recurso.TRCOMIDA] + this.capRecoleccion[Recurso.TRCOMIDA]);
@@ -320,6 +324,7 @@ public class Paisano extends Personaje {
                 this.capRecoleccion[Recurso.TRMADERA] = 0;
                 this.capRecoleccion[Recurso.TRCOMIDA] = 0;
                 this.capRecoleccion[Recurso.TRPIEDRA] = 0;
+                }
             }
         } else {
             throw new NoAlmacenableException("En esa celda no se puede almacenar");
