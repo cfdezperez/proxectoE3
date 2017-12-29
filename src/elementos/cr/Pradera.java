@@ -8,6 +8,7 @@ package elementos.cr;
 import elementos.ContRecurso;
 import elementos.Recurso;
 import excepciones.celda.CeldaOcupadaException;
+import excepciones.recursos.NoProcesableException;
 import interfazUsuario.Juego;
 import vista.Celda;
 
@@ -23,5 +24,10 @@ public class Pradera extends ContRecurso{
     @Override
     public String toString() {
         return("\n\tContenedor de recursos de tipo Pradera, no productiva");
-    } 
+    }
+    
+    @Override
+    public void procesar() throws NoProcesableException {
+        throw new NoProcesableException("Las praderas no se procesan");
+    }    
 }

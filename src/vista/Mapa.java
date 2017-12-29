@@ -24,7 +24,8 @@ public class Mapa {
 
     private List<List<Celda>> Celdas;
     private int tamX, tamY;
-    private Consola consola = new ConsolaNormal();
+    //private Consola consola = new ConsolaNormal();
+    private Consola consola;
 
     /**
      *
@@ -35,7 +36,26 @@ public class Mapa {
         this.tamX = tamX;
         this.tamY = tamY;
         this.Celdas = new ArrayList<List<Celda>>(tamY);
-
+        consola = new ConsolaNormal();
+        for (int y = 0; y < tamY; y++) { //Creamos as celdas
+            List<Celda> celdasFila = new ArrayList<>(tamX);
+            for (int x = 0; x < tamX; x++) {//Imolas recorrendo
+                // Creamos una celda vacía (con pradera, trasitables y no visibles)
+                Celda c = new Celda(this, x, y);
+                c.restartCelda();
+                c.setVisible(false);
+                celdasFila.add(c); // La añadimos a la fila de celdas
+            }
+            this.Celdas.add(celdasFila);
+        }
+    }
+    
+    public Mapa(String civ1, String civ2, int tamX, int tamY) {
+        this.tamX = tamX;
+        this.tamY = tamY;
+        this.Celdas = new ArrayList<List<Celda>>(tamY);
+        consola = new ConsolaVentana(civ1, civ2, tamX, tamY);
+        
         for (int y = 0; y < tamY; y++) { //Creamos as celdas
             List<Celda> celdasFila = new ArrayList<>(tamX);
             for (int x = 0; x < tamX; x++) {//Imolas recorrendo
@@ -146,68 +166,72 @@ public class Mapa {
     public void imprimirVisible() {
         String raya = "   ";
         String cols = "   ";
+        String s;
         for (int i = 0; i < tamX; i++) {
             cols += " " + i + " ";
         }
         for (int i = 0; i < 3 * tamX; i++) {
             raya += "-";
         }
-        consola.imprimir(cols+"\n");
-        consola.imprimir(raya+"\n");
+        s = (cols+"\n");
+        s += (raya+"\n");
         int row = 0;
         // Recorremos las celdas del mapa
         for (List<Celda> c : this.Celdas) {
-            consola.imprimir(row + " |");
+            s += (row + " |");
             row++;
             //Vamos recorriendo cada uno de los List, que es cada fila
             for (Celda c1 : c) {
                 if (c1.getVisible()) {
                     Civilizacion civcelda = c1.getCivilizacion();
                     if (civcelda != null) {
-                        consola.imprimir(Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
+                        s += (Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
                     } else {
-                        consola.imprimir(Juego.SIMBOLOS[0][c1.getTipoCelda()]);
+                        s += (Juego.SIMBOLOS[0][c1.getTipoCelda()]);
                     }
                 } else {
-                    consola.imprimir("   ");
+                    s += ("   ");
                 }
             }
-            consola.imprimir("|\n");
+            s += ("|\n");
         }
-        consola.imprimir(raya+"\n");
+        s += (raya+"\n");
+        consola.imprimir(s);
     }
 
     public void imprimirVisitadasCivilizacion(Civilizacion civil) {
         String raya = "   ";
         String cols = "   ";
+        String s;
         for (int i = 0; i < tamX; i++) {
             cols += " " + i + " ";
         }
         for (int i = 0; i < 3 * tamX; i++) {
             raya += "-";
         }
-        consola.imprimir(cols+"\n");
-        consola.imprimir(raya+"\n");
+        s = (cols+"\n");
+        s += (raya+"\n");
         int row = 0;
         // Recorremos las celdas del mapa
         for (List<Celda> c : this.Celdas) {
-            consola.imprimir(row + " |");
+            s += (row + " |");
             row++;
             //Vamos recorriendo cada uno de los List, que es cada fila
             for (Celda c1 : c) {
                 if (c1.getVisible()) {
                     if (c1.getVisitadaPor() == civil) {
-                        consola.imprimir(Juego.SIMBOLOS[civil.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
+                        s += (Juego.SIMBOLOS[civil.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
                     } else {
-                        consola.imprimir("   ");
+                        s += ("   ");
                     }
                 } else {
-                    consola.imprimir("   ");
+                    s += ("   ");
                 }
             }
-            consola.imprimir("|\n");
+            s += ("|\n");
         }
-        consola.imprimir(raya+"\n");
+        s += (raya+"\n");
+        consola.imprimir(s);
     }
 
     /**
@@ -217,33 +241,39 @@ public class Mapa {
      */
     public void imprimirCivilizacion(Civilizacion civil) {
         String raya = " ";
+        String s;
         for (int i = 0; i < 3 * tamX; i++) {
             raya += "-";
         }
-        consola.imprimir(raya+"\n");
+        s = (raya+"\n");
         // Recorremos las celdas del mapa
         for (List<Celda> c : this.Celdas) {
-            consola.imprimir("|");
+            s += ("|");
             //Vamos recorriendo cada uno de los List, que es cada fila
             for (Celda c1 : c) {
                 if (c1.getVisible()) {
                     Civilizacion civcelda = c1.getCivilizacion();
                     if (civcelda == civil || civcelda == null) {
                         if (civcelda != null) {
-                            consola.imprimir(Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
+                            s += (Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
                         } else {
-                            consola.imprimir(Juego.SIMBOLOS[0][c1.getTipoCelda()]);
+                            s += (Juego.SIMBOLOS[0][c1.getTipoCelda()]);
                         }
                     } else {
-                        consola.imprimir("   ");
+                        s += ("   ");
                     }
                 } else {
-                    consola.imprimir("   ");
+                    s += ("   ");
                 }
             }
-            consola.imprimir("|\n");
+            s += ("|\n");
         }
 
-        consola.imprimir(raya+"\n");
+        s += (raya+"\n");
+        consola.imprimir(s);
+    }
+    
+    public void salir() {
+        consola.salir();
     }
 }

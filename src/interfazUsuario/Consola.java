@@ -12,4 +12,5 @@ package interfazUsuario;
 public interface Consola {
     public void imprimir(String s);
     public String leer(String descripcion);
+    public void salir();
 }

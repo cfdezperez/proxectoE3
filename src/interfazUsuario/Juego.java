@@ -87,7 +87,8 @@ public class Juego implements Comando {
      * en el juego
      */
     public Juego(int tamX, int tamY, String[] nombreCivilizaciones) {
-        mapa = new Mapa(tamX, tamY);
+        //mapa = new Mapa(tamX, tamY);
+        mapa = new Mapa(nombreCivilizaciones[0], nombreCivilizaciones[1], tamX, tamY);
         this.contRecursos = new HashMap<String, ContRecurso>();
         this.contador = new int[9];
         String[] nc = new String[nombreCivilizaciones.length];
@@ -119,7 +120,7 @@ public class Juego implements Comando {
      * @throws excepciones.celda.CeldaOcupadaException
      * @throws excepciones.celda.CeldaEnemigaException
      */
-    public Juego(List<List<String>> personajes, List<List<String>> edificios, List<List<String>> recursos) throws FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException, CeldaEnemigaException {
+    public Juego(List<List<String>> personajes, List<List<String>> edificios, List<List<String>> recursos) throws FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException, CeldaEnemigaException, NoTransitablebleException {
         this.civilizaciones = new HashMap<String, Civilizacion>(2);
 
         int maxX = 0, maxY = 0;
@@ -274,7 +275,7 @@ public class Juego implements Comando {
     
     @Override
     public String agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException, 
-            ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException {
+            ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException {
         String[] fc = coordenadasCelda.split("");
         int f = Integer.parseInt(fc[1]);
         int c = Integer.parseInt(fc[3]);
@@ -402,7 +403,7 @@ public class Juego implements Comando {
         }
     }
 
-    private void introducePersonajes(List<List<String>> personajes) throws ParametroIncorrectoException, CeldaEnemigaException, FueraDeMapaException {
+    private void introducePersonajes(List<List<String>> personajes) throws ParametroIncorrectoException, CeldaEnemigaException, FueraDeMapaException, NoTransitablebleException {
         // Recorremos la infprmación de los personajes
         for (List<String> personaje : personajes) {
             int y = new Integer(personaje.get(0).split(",")[0]);
@@ -446,6 +447,7 @@ public class Juego implements Comando {
             }
         }
     }
+    
 //
 //    private void creaGruposDeFichero(List<List<String>> personajes) throws FueraDeMapaException, ParametroIncorrectoException {
 //        // Recorremos de nuevo en busca de grupos
@@ -486,7 +488,12 @@ public class Juego implements Comando {
         getCivilizacionActiva().getPersonaje(nPersonaje).reparar(direccion);
     }
 
-    public void juegoPorDefecto() throws CeldaOcupadaException, ParametroIncorrectoException, CeldaEnemigaException {
+    @Override
+    public void salir() {
+        getMapa().salir();
+    }
+    
+    public void juegoPorDefecto() throws CeldaOcupadaException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException {
         // Obtiene una lista con las dos civilizaciones
         List<Civilizacion> civs = new ArrayList<Civilizacion>(civilizaciones.values());
         Civilizacion civ0 = civs.get(0);
@@ -560,7 +567,7 @@ public class Juego implements Comando {
     }
 
     // Método auxiliar para añadir un personaje a una civilización y a una celda
-    private void anhadePersonaje(Personaje p, Celda c, Civilizacion civ) throws CeldaEnemigaException {
+    private void anhadePersonaje(Personaje p, Celda c, Civilizacion civ) throws CeldaEnemigaException, NoTransitablebleException {
         p.inicializaNombre(civ);
         civ.anhadePersonaje(p);
         c.anhadePersonaje(p);

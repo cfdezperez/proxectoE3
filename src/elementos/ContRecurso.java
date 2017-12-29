@@ -5,14 +5,16 @@
  */
 package elementos;
 
+import excepciones.recursos.NoProcesableException;
 import excepciones.recursos.RecursosException;
+import interfazUsuario.Juego;
 import vista.*;
 
 /**
  *
  * @author celia
  */
-public class ContRecurso {
+public abstract class ContRecurso {
 
     private Celda celda;
     private Recurso recurso;
@@ -48,7 +50,7 @@ public class ContRecurso {
 
     //Solo se puede cambiar el recurso o tipo cuando llega a 0 y se transforma en pradera
     public void setRecurso(int tipo) throws RecursosException {
-        if (tipo == 0) {
+        if (tipo == Juego.TPRADERA) {
             this.recurso = new Recurso();
         } else {
             throw new RecursosException("No se puede modificar el recurso del contenedor\n");
@@ -56,7 +58,7 @@ public class ContRecurso {
     }
 
     public void setTipo(int tipo) throws RecursosException {
-        if (tipo == 0) {
+        if (tipo == Juego.TPRADERA) {
             this.tipoContenedor = tipo;
         } else {
             throw new RecursosException("No se puede modificar el recurso del contenedor\n");
@@ -66,4 +68,6 @@ public class ContRecurso {
     public void setCelda(Celda c) {
         this.celda = c;
     }
+    
+    public abstract void procesar() throws NoProcesableException;
 }

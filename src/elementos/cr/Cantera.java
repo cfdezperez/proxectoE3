@@ -7,6 +7,7 @@ package elementos.cr;
 
 import elementos.ContRecurso;
 import elementos.Recurso;
+import excepciones.recursos.NoProcesableException;
 
 /**
  *
@@ -21,4 +22,9 @@ public class Cantera extends ContRecurso{
     public String toString() {
         return("\n\tContenedor de recursos de tipo Cantera\n\tCantidad de piedra "+this.getRecurso().getCapacidad());
     }    
+
+    @Override
+    public void procesar() throws NoProcesableException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -7,6 +7,7 @@ package elementos.cr;
 
 import elementos.ContRecurso;
 import elementos.Recurso;
+import excepciones.recursos.NoProcesableException;
 
 /**
  *
@@ -21,5 +22,10 @@ public class Arbusto extends ContRecurso{
     @Override
     public String toString() {
         return("\n\tContenedor de recursos de tipo Arbusto\n\tCantidad de comida "+this.getRecurso().getCapacidad());
+    }
+
+    @Override
+    public void procesar() throws NoProcesableException {
+        throw new NoProcesableException("Los arbustos no se procesan");
     }
 }

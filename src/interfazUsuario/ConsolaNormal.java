@@ -23,5 +23,9 @@ public class ConsolaNormal implements Consola {
         imprimir(descripcion);
         return escanear.nextLine();
     }
+
+    @Override
+    public void salir() {
+    }
     
 }

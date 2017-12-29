@@ -41,11 +41,12 @@ public interface Comando {
     public void imprimirCivilizacion() throws ParametroIncorrectoException;
     public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException;
     public String agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException, 
-            ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException;
+            ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException;
     public void desligar(String nPersonaje, String nGrupo);
     public void desagrupar(String nGrupo);
     public void reparar(String nPersonaje, String direccion) throws EstarEnGrupoException, SolRepararException, FueraDeMapaException, 
             ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;    
     public void defender(String nPersonaje, String direccion) throws EstarEnGrupoException;
     public void atacar(String nPersonaje, String direccion) throws EstarEnGrupoException;
+    public void salir();
 }

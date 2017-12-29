@@ -14,11 +14,10 @@ import elementos.ContRecurso;
 import elementos.Edificio;
 import elementos.cr.Pradera;
 import elementos.personaje.Grupo;
-import elementos.personaje.Soldado;
 import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaEnemigaException;
-import excepciones.celda.CeldaNoTransitableException;
 import excepciones.celda.CeldaOcupadaException;
+import excepciones.celda.NoTransitablebleException;
 import excepciones.personaje.NoAgrupableException;
 import interfazUsuario.Juego;
 
@@ -155,8 +154,10 @@ public class Celda {
      * Añade un personaje a la celda
      *
      * @param p Personaje a añadir
+     * @throws excepciones.celda.CeldaEnemigaException
+     * @throws excepciones.celda.NoTransitablebleException
      */
-    public void anhadePersonaje(Personaje p) throws CeldaEnemigaException, CeldaNoTransitableException {
+    public void anhadePersonaje(Personaje p) throws CeldaEnemigaException, NoTransitablebleException {
         if (getTransitable()) {
             // Si es una pradera, la elimino
             if ((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
@@ -178,7 +179,7 @@ public class Celda {
             this.setCivilizacion(p.getCivilizacion());
             this.setTipo();
         } else {
-            throw new CeldaNoTransitableException("La celda no es transitable");
+            throw new NoTransitablebleException("La celda no es transitable");
         }
     }
 
@@ -236,7 +237,7 @@ public class Celda {
         }
     }
 
-    public String agrupar() throws ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, CeldaNoTransitableException {
+    public String agrupar() throws ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException {
         if (this.getPersonajes().size() <= 1) {
             throw new NoAgrupableException("No hay personajes suficientes para agrupar");
         }

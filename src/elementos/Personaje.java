@@ -266,7 +266,7 @@ public abstract class Personaje {
      * @throws excepciones.celda.CeldaOcupadaException
      * @throws excepciones.personaje.EstarEnGrupoException
      */
-    public String mover(Mapa mapa, String direccion)  throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException {
+    public String mover(Mapa mapa, String direccion)  throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException, NoTransitablebleException {
         return mover(mapa, direccion, 1);
     }
     /**
@@ -284,7 +284,7 @@ public abstract class Personaje {
      * @throws excepciones.celda.CeldaOcupadaException
      * @throws excepciones.personaje.EstarEnGrupoException
      */    
-    public String mover(Mapa mapa, String direccion, int distancia) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException {
+    public String mover(Mapa mapa, String direccion, int distancia) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException, NoTransitablebleException {
 
         if(getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());

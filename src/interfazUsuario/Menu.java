@@ -154,7 +154,7 @@ public class Menu {
                             throw new ParametroIncorrectoException("Solo puedes indicar una distancia de 1 o 2.\n");
                         }
                         try {
-                            consola.imprimir(juego.mover(orden[1], orden[2], distancia));
+                            consola.imprimir(juego.mover(orden[1], orden[2], distancia)+"\n");
                         } catch (CeldaException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no se puede mover al " + orden[2] + ": " + ex.getMessage()+"\n");
                         } catch (EstarEnGrupoException ex) {
@@ -290,7 +290,7 @@ public class Menu {
                             consola.imprimir(juego.agrupar(orden[1])+"\n");
                         } catch (NumberFormatException ex) {
                             consola.imprimir("Coordenanas mal indicadas.\n");
-                        } catch (FueraDeMapaException | CeldaEnemigaException ex) {
+                        } catch (FueraDeMapaException | CeldaEnemigaException | NoTransitablebleException ex) {
                             consola.imprimir("Celda incorrecta: " + ex.getMessage()+"\n");
                         } catch (NoAgrupableException ex) {
                             consola.imprimir("Imposible agrupar: "+ex.getMessage()+"\n");
@@ -352,6 +352,7 @@ public class Menu {
                         break;
                     case "salir":
                         consola.imprimir("Adios. Esperamos que haya disfrutado del juego.\n");
+                        juego.salir();
                         break;
                     default:
                         consola.imprimir("Lo siento, no te he entendido.\n");
@@ -364,7 +365,7 @@ public class Menu {
         }
     }
 
-    public static Juego cargarFicheros(String dir) throws ParametroIncorrectoException, FueraDeMapaException, CeldaOcupadaException, CeldaEnemigaException, FileNotFoundException {
+    public static Juego cargarFicheros(String dir) throws ParametroIncorrectoException, FueraDeMapaException, CeldaOcupadaException, CeldaEnemigaException, FileNotFoundException, NoTransitablebleException {
         // Cargamos personajes
         List<List<String>> personajes = (new Lectura(dir + File.separator + "personajes.csv")).getElementos();
         // Cargamos edificios

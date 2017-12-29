@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package excepciones.celda;
+package excepciones.recursos;
 
 /**
  *
- * @author celia
+ * @author tomas
  */
-public class CeldaNoTransitableException extends CeldaException {
-    public CeldaNoTransitableException(String m) {
+public class NoProcesableException extends RecursosException {
+    public NoProcesableException(String m){
         super(m);
     }
-    
 }
