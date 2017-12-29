@@ -396,7 +396,7 @@ public abstract class Personaje {
     
     public abstract void reparar(String direccion) throws EstarEnGrupoException, SolRepararException, FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;
 
-    public abstract void almacenar(String direccion) throws EstarEnGrupoException, SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException;
+    public abstract void almacenar(String direccion) throws InsuficientesRecException, EstarEnGrupoException, SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException;
     
 //
 //

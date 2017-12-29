@@ -29,12 +29,14 @@ import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.NoAgrupableException;
 import excepciones.personaje.PersonajeLlenoException;
+import excepciones.personaje.SolAlmacenarException;
 import excepciones.personaje.SolConstruirException;
 import excepciones.personaje.SolRepararException;
 import excepciones.personaje.SoldadoRecException;
@@ -295,8 +297,9 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void almacenar(String nPersonaje, String direccion) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void almacenar(String nPersonaje, String direccion) throws InsuficientesRecException, NoAlmacenableException, SolAlmacenarException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getCivilizacionActiva().getPersonaje(nPersonaje).almacenar(direccion);
     }
     
     @Override
@@ -334,6 +337,7 @@ public class Juego implements Comando {
     public void salir() {
         getMapa().salir();
     }
+    
     
     // Métodos privados
     private void creaCivilizaciones(List<List<String>> personajes, List<List<String>> edificios) throws FueraDeMapaException {
