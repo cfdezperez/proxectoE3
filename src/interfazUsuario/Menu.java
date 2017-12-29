@@ -15,12 +15,14 @@ import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaException;
+import excepciones.celda.NoAlmacenableException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.edificio.EdificioException;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.NoAgrupableException;
 import excepciones.personaje.PersonajeException;
+import excepciones.personaje.SolAlmacenarException;
 import excepciones.personaje.SolRepararException;
 import excepciones.recursos.RecursosException;
 import java.io.File;
@@ -255,7 +257,7 @@ public class Menu {
                     case "almacenar":
                         try {
                             juego.almacenar(orden[1], orden[2].toLowerCase());
-                        } catch (NoTransitablebleException | FueraDeMapaException | CeldaEnemigaException | CeldaOcupadaException ex) {
+                        } catch (EstarEnGrupoException | SolAlmacenarException | NoAlmacenableException | InsuficientesRecException | NoTransitablebleException | FueraDeMapaException | CeldaEnemigaException | CeldaOcupadaException ex) {
                             consola.imprimir("No es posible almacenar: " + ex.getMessage()+"\n");
                         }
 
