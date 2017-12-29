@@ -29,6 +29,7 @@ import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.celda.CeldaException;
 import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
@@ -322,9 +323,10 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void defender(String nPersonaje, String direccion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //getMapa().imprimir();
+    public String defender(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, CeldaOcupadaException, EstarEnGrupoException, EdificioException, CeldaException {
+        String s = getCivilizacionActiva().getPersonaje(nPersonaje).defender(direccion);
+        getMapa().imprimir();
+        return s;
     }
 
     @Override
