@@ -254,20 +254,20 @@ public abstract class Edificio {
         this.estado = estado;
     }
 
-    public void setCapAlmacenamientoTotal(int capAl) {
+    public void setCapAlmacenamientoTotal(int capAl) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
             if (capAl <= 0) {
-                System.out.println("No es posible esa capacidad");
+                throw new ParametroIncorrectoException("No es posible esa capacidad");
             } else {
                 this.capAlmacenamiento[0] = capAl;
             }
         }
     }
 
-    public void setMadera(int capM) {
+    public void setMadera(int capM) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
             if (capM <= 0) {
-                System.out.println("No es posible esa capacidad");
+                throw new ParametroIncorrectoException("No es posible esa capacidad");
 
             } else {
                 this.capAlmacenamiento[Recurso.TRMADERA] = capM;
@@ -275,10 +275,10 @@ public abstract class Edificio {
         }
     }
 
-    public void setComida(int capA) {
+    public void setComida(int capA) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
             if (capA <= 0) {
-                System.out.println("No es posible esa capacidad");
+                throw new ParametroIncorrectoException("No es posible esa capacidad");
 
             } else {
                 this.capAlmacenamiento[Recurso.TRCOMIDA] = capA;
@@ -286,10 +286,10 @@ public abstract class Edificio {
         }
     }
 
-    public void setPiedra(int capP) {
+    public void setPiedra(int capP) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
             if (capP <= 0) {
-                System.out.println("No es posible esa capacidad");
+                throw new ParametroIncorrectoException("No es posible esa capacidad");
 
             } else {
                 this.capAlmacenamiento[Recurso.TRPIEDRA] = capP;

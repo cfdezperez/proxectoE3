@@ -154,7 +154,7 @@ public class Menu {
                             throw new ParametroIncorrectoException("Solo puedes indicar una distancia de 1 o 2.\n");
                         }
                         try {
-                            juego.mover(orden[1], orden[2], distancia);
+                            consola.imprimir(juego.mover(orden[1], orden[2], distancia));
                         } catch (CeldaException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no se puede mover al " + orden[2] + ": " + ex.getMessage()+"\n");
                         } catch (EstarEnGrupoException ex) {

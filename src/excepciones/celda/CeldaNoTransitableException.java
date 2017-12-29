@@ -9,8 +9,8 @@ package excepciones.celda;
  *
  * @author celia
  */
-public class CeldaNoTransitableException1 extends CeldaException {
-    public CeldaNoTransitableException1(String m) {
+public class CeldaNoTransitableException extends CeldaException {
+    public CeldaNoTransitableException(String m) {
         super(m);
     }
     

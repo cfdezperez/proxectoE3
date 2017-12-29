@@ -5,7 +5,7 @@
  */
 package elementos;
 
-import excepciones.celda.CeldaOcupadaException;
+import excepciones.recursos.RecursosException;
 import vista.*;
 
 /**
@@ -47,19 +47,19 @@ public class ContRecurso {
 
 
     //Solo se puede cambiar el recurso o tipo cuando llega a 0 y se transforma en pradera
-    public void setRecurso(int tipo) {
+    public void setRecurso(int tipo) throws RecursosException {
         if (tipo == 0) {
             this.recurso = new Recurso();
         } else {
-            System.out.println("No se puede modificar el recurso del contenedor\n");
+            throw new RecursosException("No se puede modificar el recurso del contenedor\n");
         }
     }
 
-    public void setTipo(int tipo) {
+    public void setTipo(int tipo) throws RecursosException {
         if (tipo == 0) {
             this.tipoContenedor = tipo;
         } else {
-            System.out.println("No se puede modificar el recurso del contenedor\n");
+            throw new RecursosException("No se puede modificar el recurso del contenedor\n");
         }
     }
     

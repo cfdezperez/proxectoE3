@@ -181,16 +181,18 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void mover(String nombre, String direccion, int distancia) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
+    public String mover(String nombre, String direccion, int distancia) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
         Personaje p = Juego.civilizacionActiva.getPersonaje(nombre);
+        String s;
         if(p instanceof Caballero) {
-            p.mover(mapa, direccion, distancia);
+            s = p.mover(mapa, direccion, distancia);
         } else if(distancia != 1) {
             throw new ParametroIncorrectoException("Solo los caballeros pueden avanzar más de una celda.");
         } else {
-            p.mover(mapa, direccion);
+            s = p.mover(mapa, direccion);
         }
         getMapa().imprimir();
+        return s;
     }
 
     @Override

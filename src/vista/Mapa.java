@@ -6,11 +6,11 @@
 package vista;
 
 import elementos.Civilizacion;
-import elementos.Personaje;
-import elementos.cr.Pradera;
-import excepciones.celda.CeldaOcupadaException;
+import interfazUsuario.Consola;
+import interfazUsuario.ConsolaNormal;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
+import interfazUsuario.ConsolaNormal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class Mapa {
 
     private List<List<Celda>> Celdas;
     private int tamX, tamY;
+    private Consola consola = new ConsolaNormal();
 
     /**
      *
@@ -151,29 +152,29 @@ public class Mapa {
         for (int i = 0; i < 3 * tamX; i++) {
             raya += "-";
         }
-        System.out.println(cols);
-        System.out.println(raya);
+        consola.imprimir(cols+"\n");
+        consola.imprimir(raya+"\n");
         int row = 0;
         // Recorremos las celdas del mapa
         for (List<Celda> c : this.Celdas) {
-            System.out.print(row + " |");
+            consola.imprimir(row + " |");
             row++;
             //Vamos recorriendo cada uno de los List, que es cada fila
             for (Celda c1 : c) {
                 if (c1.getVisible()) {
                     Civilizacion civcelda = c1.getCivilizacion();
                     if (civcelda != null) {
-                        System.out.print(Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
+                        consola.imprimir(Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
                     } else {
-                        System.out.print(Juego.SIMBOLOS[0][c1.getTipoCelda()]);
+                        consola.imprimir(Juego.SIMBOLOS[0][c1.getTipoCelda()]);
                     }
                 } else {
-                    System.out.print("   ");
+                    consola.imprimir("   ");
                 }
             }
-            System.out.println("|");
+            consola.imprimir("|\n");
         }
-        System.out.println(raya);
+        consola.imprimir(raya+"\n");
     }
 
     public void imprimirVisitadasCivilizacion(Civilizacion civil) {
@@ -185,28 +186,28 @@ public class Mapa {
         for (int i = 0; i < 3 * tamX; i++) {
             raya += "-";
         }
-        System.out.println(cols);
-        System.out.println(raya);
+        consola.imprimir(cols+"\n");
+        consola.imprimir(raya+"\n");
         int row = 0;
         // Recorremos las celdas del mapa
         for (List<Celda> c : this.Celdas) {
-            System.out.print(row + " |");
+            consola.imprimir(row + " |");
             row++;
             //Vamos recorriendo cada uno de los List, que es cada fila
             for (Celda c1 : c) {
                 if (c1.getVisible()) {
                     if (c1.getVisitadaPor() == civil) {
-                        System.out.print(Juego.SIMBOLOS[civil.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
+                        consola.imprimir(Juego.SIMBOLOS[civil.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
                     } else {
-                        System.out.print("   ");
+                        consola.imprimir("   ");
                     }
                 } else {
-                    System.out.print("   ");
+                    consola.imprimir("   ");
                 }
             }
-            System.out.println("|");
+            consola.imprimir("|\n");
         }
-        System.out.println(raya);
+        consola.imprimir(raya+"\n");
     }
 
     /**
@@ -219,30 +220,30 @@ public class Mapa {
         for (int i = 0; i < 3 * tamX; i++) {
             raya += "-";
         }
-        System.out.println(raya);
+        consola.imprimir(raya+"\n");
         // Recorremos las celdas del mapa
         for (List<Celda> c : this.Celdas) {
-            System.out.print("|");
+            consola.imprimir("|");
             //Vamos recorriendo cada uno de los List, que es cada fila
             for (Celda c1 : c) {
                 if (c1.getVisible()) {
                     Civilizacion civcelda = c1.getCivilizacion();
                     if (civcelda == civil || civcelda == null) {
                         if (civcelda != null) {
-                            System.out.print(Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
+                            consola.imprimir(Juego.SIMBOLOS[civcelda.getIdCivilizacion() % Civilizacion.getNumDeCivilizaciones()][c1.getTipoCelda()]);
                         } else {
-                            System.out.print(Juego.SIMBOLOS[0][c1.getTipoCelda()]);
+                            consola.imprimir(Juego.SIMBOLOS[0][c1.getTipoCelda()]);
                         }
                     } else {
-                        System.out.print("   ");
+                        consola.imprimir("   ");
                     }
                 } else {
-                    System.out.print("   ");
+                    consola.imprimir("   ");
                 }
             }
-            System.out.println("|");
+            consola.imprimir("|\n");
         }
 
-        System.out.println(raya);
+        consola.imprimir(raya+"\n");
     }
 }

@@ -17,6 +17,7 @@ import elementos.personaje.Grupo;
 import elementos.personaje.Soldado;
 import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaEnemigaException;
+import excepciones.celda.CeldaNoTransitableException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.personaje.NoAgrupableException;
 import interfazUsuario.Juego;
@@ -155,7 +156,7 @@ public class Celda {
      *
      * @param p Personaje a añadir
      */
-    public void anhadePersonaje(Personaje p) throws CeldaEnemigaException {
+    public void anhadePersonaje(Personaje p) throws CeldaEnemigaException, CeldaNoTransitableException {
         if (getTransitable()) {
             // Si es una pradera, la elimino
             if ((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
@@ -177,8 +178,7 @@ public class Celda {
             this.setCivilizacion(p.getCivilizacion());
             this.setTipo();
         } else {
-            // TODO: throws new CeldaNoTransitableException
-            System.out.println("No puedo añadir un elemento = " + getNumElementos());
+            throw new CeldaNoTransitableException("La celda no es transitable");
         }
     }
 
@@ -236,7 +236,7 @@ public class Celda {
         }
     }
 
-    public String agrupar() throws ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException {
+    public String agrupar() throws ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, CeldaNoTransitableException {
         if (this.getPersonajes().size() <= 1) {
             throw new NoAgrupableException("No hay personajes suficientes para agrupar");
         }
