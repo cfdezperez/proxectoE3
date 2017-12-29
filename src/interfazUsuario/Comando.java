@@ -35,21 +35,21 @@ public interface Comando {
     public String describir(String nombre) throws ParametroIncorrectoException;
     public String describir(String nombre, String Civilizacion) throws ParametroIncorrectoException;
     public String mirar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException;
-    public void construir(String nPersonaje, String nEdificio, String direccion) throws EstarEnGrupoException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException;
-    public void crear(String nEdificio, String tipoPersonaje);
-    public void recolectar(String nPersonaje, String direccion) throws 
+    public String construir(String nPersonaje, String nEdificio, String direccion) throws EstarEnGrupoException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException;
+    public String crear(String nEdificio, String tipoPersonaje);
+    public String reparar(String nPersonaje, String direccion) throws EstarEnGrupoException, SolRepararException, FueraDeMapaException, 
+            ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;
+    public String recolectar(String nPersonaje, String direccion) throws 
             EstarEnGrupoException, PersonajeLlenoException, SoldadoRecException, RecursosException, FueraDeMapaException, 
             ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
-    public void almacenar(String nPersonaje, String direccion) throws InsuficientesRecException, NoAlmacenableException, SolAlmacenarException, EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
+    public String almacenar(String nPersonaje, String direccion) throws InsuficientesRecException, NoAlmacenableException, SolAlmacenarException, EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
     public void cambiarCivilizacion(String nCivilizacion) throws ParametroIncorrectoException;
     public void imprimirCivilizacion() throws ParametroIncorrectoException;
     public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException;
     public String agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException, 
             ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException;
     public void desligar(String nPersonaje, String nGrupo);
-    public void desagrupar(String nGrupo);
-    public void reparar(String nPersonaje, String direccion) throws EstarEnGrupoException, SolRepararException, FueraDeMapaException, 
-            ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;    
+    public void desagrupar(String nGrupo);    
     public String defender(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, CeldaOcupadaException, EstarEnGrupoException, EdificioException, CeldaException;
     public void atacar(String nPersonaje, String direccion) throws EstarEnGrupoException;
     public void salir();

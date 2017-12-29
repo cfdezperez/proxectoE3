@@ -32,22 +32,22 @@ public abstract class Soldado extends Personaje {
      * @throws SoldadoRecException
      */
     @Override
-    public void recolectar(String direccion) throws SoldadoRecException {
+    public String recolectar(String direccion) throws SoldadoRecException {
         throw new SoldadoRecException("Un soldado no puede recolectar");
     }
     
     @Override
-    public void construirEdificio(String nedificio, String direccion) throws SolConstruirException {
-        throw new SolConstruirException("Un soldado no puede construír");
+    public String construirEdificio(String nedificio, String direccion) throws SolConstruirException {
+        throw new SolConstruirException("Un soldado no puede construir");
     }
     
     @Override
-    public void reparar(String direccion) throws SolRepararException {
+    public String reparar(String direccion) throws SolRepararException {
         throw new SolRepararException("Un soldado no puede reparar");
     }
     
     @Override
-    public void almacenar(String direccion) throws SolAlmacenarException {
+    public String almacenar(String direccion) throws SolAlmacenarException {
         throw new SolAlmacenarException("Un soldado no puede almacenar");
     }
 }

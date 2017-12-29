@@ -49,7 +49,7 @@ public abstract class ContRecurso {
         return this.tipoContenedor;
     }
 
-    public boolean getTransitable(){
+    public boolean esTransitable(){
         return this.transitable;
     }
 

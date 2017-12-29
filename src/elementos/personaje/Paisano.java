@@ -153,16 +153,18 @@ public class Paisano extends Personaje {
     /**
      *
      * @param direccion
+     * @throws excepciones.personaje.EstarEnGrupoException
      * @throws excepciones.celda.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.recursos.NoRecolectableException
      * @throws excepciones.personaje.PersonajeLlenoException
      */
     @Override
-    public void recolectar(String direccion) throws EstarEnGrupoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, PersonajeLlenoException, RecursosException {
+    public String recolectar(String direccion) throws EstarEnGrupoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, PersonajeLlenoException, RecursosException {
         if(getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
         } 
+        String s;
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
 
@@ -183,7 +185,7 @@ public class Paisano extends Personaje {
             cr.getRecurso().setCapacidad(disponible - recolectado); //cambia capacidad para recolectar en funcion de la recolectado
             this.capRecoleccion[0] = 0;
             this.capRecoleccion[cr.getRecurso().getTipo()] += recolectado;
-            System.out.println("El paisano ha conseguido " + recolectado + " unidades de " + cr.getRecurso().getNombre());
+            s = ("El paisano ha conseguido " + recolectado + " unidades de " + cr.getRecurso().getNombre());
         } else if (this.getCapRecoleccion() >= disponible) {
             recolectado = disponible;
             this.capRecoleccion[0] -= recolectado;
@@ -192,10 +194,11 @@ public class Paisano extends Personaje {
             // Convertimos la celda en pradera
             vecina.restartCelda();
 
-            System.out.println("Has conseguido " + recolectado + " unidades de " + cr.getRecurso().getNombre());
+            s = ("Has conseguido " + recolectado + " unidades de " + cr.getRecurso().getNombre());
         } else { //Si disponible, que 
             throw new RecursosException("Error al recolectar");
         }
+        return s;
     }
 
     /**
@@ -210,11 +213,11 @@ public class Paisano extends Personaje {
      * @throws excepciones.personaje.EstarEnGrupoException
      */
     @Override
-    public void construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException {
+    public String construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException {
         if(getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
         }
-        
+        String s;
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
         Edificio ed = null;
 
@@ -240,16 +243,16 @@ public class Paisano extends Personaje {
             this.capRecoleccion[Recurso.TRMADERA] = this.capRecoleccion[Recurso.TRMADERA] - ed.getCRM();
             this.capRecoleccion[Recurso.TRPIEDRA] = this.capRecoleccion[Recurso.TRPIEDRA] - ed.getCRP();
             this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
-            System.out.println("Se ha construído " + ed.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
+            s = ("Se ha construído " + ed.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
         } else {
             throw new InsuficientesRecException("El paisano no tiene suficientes recursos, no puede construír");
         }
-
+        return s;
     }
 
     @Override
-    public void reparar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException {
-
+    public String reparar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException {
+        String s;
         if(getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
         } 
@@ -257,17 +260,15 @@ public class Paisano extends Personaje {
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
 
         if (vecina.getEdificio() != null) {  // La celda contiene un edificio
-            Edificio e = this.getCelda().getEdificio();
-            System.out.println("RECURSO PERSONAJE MADERA: " + this.capRecoleccion[Recurso.TRMADERA] + " RECURSO EDIFICIO EXIGE MADERA " + e.getCRM());
-            System.out.println("RECURSO PERSONAJE PIEDRA: " + this.capRecoleccion[Recurso.TRPIEDRA] + " RECURSO EDIFICIO EXIGE PIEDRA " + e.getCRP());
+            Edificio e = vecina.getEdificio();
             if (this.capRecoleccion[Recurso.TRMADERA] >= e.getCRM() && this.capRecoleccion[Recurso.TRPIEDRA] >= e.getCRP()) {
                 if (e.getSalud() != e.getSaludInicial()) {
                     e.reiniciarSalud(); //edificio recobra la salud
                     this.capRecoleccion[Recurso.TRMADERA] -= e.getCRM();
                     this.capRecoleccion[Recurso.TRPIEDRA] -= e.getCRP();
                     this.capRecoleccion[0] -= (e.getCRM() + e.getCRP());
-                    System.out.println("Reparado el edificio " + e.getNombre());
-                    System.out.println("Coste de la reparacion: " + (this.capRecoleccion[Recurso.TRMADERA] - e.getCRM()) + " de madera y " + (this.capRecoleccion[0] - e.getCRP()) + " de piedra");
+                    s = "Reparado el edificio " + e.getNombre()+"\n";
+                    s += "Coste de la reparacion: " + (this.capRecoleccion[Recurso.TRMADERA] - e.getCRM()) + " de madera y " + (this.capRecoleccion[0] - e.getCRP()) + " de piedra";
 
                 } else {
                     throw new NoNecRepararException("El edificio no necesita ser reparado");
@@ -278,12 +279,14 @@ public class Paisano extends Personaje {
         } else {
             throw new EdificioException("No hay ningún edificio que reparar en esta posición");
         }
+        return s;
 
     }
 
     /**
      *
      * @param direccion
+     * @return 
      * @throws excepciones.personaje.InsuficientesRecException
      * @throws excepciones.celda.FueraDeMapaException
      * @throws excepciones.ParametroIncorrectoException
@@ -291,11 +294,12 @@ public class Paisano extends Personaje {
      * @throws excepciones.personaje.EstarEnGrupoException
      */
     @Override
-    public void almacenar(String direccion) throws InsuficientesRecException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException {
+    public String almacenar(String direccion) throws InsuficientesRecException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException {
         if(getEstarGrupo()) {
-            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
+            throw new EstarEnGrupoException("El paisano puede almacenar, ya que está en el grupo "+getGrupo());
         } 
-
+        String s;
+        
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
 
         if (vecina.getEdificio() != null) {  // La celda contiene un edificio
@@ -311,7 +315,7 @@ public class Paisano extends Personaje {
                 e.setComida(e.getCapAlmacenamiento()[Recurso.TRCOMIDA] + this.capRecoleccion[Recurso.TRCOMIDA]);
                 e.setPiedra(e.getCapAlmacenamiento()[Recurso.TRPIEDRA] + this.capRecoleccion[Recurso.TRPIEDRA]);
                 //todo lo que tiene el personaje se le pasa a la ciudadela
-                System.out.println("Almacenado " + this.capRecoleccion[Recurso.TRMADERA]
+                s = ("Almacenado " + this.capRecoleccion[Recurso.TRMADERA]
                         + " madera, " + this.capRecoleccion[Recurso.TRCOMIDA]
                         + " comida, y " + this.capRecoleccion[Recurso.TRPIEDRA]
                         + " piedra en el edificio " + direccion.toUpperCase());
@@ -325,6 +329,6 @@ public class Paisano extends Personaje {
         } else {
             throw new NoAlmacenableException("En esa celda no se puede almacenar");
         }
-
+        return s;
     }
 }
