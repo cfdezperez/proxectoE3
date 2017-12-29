@@ -110,7 +110,7 @@ public class Civilizacion {
     }
 
     /**
-     * Devuelve un personaje de la civilización dado su nombre
+     * Devuelve un personaje (individual o grupo) de la civilización dado su nombre
      *
      * @param nombre Nombre del personaje
      * @return El personaje
@@ -118,11 +118,44 @@ public class Civilizacion {
     public Personaje getPersonaje(String nombre) throws ParametroIncorrectoException {
         if(Personajes.containsKey(nombre)) {
             return Personajes.get(nombre);
-        } else {
+        } else if (Grupos.containsKey(nombre)) {
+            return Grupos.get(nombre);
+        }
+        else {
             throw new ParametroIncorrectoException("El personaje "+nombre+
                     " no existe en la civilización "+this.getNomCivilizacion());
         }
     }
+    
+//    /**
+//     * Devuelve un personaje de la civilización dado su nombre
+//     *
+//     * @param nombre Nombre del personaje
+//     * @return El personaje
+//     */
+//    public Personaje getPersonaje(String nombre) throws ParametroIncorrectoException {
+//        if(Personajes.containsKey(nombre)) {
+//            return Personajes.get(nombre);
+//        } else {
+//            throw new ParametroIncorrectoException("El personaje "+nombre+
+//                    " no existe en la civilización "+this.getNomCivilizacion());
+//        }
+//    }
+//    
+//    /**
+//     * Devuelve un grupo de la civilización dado su nombre
+//     *
+//     * @param nombre Nombre del personaje
+//     * @return El personaje
+//     */
+//    public Personaje getGrupo(String nombre) throws ParametroIncorrectoException {
+//        if(Personajes.containsKey(nombre)) {
+//            return Personajes.get(nombre);
+//        } else {
+//            throw new ParametroIncorrectoException("El personaje "+nombre+
+//                    " no existe en la civilización "+this.getNomCivilizacion());
+//        }
+//    }
 
     /**
      * Añade un personaje a la civilizacion

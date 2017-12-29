@@ -322,7 +322,7 @@ public abstract class Personaje {
      * Haz visibles las celdas que rodean al personaje
      *
      */
-    public void actualizaVisibilidad() {
+    public void actualizaVisibilidad() throws FueraDeMapaException {
         Celda c = this.getCelda();
         Mapa mapa = c.getMapa();
         int x = c.getX();
@@ -626,7 +626,7 @@ public abstract class Personaje {
 //    }
     @Override
     public String toString() {
-        String s = "\n\tTipo personaje: ";
+        String s = "\tTipo personaje: ";
         if(this instanceof Paisano) {
             s += "Paisano";
         }

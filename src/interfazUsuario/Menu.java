@@ -54,7 +54,7 @@ public class Menu {
 
                     try {
                         juego = cargarFicheros(dir);
-                    } catch (CeldaException ex) {
+                    } catch (CeldaException | NoAgrupableException ex) {
                         consola.imprimir("Los datos de los ficheros son erróneos: " + ex.getMessage() + ". Salimos.\n");
                         System.exit(-1);
                     } catch (ParametroIncorrectoException | FileNotFoundException ex) {
@@ -105,7 +105,7 @@ public class Menu {
                         }
                         try {
                             juego = cargarFicheros(orden[1]);
-                        } catch (CeldaException ex) {
+                        } catch (CeldaException | NoAgrupableException ex) {
                             consola.imprimir("Los datos de los ficheros son erróneos: " + ex.getMessage() + ". Salimos.\n");
                             System.exit(-1);
                         } catch (ParametroIncorrectoException | FileNotFoundException ex) {
@@ -367,7 +367,7 @@ public class Menu {
         }
     }
 
-    public static Juego cargarFicheros(String dir) throws ParametroIncorrectoException, FueraDeMapaException, CeldaOcupadaException, CeldaEnemigaException, FileNotFoundException, NoTransitablebleException {
+    public static Juego cargarFicheros(String dir) throws ParametroIncorrectoException, FueraDeMapaException, CeldaOcupadaException, CeldaEnemigaException, FileNotFoundException, NoTransitablebleException, NoAgrupableException {
         // Cargamos personajes
         List<List<String>> personajes = (new Lectura(dir + File.separator + "personajes.csv")).getElementos();
         // Cargamos edificios

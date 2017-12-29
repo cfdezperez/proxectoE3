@@ -25,6 +25,9 @@ import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.PersonajeLlenoException;
+import excepciones.personaje.SolAlmacenarException;
+import excepciones.personaje.SolConstruirException;
+import excepciones.personaje.SolRepararException;
 import excepciones.recursos.RecursosException;
 import excepciones.personaje.SoldadoRecException;
 import interfazUsuario.Juego;
@@ -45,6 +48,7 @@ public class Grupo extends Personaje {
     private int ataque;
     private int defensa;
     private static int[] numeroGrupos = new int[Civilizacion.getNumDeCivilizaciones()];
+    public boolean tieneSoldado = false;
 
     public Grupo() throws ParametroIncorrectoException {
         super(100, 0, 0, true, Juego.TGRUPO);
@@ -163,9 +167,12 @@ public class Grupo extends Personaje {
      * @throws excepciones.celda.CeldaEnemigaException
      */
     @Override
-    public String construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException {
+    public String construirEdificio(String nedificio, String direccion) throws InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException, SolConstruirException {
         if (getEstarGrupo()) {
-            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo " + getGrupo());
+            throw new EstarEnGrupoException("El personaje puede construir, ya que está en un grupo " + getGrupo());
+        }
+        if (tieneSoldado) {
+            throw new SolConstruirException("El grupo tiene soldados");
         }
         String s;
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
@@ -195,16 +202,19 @@ public class Grupo extends Personaje {
             this.capRecoleccion[0] = 100 - (this.capRecoleccion[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRPIEDRA]);
             s = ("Se ha construído " + ed.getNombre() + " en la posicion " + "(" + vecina.getX() + "," + vecina.getY() + ")");
         } else {
-            throw new InsuficientesRecException("El paisano no tiene suficientes recursos, no puede construír");
+            throw new InsuficientesRecException("El grupo no tiene suficientes recursos, no puede construír");
         }
         return s;
     }
 
     @Override
-    public String reparar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException {
+    public String reparar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException, SolRepararException {
         String s;
         if (getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo " + getGrupo());
+        }
+        if (tieneSoldado) {
+            throw new SolRepararException("El grupo tiene soldados");
         }
 
         Celda vecina = this.getCelda().getMapa().obtenerCeldaVecina(this.getCelda(), direccion);
@@ -224,7 +234,7 @@ public class Grupo extends Personaje {
                     throw new NoNecRepararException("El edificio no necesita ser reparado");
                 }
             } else {
-                throw new InsuficientesRecException("El paisano no tiene los suficientes recursos para reparar");
+                throw new InsuficientesRecException("El grupo no tiene los suficientes recursos para reparar");
             }
         } else {
             throw new EdificioException("No hay ningún edificio que reparar en esta posición");
@@ -243,9 +253,12 @@ public class Grupo extends Personaje {
      * @throws excepciones.personaje.PersonajeLlenoException
      */
     @Override
-    public String recolectar(String direccion) throws EstarEnGrupoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, PersonajeLlenoException, RecursosException {
+    public String recolectar(String direccion) throws EstarEnGrupoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, PersonajeLlenoException, RecursosException, SoldadoRecException {
         if (getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo " + getGrupo());
+        }
+        if (tieneSoldado) {
+            throw new SoldadoRecException("El grupo tiene soldados");
         }
         String s;
         Celda actual = this.getCelda();
@@ -262,13 +275,13 @@ public class Grupo extends Personaje {
         int disponible = cr.getRecurso().getCapacidad(); //Capacidad disponible en ese momento
         int recolectado;
         if (this.getCapRecoleccion() == 0) {
-            throw new PersonajeLlenoException("El personaje agotó su capacidad de recolección");
+            throw new PersonajeLlenoException("El grupo "+this.getNombre()+" agotó su capacidad de recolección");
         } else if (disponible > this.getCapRecoleccion()) {
             recolectado = this.getCapRecoleccion();
             cr.getRecurso().setCapacidad(disponible - recolectado); //cambia capacidad para recolectar en funcion de la recolectado
             this.capRecoleccion[0] = 0;
             this.capRecoleccion[cr.getRecurso().getTipo()] += recolectado;
-            s = ("El paisano ha conseguido " + recolectado + " unidades de " + cr.getRecurso().getNombre());
+            s = ("El grupo "+this.getNombre()+" ha conseguido " + recolectado + " unidades de " + cr.getRecurso().getNombre());
         } else if (this.getCapRecoleccion() >= disponible) {
             recolectado = disponible;
             this.capRecoleccion[0] -= recolectado;
@@ -292,11 +305,15 @@ public class Grupo extends Personaje {
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.celda.NoAlmacenableException
      * @throws excepciones.personaje.EstarEnGrupoException
+     * @throws excepciones.personaje.SolAlmacenarException
      */
     @Override
-    public String almacenar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException {
+    public String almacenar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException, SolAlmacenarException {
         if (getEstarGrupo()) {
             throw new EstarEnGrupoException("El grupo no se puede almacenar, ya que está en el grupo " + getGrupo());
+        }
+        if (tieneSoldado) {
+            throw new SolAlmacenarException("El grupo tiene soldados");
         }
         String s;
 
@@ -316,7 +333,7 @@ public class Grupo extends Personaje {
                         + " madera, " + this.capRecoleccion[Recurso.TRCOMIDA]
                         + " comida, y " + this.capRecoleccion[Recurso.TRPIEDRA]
                         + " piedra en el edificio " + direccion.toUpperCase());
-                // Restauramos las capacidades del paisano
+                // Restauramos las capacidades del grupo
                 this.capRecoleccion[0] = this.capRecoleccionInicial; //capacidad recoleccion vuelve a ser la inicial
                 this.capRecoleccion[Recurso.TRMADERA] = 0;
                 this.capRecoleccion[Recurso.TRCOMIDA] = 0;
@@ -338,6 +355,8 @@ public class Grupo extends Personaje {
             this.capRecoleccion[Recurso.TRMADERA] += pa.getMadera();
             this.capRecoleccion[Recurso.TRCOMIDA] += pa.getComida();
             this.capRecoleccion[Recurso.TRPIEDRA] += pa.getPiedra();
+        } else if(p instanceof Soldado) {
+            tieneSoldado = true;
         }
         //compruebaSoldadoEnGrupo();
     }
@@ -345,6 +364,10 @@ public class Grupo extends Personaje {
     @Override
     public String toString() {
         String s = super.toString();
+        if(!tieneSoldado) {
+            s += "\n\tCapacidad de recolección: " + this.getCapRecoleccion();
+            s += "\n\tDispone de " + this.getMadera() + " madera, " + this.getPiedra() + " piedra y " + this.getComida() + " comida.";
+        }
         s += "\n\tEstá formado por " + this.personajes.size() + " personajes.";
         s += "\n\tPersonajes que forman el grupo: ";
         for (Personaje p : this.personajes) {

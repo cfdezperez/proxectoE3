@@ -17,6 +17,7 @@ import elementos.personaje.Grupo;
 import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
+import excepciones.celda.FueraDeMapaException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.personaje.NoAgrupableException;
 import interfazUsuario.Juego;
@@ -157,7 +158,7 @@ public class Celda {
      * @throws excepciones.celda.CeldaEnemigaException
      * @throws excepciones.celda.NoTransitablebleException
      */
-    public void anhadePersonaje(Personaje p) throws CeldaEnemigaException, NoTransitablebleException {
+    public void anhadePersonaje(Personaje p) throws CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
         if (getTransitable()) {
             // Si es una pradera, la elimino
             if ((this.contRecurso != null) && (this.contRecurso instanceof Pradera)) {
@@ -237,7 +238,19 @@ public class Celda {
         }
     }
 
-    public String agrupar() throws ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException {
+    public String agrupar(String nombreGrupo, Civilizacion civ) throws NoAgrupableException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        if (this.getPersonajes().size() <= 1) {
+            throw new NoAgrupableException("No hay personajes suficientes para agrupar");
+        }
+        // Crea e inicializa el grupo
+        Grupo grupo = new Grupo();
+        grupo.inicializaNombre(civ);
+        grupo.setNombre(nombreGrupo);
+        civ.anhadeGrupo(grupo);
+        return agrupar(grupo);
+    }
+
+    public String agrupar() throws ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
         if (this.getPersonajes().size() <= 1) {
             throw new NoAgrupableException("No hay personajes suficientes para agrupar");
         }
@@ -245,20 +258,7 @@ public class Celda {
         Grupo grupo = new Grupo();
         grupo.inicializaNombre(Juego.getCivilizacionActiva());
         Juego.getCivilizacionActiva().anhadeGrupo(grupo);
-
-        // Recorre la lista de personajes
-        for (Personaje p : this.getPersonajes()) {
-            grupo.anhadirPersonaje(p);
-            p.setGrupo(grupo);
-            this.eliminarPersonaje(p);
-        }
-
-        this.anhadePersonaje(grupo);
-        this.setTipo();
-        
-        
-        String s = "Se ha creado el " + grupo.getNombre() + " de la civilización " + Juego.getCivilizacionActiva() + grupo;
-        return s;
+        return agrupar(grupo);
     }
 
     /**
@@ -318,7 +318,7 @@ public class Celda {
         this.tipoCelda = Juego.TPRADERA;
         this.civilizacion = null;
         this.transitable = true;
-        
+
     }
 
     private void setTipo() {
@@ -333,8 +333,24 @@ public class Celda {
             } else if (this.edificio != null) {
                 this.setTipoCelda(this.edificio.getTipo());
             } else if (!this.getPersonajes().isEmpty()) {
-                this.setTipoCelda(this.listaPersonajes.get(0).getTipo());
+                this.setTipoCelda(this.getPersonajes().get(0).getTipo());
             }
         }
+    }
+
+    private String agrupar(Grupo grupo) throws CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {        
+        // Recorre la lista de personajes
+        grupo.setTipo(Juego.TGRUPO);
+        for (Personaje p : this.getPersonajes()) {
+            grupo.anhadirPersonaje(p);
+            p.setGrupo(grupo);
+        }
+        // Una vez añadidos, restauro la lista de personajes de la celda y añado el grupo
+        this.restartPersonajes();
+        this.anhadePersonaje(grupo);
+        this.setTipo();
+
+        String s = "Se ha creado el " + grupo.getNombre() + " de la civilización " + Juego.getCivilizacionActiva() + grupo;
+        return s;
     }
 }

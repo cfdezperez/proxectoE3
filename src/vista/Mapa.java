@@ -84,12 +84,11 @@ public class Mapa {
      * @param y Posición y de la celda (fila)
      * @return La celda en (x,y)
      */
-    public Celda obtenerCelda(int x, int y) {
+    public Celda obtenerCelda(int x, int y) throws FueraDeMapaException {
         if (x >= 0 && x < tamX && y >= 0 && y < tamY) {
             return this.Celdas.get(y).get(x);
         } else {
-            // TODO: throws new FueraDeMapaException
-            return null;
+            throw new FueraDeMapaException("La cerda está fuera del mapa");
         }
     }
 
