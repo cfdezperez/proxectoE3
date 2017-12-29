@@ -205,7 +205,7 @@ public class Menu {
                             continue;
                         }
                         try {
-                            juego.construir(orden[1], orden[2], orden[3].toLowerCase());
+                            consola.imprimir(juego.construir(orden[1], orden[2], orden[3].toLowerCase())+"\n");
                         } catch (PersonajeException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no puede construir: " + ex.getMessage()+"\n");
                         } catch (CeldaOcupadaException | CeldaEnemigaException | FueraDeMapaException ex) {
@@ -223,7 +223,7 @@ public class Menu {
                             continue;
                         }
                         try {
-                            juego.reparar(orden[1], orden[2].toLowerCase());
+                            consola.imprimir(juego.reparar(orden[1], orden[2].toLowerCase())+"\n");
                         } catch (SolRepararException | FueraDeMapaException | InsuficientesRecException | EdificioException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no puede reparar en la dirección " + orden[2] + ": " + ex.getMessage()+"\n");
                         } catch (EstarEnGrupoException ex) {
@@ -241,11 +241,11 @@ public class Menu {
                             consola.imprimir("Debes indicar lo que " + orden[1] + " tiene que crear.\n");
                             continue;
                         }
-                        juego.crear(orden[1], orden[2]);
+                        consola.imprimir(juego.crear(orden[1], orden[2])+"\n");
 
                     case "recolectar":
                         try {
-                            juego.recolectar(orden[1], orden[2].toLowerCase());
+                            consola.imprimir(juego.recolectar(orden[1], orden[2].toLowerCase())+"\n");
                         } catch (PersonajeException | RecursosException | FueraDeMapaException | CeldaOcupadaException ex) {
                             consola.imprimir("No es posible recolectar: " + ex.getMessage()+"\n");
                         }
@@ -254,7 +254,7 @@ public class Menu {
 
                     case "almacenar":
                         try {
-                            juego.almacenar(orden[1], orden[2].toLowerCase());
+                            consola.imprimir(juego.almacenar(orden[1], orden[2].toLowerCase())+"\n");
                         } catch (NoTransitablebleException | FueraDeMapaException | CeldaEnemigaException | CeldaOcupadaException ex) {
                             consola.imprimir("No es posible almacenar: " + ex.getMessage()+"\n");
                         }
@@ -373,7 +373,7 @@ public class Menu {
         // Cargamos recursos
         List<List<String>> recursos = (new Lectura(dir + File.separator + "mapa.csv")).getElementos();
         if (personajes == null || edificios == null || recursos == null) {
-
+            throw new FileNotFoundException("Alguno de los fichros está vacío");
         }
         return new Juego(personajes, edificios, recursos);
     }

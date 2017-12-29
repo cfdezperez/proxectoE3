@@ -372,6 +372,7 @@ public abstract class Personaje {
     /**
      *
      * @param direccion
+     * @return 
      * @throws excepciones.personaje.EstarEnGrupoException
      * @throws RecursosException
      * @throws PersonajeLlenoException
@@ -381,7 +382,7 @@ public abstract class Personaje {
      * @throws CeldaOcupadaException
      * @throws SoldadoRecException
      */
-    public abstract void recolectar(String direccion) throws EstarEnGrupoException, RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, CeldaOcupadaException, SoldadoRecException;
+    public abstract String recolectar(String direccion) throws EstarEnGrupoException, RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, CeldaOcupadaException, SoldadoRecException;
 
     //public abstract void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion);
     /**
@@ -392,11 +393,11 @@ public abstract class Personaje {
      */
     public abstract void inicializaNombre(Civilizacion civil);
 
-    public abstract void construirEdificio(String nedificio, String direccion) throws EstarEnGrupoException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException;
+    public abstract String construirEdificio(String nedificio, String direccion) throws SolConstruirException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException;
     
-    public abstract void reparar(String direccion) throws EstarEnGrupoException, SolRepararException, FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;
+    public abstract String reparar(String direccion) throws SolRepararException, FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException;
 
-    public abstract void almacenar(String direccion) throws EstarEnGrupoException, SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException;
+    public abstract String almacenar(String direccion) throws SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException;
     
 //
 //
