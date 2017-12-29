@@ -19,6 +19,7 @@ import vista.Celda;
 public class Pradera extends ContRecurso{
     public Pradera() {
         super(new Recurso(Juego.TPRADERA, 0));
+        setTransitable(true);
     }
     
     @Override
