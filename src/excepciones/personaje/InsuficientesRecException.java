@@ -7,7 +7,7 @@ package excepciones.personaje;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class InsuficientesRecException extends PersonajeException {
     public InsuficientesRecException(String m){

@@ -9,7 +9,7 @@ import interfazUsuario.Consola;
 
 /**
  *
- * @author tomas
+ * @author celia y maria
  */
 public class ConsolaVentana extends javax.swing.JFrame implements Consola {
     private static String civ1, civ2;

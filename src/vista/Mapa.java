@@ -7,7 +7,6 @@ package vista;
 
 import elementos.Civilizacion;
 import interfazUsuario.Consola;
-import interfazUsuario.ConsolaNormal;
 import excepciones.celda.FueraDeMapaException;
 import excepciones.ParametroIncorrectoException;
 import interfazUsuario.ConsolaNormal;
@@ -18,7 +17,7 @@ import interfazUsuario.Juego;
 
 /**
  *
- * @author tomas
+ * @author celia y maria
  */
 public class Mapa {
 

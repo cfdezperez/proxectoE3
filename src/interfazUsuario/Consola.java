@@ -7,7 +7,7 @@ package interfazUsuario;
 
 /**
  *
- * @author tomas
+ * @author celia y maria
  */
 public interface Consola {
     public void imprimir(String s);

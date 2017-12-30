@@ -14,7 +14,7 @@ import excepciones.personaje.SolAlmacenarException;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public abstract class Soldado extends Personaje {
     

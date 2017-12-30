@@ -7,7 +7,7 @@ package excepciones.personaje;
 
 /**
  *
- * @author tomas
+ * @author celia y maria
  */
 public class GrupoException  extends PersonajeException {
     public GrupoException(String m) {

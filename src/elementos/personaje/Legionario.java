@@ -12,7 +12,7 @@ import vista.Celda;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Legionario extends Soldado{
     private static int [] numeroLegionarios = new int[Civilizacion.getNumDeCivilizaciones()];

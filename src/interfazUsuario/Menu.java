@@ -26,9 +26,7 @@ import excepciones.personaje.PersonajeException;
 import excepciones.personaje.SolAlmacenarException;
 import excepciones.personaje.SolRepararException;
 import excepciones.recursos.RecursosException;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,16 +45,15 @@ public class Menu {
         boolean flag;
         String sn;
         Juego juego = null;
-        
+        CargadorJuego cargador = new CargadorJuego(consola);
+
         flag = true;
         while (flag) {
             sn = consola.leer("¿Cargar juego de ficheros? (s/n) ").toLowerCase();
             switch (sn.toLowerCase()) {
-                case "s":
-                    String dir = consola.leer("Directorio donde se encuentran los ficheros ");
-                    
+                case "s": {
                     try {
-                        juego = cargarFicheros(dir);
+                        juego = cargador.juegoDeFichero();
                     } catch (CeldaException | NoAgrupableException ex) {
                         consola.imprimir("Los datos de los ficheros son erróneos: " + ex.getMessage() + ". Salimos.\n");
                         System.exit(-1);
@@ -65,41 +62,34 @@ public class Menu {
                                 + ex.getMessage() + ". Salimos.\n");
                         System.exit(-1);
                     }
-                    juego.getMapa().imprimir();
-                    flag = false;
-                    break;
+                }
+                flag = false;
+                break;
                 case "n":
-                    String[] nombreCivilizaciones = consola.leer("Nombre de las dos civilizaciones que quieres crear (p.e. Romana, Griega): ").split(",");
-                    if (nombreCivilizaciones.length != 2) {
-                        consola.imprimir("Los nombres introducidos no son correctos.\n");
-                    } else {
-                        consola.imprimir("Creamos mapa por defecto (tamaño 10x10).\n");
-                        juego = new Juego(10, 10, nombreCivilizaciones);
-                        try {
-                            juego.juegoPorDefecto();
-                        } catch (CeldaException | ParametroIncorrectoException ex) {
-                            consola.imprimir("Error creando el mapa por defecto: " + ex.getMessage() + ". Salimos.\n");
-                            System.exit(-1);
-                        }
-                        juego.getMapa().imprimir();
-                        flag = false;
+                    try {
+                        juego = cargador.juegoPorDefecto();
+                    } catch (CeldaException | ParametroIncorrectoException ex) {
+                        consola.imprimir("Error creando el mapa por defecto: " + ex.getMessage() + ". Salimos.\n");
+                        System.exit(-1);
                     }
+                    flag = false;
                     break;
                 default:
                     consola.imprimir("Responde s o n, por favor.\n");
             }
         }
-        
+
         if (juego == null) { // Algo ha ido mal, así que me voy
             consola.imprimir("Error indeterminado. Salimos.\n");
             System.exit(-1);
         }
+
         String[] orden = new String[4];
-        
+
         while (!"salir".equals(orden[0])) {
             try {
                 orden = consola.leer(Juego.getCivilizacionActiva().getNomCivilizacion() + "> ").split(" ");
-                
+
                 switch (orden[0].toLowerCase()) {
                     case "cargar":
                         if (orden.length < 2) {
@@ -107,26 +97,24 @@ public class Menu {
                             continue;
                         }
                         try {
-                            juego = cargarFicheros(orden[1]);
+                            juego = cargador.juegoDeFichero(orden[1]);
                         } catch (CeldaException | NoAgrupableException ex) {
-                            consola.imprimir("Los datos de los ficheros son erróneos: " + ex.getMessage() + ". Salimos.\n");
-                            System.exit(-1);
+                            consola.imprimir("Los datos de los ficheros son erróneos: " + ex.getMessage() + ".\n");
                         } catch (ParametroIncorrectoException | FileNotFoundException ex) {
                             consola.imprimir("No se ha encontrado alguno de los ficheros personajes.csv, edificios.csv o mapa.csv. "
-                                    + ex.getMessage() + ". Salimos.\n");
-                            System.exit(-1);
+                                    + ex.getMessage() + ".\n");
                         }
                         break;
-                    
+
                     case "listar":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar lo que quieres listar.\n");
                             continue;
                         }
                         consola.imprimir(juego.listar(orden[1]) + "\n");
-                        
+
                         break;
-                    
+
                     case "describir":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar lo que quieres describir.\n");
@@ -136,7 +124,7 @@ public class Menu {
                             consola.imprimir(juego.describir(orden[1], orden[2]) + "\n");
                         }
                         break;
-                    
+
                     case "mover":
                         int distancia = 1;
                         if (orden.length < 2) {
@@ -166,7 +154,7 @@ public class Menu {
                             consola.imprimir("El personaje " + orden[1] + " no se puede mover: " + ex.getMessage() + ".\n");
                         }
                         break;
-                    
+
                     case "mirar":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar la celda que quieres mirar, por ejemplo: mirar (1,2).\n");
@@ -180,7 +168,7 @@ public class Menu {
                             consola.imprimir("Celda incorrecta: " + ex.getMessage() + "\n");
                         }
                         break;
-                    
+
                     case "construir":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar quién quieres que construya, "
@@ -217,7 +205,7 @@ public class Menu {
                             consola.imprimir("No se puede construir en la dirección indicada: " + ex.getMessage() + "\n");
                         }
                         break;
-                    
+
                     case "reparar":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar quién quieres que repare y en qué dirección.\n");
@@ -234,9 +222,9 @@ public class Menu {
                         } catch (EstarEnGrupoException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no puede reparar: " + ex.getMessage() + "\n");
                         }
-                        
+
                         break;
-                    
+
                     case "crear":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar qué edificio es el que va crear y lo que tiene que crear.\n");
@@ -247,25 +235,25 @@ public class Menu {
                             continue;
                         }
                         consola.imprimir(juego.crear(orden[1], orden[2]) + "\n");
-                    
+
                     case "recolectar":
                         try {
                             consola.imprimir(juego.recolectar(orden[1], orden[2].toLowerCase()) + "\n");
                         } catch (PersonajeException | RecursosException | FueraDeMapaException | CeldaOcupadaException ex) {
                             consola.imprimir("No es posible recolectar: " + ex.getMessage() + "\n");
                         }
-                        
+
                         break;
-                    
+
                     case "almacenar":
                         try {
                             consola.imprimir(juego.almacenar(orden[1], orden[2].toLowerCase()) + "\n");
                         } catch (EstarEnGrupoException | SolAlmacenarException | NoAlmacenableException | InsuficientesRecException | NoTransitablebleException | FueraDeMapaException | CeldaEnemigaException | CeldaOcupadaException ex) {
                             consola.imprimir("No es posible almacenar: " + ex.getMessage() + "\n");
                         }
-                        
+
                         break;
-                    
+
                     case "cambiar":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar el nombre de la civilización a la que quieres cambiar.\n");
@@ -273,11 +261,11 @@ public class Menu {
                         }
                         juego.cambiarCivilizacion(orden[1]);
                         break;
-                    
+
                     case "civilizacion":
                         juego.imprimirCivilizacion();
                         break;
-                    
+
                     case "imprimir":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar la civilización que quieres imprimir.\n");
@@ -285,7 +273,7 @@ public class Menu {
                         }
                         juego.imprimirCivilizacion(orden[1]);
                         break;
-                    
+
                     case "agrupar":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar la celda donde están los personajes que quieres agrupar, por ejemplo: agrupar (1,2).\n");
@@ -301,7 +289,7 @@ public class Menu {
                             consola.imprimir("Imposible agrupar: " + ex.getMessage() + "\n");
                         }
                         break;
-                    
+
                     case "desligar":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar a qué personaje quieres separar del grupo.\n");
@@ -315,7 +303,7 @@ public class Menu {
                             consola.imprimir("Error desligando a " + orden[1] + ": " + ex.getMessage() + "\n");
                         }
                         break;
-                    
+
                     case "desagrupar":
                         if (orden.length < 1) {
                             consola.imprimir("Debes indicar el grupo que quieres desagrupar.\n");
@@ -326,7 +314,7 @@ public class Menu {
                             consola.imprimir("Error desligando a " + orden[1] + ": " + ex.getMessage() + "\n");
                         }
                         break;
-                    
+
                     case "defender":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar quien quieres que entre en el edificio para defenderlo.\n");
@@ -346,7 +334,7 @@ public class Menu {
                             consola.imprimir(ex.getMessage());
                         }
                         break;
-                    
+
                     case "atacar":
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar quien quieres que ataque.\n");
@@ -361,7 +349,7 @@ public class Menu {
                         } catch (FueraDeMapaException | NoTransitablebleException | CeldaEnemigaException | AtaqueExcepcion | EstarEnGrupoException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no puede atacar en la dirección " + orden[2] + ": " + ex.getMessage() + "\n");
                         }
-                        
+
                         break;
                     case "ayuda":
                         consola.imprimir("Simbolos:\n");
@@ -378,23 +366,11 @@ public class Menu {
                         consola.imprimir("Lo siento, no te he entendido.\n");
                         break;
                 }
-                
+
             } catch (ParametroIncorrectoException ex) {
                 consola.imprimir("Error en parámetro: " + ex.getMessage() + "\n");
             }
         }
     }
-    
-    public static Juego cargarFicheros(String dir) throws ParametroIncorrectoException, FueraDeMapaException, CeldaOcupadaException, CeldaEnemigaException, FileNotFoundException, NoTransitablebleException, NoAgrupableException {
-        // Cargamos personajes
-        List<List<String>> personajes = (new Lectura(dir + File.separator + "personajes.csv")).getElementos();
-        // Cargamos edificios
-        List<List<String>> edificios = (new Lectura(dir + File.separator + "edificios.csv")).getElementos();
-        // Cargamos recursos
-        List<List<String>> recursos = (new Lectura(dir + File.separator + "mapa.csv")).getElementos();
-        if (personajes == null || edificios == null || recursos == null) {
-            throw new FileNotFoundException("Alguno de los fichros está vacío");
-        }
-        return new Juego(personajes, edificios, recursos);
-    }
+
 }

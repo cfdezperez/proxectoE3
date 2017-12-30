@@ -7,7 +7,7 @@ package excepciones.edificio;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class EdificioException extends Exception{
     public EdificioException(String m) {

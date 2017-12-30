@@ -7,7 +7,7 @@ package excepciones.edificio;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class NoNecRepararException extends EdificioException{
     public NoNecRepararException(String m) {

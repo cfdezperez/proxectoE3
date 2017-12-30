@@ -7,7 +7,7 @@ package excepciones.personaje;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class AtaqueExcepcion extends PersonajeException {
     public AtaqueExcepcion(String m) {

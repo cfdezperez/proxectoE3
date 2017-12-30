@@ -7,7 +7,7 @@ package excepciones;
 
 /**
  *
- * @author tomas
+ * @author celia y maria
  */
 public class ParametroIncorrectoException extends Exception {
     public ParametroIncorrectoException(String m) {

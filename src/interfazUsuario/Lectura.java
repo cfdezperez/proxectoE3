@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Lectura {
 

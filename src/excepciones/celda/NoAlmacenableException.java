@@ -7,7 +7,7 @@ package excepciones.celda;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class NoAlmacenableException extends CeldaException{
     public NoAlmacenableException(String m) {

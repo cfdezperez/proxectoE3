@@ -9,7 +9,7 @@ import excepciones.celda.CeldaException;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class NoTransitablebleException extends CeldaException {
     public NoTransitablebleException(String m) {

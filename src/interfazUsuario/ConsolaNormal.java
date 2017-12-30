@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author tomas
+ * @author celia y maria
  */
 public class ConsolaNormal implements Consola {
     Scanner escanear = new Scanner(System.in);

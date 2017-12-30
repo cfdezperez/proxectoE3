@@ -9,7 +9,7 @@ import excepciones.personaje.PersonajeException;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class PersonajeLlenoException extends PersonajeException {
     public PersonajeLlenoException(String m){

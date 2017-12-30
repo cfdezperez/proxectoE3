@@ -7,7 +7,7 @@ package excepciones.celda;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class FueraDeMapaException extends CeldaException {
     public FueraDeMapaException(String m) {

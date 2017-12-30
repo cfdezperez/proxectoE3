@@ -36,7 +36,7 @@ import vista.Mapa;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public abstract class Personaje {
 

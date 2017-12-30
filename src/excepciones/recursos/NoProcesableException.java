@@ -7,7 +7,7 @@ package excepciones.recursos;
 
 /**
  *
- * @author tomas
+ * @author celia y maria
  */
 public class NoProcesableException extends RecursosException {
     public NoProcesableException(String m){

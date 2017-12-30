@@ -25,7 +25,7 @@ import interfazUsuario.Juego;
 /**
  * Clase que define una celda en el mapa
  *
- * @author celia
+ * @author celia y maria
  */
 public class Celda {
 

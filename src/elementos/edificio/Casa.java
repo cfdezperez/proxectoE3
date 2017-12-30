@@ -13,7 +13,7 @@ import interfazUsuario.Juego;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Casa extends Edificio{
     private static int[] numeroCasas = new int[Civilizacion.getNumDeCivilizaciones()];

@@ -12,7 +12,7 @@ import vista.Celda;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Arquero extends Soldado {
    private static int [] numeroArqueros = new int[Civilizacion.getNumDeCivilizaciones()];

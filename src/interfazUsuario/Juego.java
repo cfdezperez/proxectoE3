@@ -53,7 +53,7 @@ import vista.Mapa;
 /**
  * Clase principal para inciar el juego
  *
- * @author celia
+ * @author celia y maria
  */
 public class Juego implements Comando {
 

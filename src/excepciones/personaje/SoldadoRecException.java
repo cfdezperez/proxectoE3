@@ -9,7 +9,7 @@ import excepciones.personaje.SoldadoException;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class SoldadoRecException extends SoldadoException {
     public SoldadoRecException(String m){

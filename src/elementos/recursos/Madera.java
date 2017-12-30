@@ -9,7 +9,7 @@ import elementos.Recurso;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Madera extends Recurso{
     public Madera(int cap){

@@ -27,7 +27,7 @@ import excepciones.recursos.RecursosException;
 
 /**
  *
- * @author tomas
+ * @author celia y maria
  */
 public interface Comando {
     public String mover(String nPersonaje, String direccion, int distancia) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;

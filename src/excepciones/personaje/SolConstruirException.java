@@ -7,7 +7,7 @@ package excepciones.personaje;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class SolConstruirException extends SoldadoException {
     public SolConstruirException(String m){

@@ -38,7 +38,7 @@ import vista.Celda;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Grupo extends Personaje {
 

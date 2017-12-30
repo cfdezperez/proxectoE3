@@ -11,7 +11,7 @@ import interfazUsuario.Juego;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Caballero extends Soldado {
 

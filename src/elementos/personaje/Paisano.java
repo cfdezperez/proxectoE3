@@ -32,7 +32,7 @@ import vista.Mapa;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Paisano extends Personaje {
 

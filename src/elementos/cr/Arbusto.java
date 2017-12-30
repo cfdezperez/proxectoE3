@@ -11,7 +11,7 @@ import excepciones.recursos.NoProcesableException;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Arbusto extends ContRecurso{
     public Arbusto(Recurso rec) {

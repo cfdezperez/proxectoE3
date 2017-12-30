@@ -13,7 +13,7 @@ import interfazUsuario.Juego;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class Cuartel extends Edificio{
     private static int[] numeroCuarteles = new int[Civilizacion.getNumDeCivilizaciones()];

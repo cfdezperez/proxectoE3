@@ -7,7 +7,7 @@ package excepciones.recursos;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 
 public class RecursosException extends Exception {

@@ -7,7 +7,7 @@ package excepciones.celda;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public class CeldaOcupadaException extends CeldaException {
     public CeldaOcupadaException(String m) {

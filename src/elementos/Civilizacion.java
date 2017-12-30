@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Clase para las civilizaciones que participan en el juego
  *
- * @author celia
+ * @author celia y maria
  */
 public class Civilizacion {
 

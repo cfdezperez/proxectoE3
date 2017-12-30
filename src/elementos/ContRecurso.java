@@ -12,7 +12,7 @@ import vista.*;
 
 /**
  *
- * @author celia
+ * @author celia y maria
  */
 public abstract class ContRecurso {
 
