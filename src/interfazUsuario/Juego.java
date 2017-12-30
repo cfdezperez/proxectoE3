@@ -23,6 +23,7 @@ import elementos.personaje.Legionario;
 import elementos.recursos.Madera;
 import elementos.personaje.Paisano;
 import elementos.Personaje;
+import elementos.personaje.Grupo;
 import elementos.recursos.Piedra;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
@@ -240,10 +241,10 @@ public class Juego implements Comando {
         Civilizacion civ = this.getCivilizacion(civilizacion);
         if (civ.getMapaPersonajes().containsKey(nombre)) {
             return (civ.getMapaPersonajes().get(nombre).toString());
-        } else if (civ.getEdCivilizacion().containsKey(nombre)) {
-            return (civ.getEdCivilizacion().get(nombre).toString());
-        } else if (civ.getGrupoCivilizacion().containsKey(nombre)) {
-            return (civ.getGrupoCivilizacion().get(nombre).toString());
+        } else if (civ.getMapaEdificios().containsKey(nombre)) {
+            return (civ.getMapaEdificios().get(nombre).toString());
+        } else if (civ.getMapaGrupos().containsKey(nombre)) {
+            return (civ.getMapaGrupos().get(nombre).toString());
         } else {
             throw new ParametroIncorrectoException(nombre + " no corresponde a un personaje ni a un edificio.");
         }
@@ -304,6 +305,28 @@ public class Juego implements Comando {
     }
     
     @Override
+    public String desagrupar(String nGrupo) throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        String s;
+        Personaje p = getCivilizacionActiva().getPersonaje(nGrupo);
+        if(p instanceof Grupo) {
+            s = ((Grupo) p).desagrupar();
+        } else {
+            throw new ParametroIncorrectoException(nGrupo+" no es el nombre de un grupo");
+        }
+        this.getMapa().imprimir();
+        return s;        
+    }
+
+    @Override
+    public String desligar(String nPersonaje) throws EstarEnGrupoException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        String s;
+        Personaje p = getCivilizacionActiva().getPersonaje(nPersonaje);
+        s = p.getGrupo().desligar(p);
+        this.getMapa().imprimir();
+        return s;
+    }
+    
+    @Override
     public String crear(String nEdificio, String tipoPersonaje) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         //getMapa().imprimir();
@@ -320,18 +343,6 @@ public class Juego implements Comando {
         String s = getCivilizacionActiva().getPersonaje(nPersonaje).reparar(direccion);
         getMapa().imprimir();
         return s;
-    }
-
-        @Override
-    public void desligar(String nPersonaje, String nGrupo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //getMapa().imprimir();
-    }
-
-    @Override
-    public void desagrupar(String nGrupo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //getMapa().imprimir();
     }
 
     @Override

@@ -303,23 +303,27 @@ public class Menu {
 
                     case "desligar":
                         if (orden.length < 2) {
-                            consola.imprimir("Debes indicar a quien quieres desligar.\n");
+                            consola.imprimir("Debes indicar a qué personaje quieres separar del grupo.\n");
                             continue;
                         }
-                        if (orden.length < 3) {
-                            consola.imprimir("Debes indicar de que grupo quieres desligar al personaje.\n");
-                            continue;
+                        try {
+                            consola.imprimir(juego.desligar(orden[1]) + ".\n");
+                        } catch (EstarEnGrupoException ex) {
+                            consola.imprimir("Imposible desligar al personaje " + orden[1] + ": " + ex.getMessage() + "\n");
+                        } catch (CeldaEnemigaException | NoTransitablebleException | FueraDeMapaException ex) {
+                            consola.imprimir("Error desligando a " + orden[1] + ": " + ex.getMessage() + "\n");
                         }
-                        juego.desligar(orden[1], orden[2]);
-
                         break;
 
                     case "desagrupar":
                         if (orden.length < 1) {
-                            consola.imprimir("Debes indicar un grupo.\n");
+                            consola.imprimir("Debes indicar el grupo que quieres desagrupar.\n");
                         }
-                        juego.desagrupar(orden[1]);
-
+                        try{
+                            consola.imprimir(juego.desagrupar(orden[1])+".\n");
+                        } catch (CeldaEnemigaException | NoTransitablebleException | FueraDeMapaException ex) {
+                            consola.imprimir("Error desligando a " + orden[1] + ": " + ex.getMessage() + "\n");
+                        }
                         break;
 
                     case "defender":
@@ -331,18 +335,15 @@ public class Menu {
                             consola.imprimir("Debes indicar la dirección hacia donde defender " + orden[1]+"\n");
                             continue;
                         }
-                {
-                    try {
-                        consola.imprimir(juego.defender(orden[1], orden[2].toLowerCase()));
-                    } catch (CeldaEnemigaException ex) {
-                        consola.imprimir(ex.getMessage());
-                    } catch (NoTransitablebleException | CeldaOcupadaException | EstarEnGrupoException | EdificioException ex) {
-                        consola.imprimir(ex.getMessage());
-                    } catch (CeldaException ex) {
-                        consola.imprimir(ex.getMessage());
-                    }
-                }
-
+                        try {
+                            consola.imprimir(juego.defender(orden[1], orden[2].toLowerCase()));
+                        } catch (CeldaEnemigaException ex) {
+                            consola.imprimir(ex.getMessage());
+                        } catch (NoTransitablebleException | CeldaOcupadaException | EstarEnGrupoException | EdificioException ex) {
+                            consola.imprimir(ex.getMessage());
+                        } catch (CeldaException ex) {
+                            consola.imprimir(ex.getMessage());
+                        }
                         break;
 
                     case "atacar":
@@ -360,7 +361,7 @@ public class Menu {
                     case "ayuda":
                         consola.imprimir("Simbolos:\n");
                         consola.imprimir("\tRecursos: X - Pradera,  B - Bosque,  A - Arbusto, C - Cantera.\n");
-                        consola.imprimir("\tPersonajes: P - Paisano,  S - Soldado.\n");
+                        consola.imprimir("\tPersonajes: P - Paisano,  Q - Arquero, O - Caballero, I - Legionario.\n");
                         consola.imprimir("\tEdificios:  M - Ciudadela, L - Casa, N - Cuartel.\n");
                         consola.imprimir("\tOtros:  G - Grupo de personajes, V - Varios elementos.\n");
                         break;

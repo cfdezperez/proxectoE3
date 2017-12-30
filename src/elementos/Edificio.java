@@ -496,7 +496,7 @@ public abstract class Edificio {
 //            case Mapa.TCASA:
 //            case Mapa.TCIUDADELA:
 //            case Mapa.TCUARTEL:
-//                Iterator it2 = m.getCivActiva().getEdCivilizacion().entrySet().iterator();
+//                Iterator it2 = m.getCivActiva().getMapaEdificios().entrySet().iterator();
 //                while (it2.hasNext()) {
 //                    Map.Entry e = (Map.Entry) it2.next();
 //                    Edificio ed = (Edificio) e.getValue();
@@ -533,7 +533,7 @@ public abstract class Edificio {
 //        {
 //            if (vecina.getNumElementos() != 0) {
 //
-//                Iterator it2 = obtenerCivEnemiga(mapa).getEdCivilizacion().entrySet().iterator();
+//                Iterator it2 = obtenerCivEnemiga(mapa).getMapaEdificios().entrySet().iterator();
 //                while (it2.hasNext()) {
 //                    Map.Entry e = (Map.Entry) it2.next();
 //                    if (((Edificio) e.getValue()).getCelda().getX() == vecina.getX()
@@ -574,7 +574,7 @@ public abstract class Edificio {
 //                                    }
 //                                }
 //
-//                                Iterator it3 = obtenerCivEnemiga(mapa).getGrupoCivilizacion().entrySet().iterator();
+//                                Iterator it3 = obtenerCivEnemiga(mapa).getMapaGrupos().entrySet().iterator();
 //                                while (it3.hasNext()) {
 //                                    Map.Entry e3 = (Map.Entry) it3.next();
 //                                    if (((Grupo) e3.getValue()).getCelda().getX() == vecina.getX()
@@ -625,7 +625,7 @@ public abstract class Edificio {
 //
 //                            }
 //                        }
-//                        Iterator it3 = obtenerCivEnemiga(mapa).getGrupoCivilizacion().entrySet().iterator();
+//                        Iterator it3 = obtenerCivEnemiga(mapa).getMapaGrupos().entrySet().iterator();
 //                        while (it3.hasNext()) {
 //                            Map.Entry e3 = (Map.Entry) it3.next();
 //                            if (((Grupo) e3.getValue()).getCelda().getX() == vecina.getX()
@@ -673,7 +673,7 @@ public abstract class Edificio {
 //    }
 //
 //    private void comprobarDestruccion(Mapa mapa) {
-//        Iterator it2 = obtenerCivEnemiga(mapa).getEdCivilizacion().entrySet().iterator();
+//        Iterator it2 = obtenerCivEnemiga(mapa).getMapaEdificios().entrySet().iterator();
 //        while (it2.hasNext()) {
 //            Map.Entry e = (Map.Entry) it2.next();
 //            if (((Edificio) e.getValue()).getSalud() == 0) {

@@ -54,7 +54,7 @@ public class Civilizacion {
      *
      * @return el HashMap de los edificios pertenecientes a la civilizacion
      */
-    public Map<String, Edificio> getEdCivilizacion() {
+    public Map<String, Edificio> getMapaEdificios() {
         return this.Edificios;
     }
 
@@ -63,7 +63,7 @@ public class Civilizacion {
      *
      * @return el HashMap de los grupos pertenecientes a la civilizacion
      */
-    public Map<String, Grupo> getGrupoCivilizacion() {
+    public Map<String, Grupo> getMapaGrupos() {
         return this.Grupos;
     }
 
@@ -127,36 +127,6 @@ public class Civilizacion {
         }
     }
     
-//    /**
-//     * Devuelve un personaje de la civilización dado su nombre
-//     *
-//     * @param nombre Nombre del personaje
-//     * @return El personaje
-//     */
-//    public Personaje getPersonaje(String nombre) throws ParametroIncorrectoException {
-//        if(Personajes.containsKey(nombre)) {
-//            return Personajes.get(nombre);
-//        } else {
-//            throw new ParametroIncorrectoException("El personaje "+nombre+
-//                    " no existe en la civilización "+this.getNomCivilizacion());
-//        }
-//    }
-//    
-//    /**
-//     * Devuelve un grupo de la civilización dado su nombre
-//     *
-//     * @param nombre Nombre del personaje
-//     * @return El personaje
-//     */
-//    public Personaje getGrupo(String nombre) throws ParametroIncorrectoException {
-//        if(Personajes.containsKey(nombre)) {
-//            return Personajes.get(nombre);
-//        } else {
-//            throw new ParametroIncorrectoException("El personaje "+nombre+
-//                    " no existe en la civilización "+this.getNomCivilizacion());
-//        }
-//    }
-
     /**
      * Añade un personaje a la civilizacion
      *
@@ -186,6 +156,24 @@ public class Civilizacion {
         g.setCivilizacion(this);
         this.Grupos.put(g.getNombre(), g);
     }
+    
+    /**
+     * Elimina un personaje de la civilizacion
+     * 
+     * @return 
+     */
+    public void eliminaPersonaje(Personaje p) throws ParametroIncorrectoException {
+        String nombre = p.getNombre();
+        if(Personajes.containsKey(nombre)) {
+            Personajes.remove(nombre);
+        } else if (Grupos.containsKey(nombre)) {
+            Grupos.remove(nombre);
+        }
+        else {
+            throw new ParametroIncorrectoException("El personaje "+nombre+
+                    " no existe en la civilización "+this.getNomCivilizacion());
+        }        
+    }
 
     @Override
     public String toString() {
@@ -204,7 +192,7 @@ public class Civilizacion {
 
     public String listarEdificios() {
         String s = "Edificios de la civilizacion " + this.getNomCivilizacion() + ":\n";
-        Iterator it = this.getEdCivilizacion().entrySet().iterator();
+        Iterator it = this.getMapaEdificios().entrySet().iterator();
 
         while (it.hasNext()) {
             Map.Entry e = (Map.Entry) it.next();
@@ -217,7 +205,7 @@ public class Civilizacion {
 
     public String listarGrupos() {
         String s = "Grupos de la civilizacion " + this.getNomCivilizacion() + ":\n";
-        Iterator it = this.getGrupoCivilizacion().entrySet().iterator();
+        Iterator it = this.getMapaGrupos().entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry e = (Map.Entry) it.next();
             s += "\t" + e.getKey() + " " + ((Grupo) e.getValue()).getCelda();

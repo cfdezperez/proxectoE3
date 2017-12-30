@@ -350,7 +350,7 @@ public class Celda {
         this.anhadePersonaje(grupo);
         this.setTipo();
 
-        String s = "Se ha creado el " + grupo.getNombre() + " de la civilización " + Juego.getCivilizacionActiva() + grupo;
+        String s = "Se ha creado el " + grupo.getNombre() + " de la civilización " + Juego.getCivilizacionActiva() + "\n" + grupo;
         return s;
     }
 }

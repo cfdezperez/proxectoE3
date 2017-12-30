@@ -20,6 +20,7 @@ import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.NoAlmacenableException;
+import excepciones.celda.NoTransitablebleException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.EstarEnGrupoException;
@@ -45,20 +46,16 @@ public class Grupo extends Personaje {
     private int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
     //2 capacidad comida, 3 capacidad piedra
     private final int capRecoleccionInicial;
-    private int ataque;
-    private int defensa;
     private static int[] numeroGrupos = new int[Civilizacion.getNumDeCivilizaciones()];
     public boolean tieneSoldado = false;
 
     public Grupo() throws ParametroIncorrectoException {
-        super(100, 0, 0, true, Juego.TGRUPO);
+        super(0, 0, 0, true, Juego.TGRUPO);
         personajes = new ArrayList<Personaje>();
         //numeroGrupos[civil.getIdCivilizacion()]++;
         //setNombre("Grupo-" + numeroGrupos[civil.getIdCivilizacion()]);
         this.capRecoleccion[0] = 0;
-        this.capRecoleccionInicial = this.capRecoleccion[0];
-        this.ataque = 0;
-        this.defensa = 0;
+        this.capRecoleccionInicial = this.capRecoleccion[0];        
     }
 
     @Override
@@ -347,8 +344,9 @@ public class Grupo extends Personaje {
 
     public void anhadirPersonaje(Personaje p) {
         personajes.add(p);
-        this.ataque += p.getAtaque();
-        this.defensa += p.getArmadura();
+        setAtaque(this.getAtaque() + p.getAtaque());
+        setArmadura(this.getArmadura() + p.getArmadura());
+        setSalud(this.getSalud() + p.getSalud());
         if (p instanceof Paisano) {
             Paisano pa = (Paisano) p;
             this.capRecoleccion[0] += pa.getCapRecoleccion();
@@ -356,11 +354,66 @@ public class Grupo extends Personaje {
             this.capRecoleccion[Recurso.TRCOMIDA] += pa.getComida();
             this.capRecoleccion[Recurso.TRPIEDRA] += pa.getPiedra();
         } else if(p instanceof Soldado) {
-            tieneSoldado = true;
+            this.tieneSoldado = true;
         }
-        //compruebaSoldadoEnGrupo();
     }
-
+    
+    /**
+     * Desagrupamos el grupo grupo
+     * 
+     * @return Mensaje de acción
+     * @throws ParametroIncorrectoException
+     * @throws CeldaEnemigaException
+     * @throws NoTransitablebleException
+     * @throws FueraDeMapaException 
+     */
+    public String desagrupar() throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        String s = "";
+        Celda actual = this.getCelda();
+        // Elimino el grupo de la celda actual
+        actual.eliminarPersonaje(this);
+        // Elimino el grupo de la civilizacion
+        this.getCivilizacion().eliminaPersonaje(this);
+        // Recorro la lista de personajes del grupo
+        for(Personaje p : this.personajes) {
+            s += "\tRecuperado personaje "+p.getNombre()+"\n";
+            // Añado el personaje a la celda actual
+            actual.anhadePersonaje(p);
+            p.setEstarGrupo(false);
+        }
+        this.setCelda(null);
+        this.setCivilizacion(null);
+        this.personajes = new ArrayList<Personaje>();
+        return s;
+    }
+    
+    /**
+     * Separamos un personaje del grupo
+     * 
+     * @param p El personaje a separar
+     * @return Mesanje de acción
+     * @throws excepciones.ParametroIncorrectoException
+     * @throws excepciones.celda.CeldaEnemigaException
+     * @throws excepciones.celda.NoTransitablebleException
+     * @throws excepciones.celda.FueraDeMapaException
+     */
+    public String desligar(Personaje p) throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        // Saca al personaje de la lista de personajes del grupo
+        if(this.personajes.contains(p)) {
+            this.personajes.remove(p);
+            p.setEstarGrupo(false);
+        } else {
+            throw new ParametroIncorrectoException("El personaje "+p.getNombre()+" no está en el grupo "+this.getNombre());
+        }
+        // añade el personaje a la celda
+        this.getCelda().anhadePersonaje(p);
+        // Si el grupo se ha quedado con un solo personaje, lo eliminamos
+        if(this.personajes.size() == 1) {
+            this.desagrupar();
+        }
+        return "Personaje "+p.getNombre()+" separado del grupo "+this.getNombre();
+    }
+    
     @Override
     public String toString() {
         String s = super.toString();

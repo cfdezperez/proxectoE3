@@ -62,8 +62,8 @@ public abstract class Personaje {
      * @throws excepciones.ParametroIncorrectoException
      */
     public Personaje(int salud, int armadura, int ataque, boolean capEdificacion, int tipo) throws ParametroIncorrectoException {
-        if (salud <= 0) {
-            throw new ParametroIncorrectoException("La salud no puede ser negativa o nula");
+        if (salud < 0) {
+            throw new ParametroIncorrectoException("La salud no puede ser negativa");
         } else {
             //this.celda = celda;
             this.estado = true;
@@ -207,7 +207,7 @@ public abstract class Personaje {
      * @param s
      */
     public void setSalud(int s) {
-        if (s <= 0) {
+        if (s < 0) {
             this.salud = 0;
             this.estado = false;
         } else {
@@ -288,7 +288,7 @@ public abstract class Personaje {
     public String mover(Mapa mapa, String direccion, int distancia) throws NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, EstarEnGrupoException, NoTransitablebleException {
 
         if(getEstarGrupo()) {
-            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo());
+            throw new EstarEnGrupoException("El personaje no se puede mover, ya que está en el grupo "+getGrupo().getNombre());
         } 
         
         Celda actual = this.getCelda();
@@ -439,7 +439,7 @@ public abstract class Personaje {
 //        {
 //            if (vecina.getNumElementos() != 0) {
 //
-//                Iterator it2 = obtenerCivEnemiga(mapa).getEdCivilizacion().entrySet().iterator();
+//                Iterator it2 = obtenerCivEnemiga(mapa).getMapaEdificios().entrySet().iterator();
 //                while (it2.hasNext()) {
 //                    Map.Entry e = (Map.Entry) it2.next();
 //                    //Hay un edificio
@@ -489,7 +489,7 @@ public abstract class Personaje {
 //                                    }
 //                                }
 //
-//                                Iterator it3 = obtenerCivEnemiga(mapa).getGrupoCivilizacion().entrySet().iterator();
+//                                Iterator it3 = obtenerCivEnemiga(mapa).getMapaGrupos().entrySet().iterator();
 //                                while (it3.hasNext()) {
 //                                    Map.Entry e3 = (Map.Entry) it3.next();
 //                                    //Si tiene un grupo, va atacando a todos los personajes
@@ -544,7 +544,7 @@ public abstract class Personaje {
 //
 //                            }
 //                        }
-//                        Iterator it3 = obtenerCivEnemiga(mapa).getGrupoCivilizacion().entrySet().iterator();
+//                        Iterator it3 = obtenerCivEnemiga(mapa).getMapaGrupos().entrySet().iterator();
 //                        while (it3.hasNext()) {
 //                            Map.Entry e3 = (Map.Entry) it3.next();
 //                            //Si es un grupo
@@ -620,7 +620,7 @@ public abstract class Personaje {
 //
 //    //Borra los edificios muertos
 //    private void comprobarDestruccion(Mapa mapa) {
-//        Iterator it2 = obtenerCivEnemiga(mapa).getEdCivilizacion().entrySet().iterator();
+//        Iterator it2 = obtenerCivEnemiga(mapa).getMapaEdificios().entrySet().iterator();
 //        while (it2.hasNext()) {
 //            Map.Entry e = (Map.Entry) it2.next();
 //            if (((Edificio) e.getValue()).getSalud() == 0) {
