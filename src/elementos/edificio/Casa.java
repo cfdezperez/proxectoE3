@@ -36,7 +36,7 @@ public class Casa extends Edificio{
      * @throws ParametroIncorrectoException 
      */
     public Casa(int capAlojar) throws CeldaOcupadaException, ParametroIncorrectoException {
-        this(100, 50, 40, 25, 20, capAlojar);
+        this(10, 50, 40, 25, 20, capAlojar);
     }
     
     /**
@@ -56,6 +56,7 @@ public class Casa extends Edificio{
         // Una casa puede alojar personajes
         this.setCapAlojar(true);
         this.setCapAlojamiento(capAlojar);
+        setCapPersonajes(capAlojar);
         Edificio.addCapAlojamientoTotal(capAlojar);
         // Una casa no puede crear paisanos ni soldados ni almacednar
         setCrearPaisanos(false);

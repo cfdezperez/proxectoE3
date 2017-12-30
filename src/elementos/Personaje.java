@@ -313,65 +313,15 @@ public abstract class Personaje {
             // Actualiza la visibilidad
             this.actualizaVisibilidad();
 
-            // Si la celda vecina tiene un edificio, indicamos que ya no está vacío
-            Edificio e = vecina.getEdificio();
+            // Si la celda que abandonamos tenía edificio, le aumentamos su capacidad de acogida y le reducimos la defensa
+            Edificio e = actual.getEdificio();
             if (e != null) {
-                e.setEstarVacio(false);
+                e.setDefensa(e.getDefensa() - this.getArmadura());
+                e.setCapPersonajes(e.getCapPersonajes() + 1);
             }
 
             return ("El " + this.getNombre() + " se ha movido a la celda " + vecina);
 
-        }
-    }
-
-    /**
-     * Haz visibles las celdas que rodean al personaje
-     *
-     */
-    public void actualizaVisibilidad() throws FueraDeMapaException {
-        Celda c = this.getCelda();
-        Mapa mapa = c.getMapa();
-        int x = c.getX();
-        int y = c.getY();
-
-        mapa.obtenerCelda(x, y).setVisible(true);
-        mapa.obtenerCelda(x, y).setVisitadaPor(this.civilizacion);
-        Celda vecina;
-        if (x > 0) {
-            vecina = mapa.obtenerCelda(x - 1, y);
-            vecina.setVisible(true);
-            // Si la celda vecina no tiene personajes, la marcamos como visitada
-            // por la civilización actual
-            if (vecina.getPersonajes().isEmpty()) {
-                vecina.setVisitadaPor(this.civilizacion);
-            }
-        }
-        if (x < (mapa.getTamX() - 1)) {
-            vecina = mapa.obtenerCelda(x + 1, y);
-            vecina.setVisible(true);
-            // Si la celda vecina no tiene personajes, la marcamos como visitada
-            // por la civilización actual
-            if (vecina.getPersonajes().isEmpty()) {
-                vecina.setVisitadaPor(this.civilizacion);
-            }
-        }
-        if (y > 0) {
-            vecina = mapa.obtenerCelda(x, y - 1);
-            vecina.setVisible(true);
-            // Si la celda vecina no tiene personajes, la marcamos como visitada
-            // por la civilización actual
-            if (vecina.getPersonajes().isEmpty()) {
-                vecina.setVisitadaPor(this.civilizacion);
-            }
-        }
-        if (y < (mapa.getTamY() - 1)) {
-            vecina = mapa.obtenerCelda(x, y + 1);
-            vecina.setVisible(true);
-            // Si la celda vecina no tiene personajes, la marcamos como visitada
-            // por la civilización actual
-            if (vecina.getPersonajes().isEmpty()) {
-                vecina.setVisitadaPor(this.civilizacion);
-            }
         }
     }
 
@@ -419,15 +369,18 @@ public abstract class Personaje {
                 throw new CeldaEnemigaException("El edificio pertenece a la civilización enemiga\n");
             } else {
                 if (e.getCapPersonajes() > 0) {
+                    // Hago la celda vecina transitable para poder entrar
+                    vecina.setTransitable(true);
                     mover(this.getCelda().getMapa(), direccion);
-                    e.setDefensa(this.getArmadura());
+                    vecina.setTransitable(false);
+                    
+                    e.setDefensa(e.getDefensa() + this.getArmadura());
                     e.setCapPersonajes(e.getCapPersonajes() - 1);
                     this.setSalud(this.saludInicial);
                     s = "El " + this.getNombre() + " ha entrado en el " + e.getNombre() + " (capacidad restante edificio es " + e.getCapPersonajes() + ")\n";
 
                 } else {
                     throw new EdificioException("El edificio está al máximo de capacidad de personajes, no puede entrar\n");
-
                 }
             }
         } else { //la celda no contiene un edificio
@@ -524,6 +477,57 @@ public abstract class Personaje {
             return s;
         } else {
             throw new AtaqueExcepcion("No hay nadie a quién atacar");
+        }
+    }
+    
+    /**
+     * Haz visibles las celdas que rodean al personaje
+     *
+     */
+    public void actualizaVisibilidad() throws FueraDeMapaException {
+        Celda c = this.getCelda();
+        Mapa mapa = c.getMapa();
+        int x = c.getX();
+        int y = c.getY();
+
+        mapa.obtenerCelda(x, y).setVisible(true);
+        mapa.obtenerCelda(x, y).setVisitadaPor(this.civilizacion);
+        Celda vecina;
+        if (x > 0) {
+            vecina = mapa.obtenerCelda(x - 1, y);
+            vecina.setVisible(true);
+            // Si la celda vecina no tiene personajes, la marcamos como visitada
+            // por la civilización actual
+            if (vecina.getPersonajes().isEmpty()) {
+                vecina.setVisitadaPor(this.civilizacion);
+            }
+        }
+        if (x < (mapa.getTamX() - 1)) {
+            vecina = mapa.obtenerCelda(x + 1, y);
+            vecina.setVisible(true);
+            // Si la celda vecina no tiene personajes, la marcamos como visitada
+            // por la civilización actual
+            if (vecina.getPersonajes().isEmpty()) {
+                vecina.setVisitadaPor(this.civilizacion);
+            }
+        }
+        if (y > 0) {
+            vecina = mapa.obtenerCelda(x, y - 1);
+            vecina.setVisible(true);
+            // Si la celda vecina no tiene personajes, la marcamos como visitada
+            // por la civilización actual
+            if (vecina.getPersonajes().isEmpty()) {
+                vecina.setVisitadaPor(this.civilizacion);
+            }
+        }
+        if (y < (mapa.getTamY() - 1)) {
+            vecina = mapa.obtenerCelda(x, y + 1);
+            vecina.setVisible(true);
+            // Si la celda vecina no tiene personajes, la marcamos como visitada
+            // por la civilización actual
+            if (vecina.getPersonajes().isEmpty()) {
+                vecina.setVisitadaPor(this.civilizacion);
+            }
         }
     }
 

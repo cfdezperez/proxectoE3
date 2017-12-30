@@ -48,7 +48,7 @@ public abstract class Edificio {
     }*/
     public Edificio(int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
         //Inicializa sus atributos con unos datos predeterminados
-        this(100, 50, 40, 50, 50, tipo);
+        this(10, 50, 40, 50, 50, tipo);
 
     }
     /**
@@ -376,6 +376,8 @@ public abstract class Edificio {
         s += "\n\tSalud: " + this.getSalud();
         s += "\n\tCoste de reparación en piedra: " + this.getCRP();
         s += "\n\tCoste de reparación en madera: " + this.getCRM();
+        s += "\n\tCapacidad de ataque: "+getAtaque();
+        s += "\n\tCapacidad de defensa: "+getDefensa();
         return(s);
     }    
 

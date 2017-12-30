@@ -25,7 +25,7 @@ public class Ciudadela extends Edificio {
     }
     
     public Ciudadela(int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
-        this(100, 50, 40, 25, 20, capPer);
+        this(10, 50, 40, 25, 20, capPer);
     }
     
     public Ciudadela(int salud, int CRM, int CRP, int CCC, int capAl, int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
