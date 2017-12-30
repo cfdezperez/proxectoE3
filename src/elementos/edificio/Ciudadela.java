@@ -25,11 +25,11 @@ public class Ciudadela extends Edificio {
     }
     
     public Ciudadela(int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
-        this(100, 50, 40, 50, 50, 25, 20, capPer);
+        this(100, 50, 40, 25, 20, capPer);
     }
     
-    public Ciudadela(int salud, int CRM, int CRP, int ataq, int def, int CCC, int capAl, int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
-        super(salud, CRM, CRP, ataq, def, CCC, capAl, Juego.TCIUDADELA);
+    public Ciudadela(int salud, int CRM, int CRP, int CCC, int capAl, int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
+        super(salud, CRM, CRP, CCC, capAl, Juego.TCIUDADELA);
         // Una ciudadela puede crear paisanos y almacednar
         setCrearPaisanos(true);
         setCapPersonajes(capPer);

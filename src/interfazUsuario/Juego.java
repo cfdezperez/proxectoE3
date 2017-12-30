@@ -34,6 +34,7 @@ import excepciones.celda.CeldaException;
 import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
+import excepciones.personaje.AtaqueExcepcion;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.NoAgrupableException;
@@ -353,9 +354,11 @@ public class Juego implements Comando {
     }
 
     @Override
-    public void atacar(String nPersonaje, String direccion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //getMapa().imprimir();
+    public String atacar(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
+            NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException {
+        String s = getCivilizacionActiva().getPersonaje(nPersonaje).atacar(direccion);
+        getMapa().imprimir();
+        return s;
     }
     
     @Override

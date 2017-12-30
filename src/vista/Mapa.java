@@ -83,6 +83,7 @@ public class Mapa {
      * @param x Posición x de la celda (columna)
      * @param y Posición y de la celda (fila)
      * @return La celda en (x,y)
+     * @throws excepciones.celda.FueraDeMapaException
      */
     public Celda obtenerCelda(int x, int y) throws FueraDeMapaException {
         if (x >= 0 && x < tamX && y >= 0 && y < tamY) {

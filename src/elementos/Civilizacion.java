@@ -110,23 +110,23 @@ public class Civilizacion {
     }
 
     /**
-     * Devuelve un personaje (individual o grupo) de la civilización dado su nombre
+     * Devuelve un personaje (individual o grupo) de la civilización dado su
+     * nombre
      *
      * @param nombre Nombre del personaje
      * @return El personaje
      */
     public Personaje getPersonaje(String nombre) throws ParametroIncorrectoException {
-        if(Personajes.containsKey(nombre)) {
+        if (Personajes.containsKey(nombre)) {
             return Personajes.get(nombre);
         } else if (Grupos.containsKey(nombre)) {
             return Grupos.get(nombre);
-        }
-        else {
-            throw new ParametroIncorrectoException("El personaje "+nombre+
-                    " no existe en la civilización "+this.getNomCivilizacion());
+        } else {
+            throw new ParametroIncorrectoException("El personaje " + nombre
+                    + " no existe en la civilización " + this.getNomCivilizacion());
         }
     }
-    
+
     /**
      * Añade un personaje a la civilizacion
      *
@@ -156,23 +156,40 @@ public class Civilizacion {
         g.setCivilizacion(this);
         this.Grupos.put(g.getNombre(), g);
     }
-    
+
     /**
      * Elimina un personaje de la civilizacion
-     * 
-     * @return 
+     *
+     * @param p El personaje a eliminar
+     * @throws excepciones.ParametroIncorrectoException
      */
     public void eliminaPersonaje(Personaje p) throws ParametroIncorrectoException {
         String nombre = p.getNombre();
-        if(Personajes.containsKey(nombre)) {
+        if (Personajes.containsKey(nombre)) {
             Personajes.remove(nombre);
         } else if (Grupos.containsKey(nombre)) {
             Grupos.remove(nombre);
+        } else {
+            throw new ParametroIncorrectoException("El personaje " + nombre
+                    + " no existe en la civilización " + this.getNomCivilizacion());
         }
-        else {
-            throw new ParametroIncorrectoException("El personaje "+nombre+
-                    " no existe en la civilización "+this.getNomCivilizacion());
-        }        
+    }
+
+    /**
+     * Elimina un edificio de la civilizacion
+     *
+     * @param e El edificio a eliminar
+     *
+     * @throws excepciones.ParametroIncorrectoException
+     */
+    public void eliminaEdificio(Edificio e) throws ParametroIncorrectoException {
+        String nombre = e.getNombre();
+        if (Edificios.containsKey(nombre)) {
+            Edificios.remove(nombre);
+        } else {
+            throw new ParametroIncorrectoException("El edificio " + nombre
+                    + " no existe en la civilización " + this.getNomCivilizacion());
+        }
     }
 
     @Override
@@ -198,10 +215,9 @@ public class Civilizacion {
             Map.Entry e = (Map.Entry) it.next();
             s += "\t" + e.getKey() + " " + ((Edificio) e.getValue()).getCelda();
         }
-        
+
         return s;
     }
-
 
     public String listarGrupos() {
         String s = "Grupos de la civilizacion " + this.getNomCivilizacion() + ":\n";

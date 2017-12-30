@@ -36,7 +36,7 @@ public class Casa extends Edificio{
      * @throws ParametroIncorrectoException 
      */
     public Casa(int capAlojar) throws CeldaOcupadaException, ParametroIncorrectoException {
-        this(100, 50, 40, 50, 50, 25, 20, capAlojar);
+        this(100, 50, 40, 25, 20, capAlojar);
     }
     
     /**
@@ -45,16 +45,14 @@ public class Casa extends Edificio{
      * @param salud
      * @param CRM
      * @param CRP
-     * @param ataq
-     * @param def
      * @param CCC
      * @param capAl
      * @param capAlojar
      * @throws CeldaOcupadaException
      * @throws ParametroIncorrectoException 
      */
-    public Casa(int salud, int CRM, int CRP, int ataq, int def, int CCC, int capAl, int capAlojar) throws CeldaOcupadaException, ParametroIncorrectoException {
-        super(salud, CRM, CRP, ataq, def, CCC, capAl, Juego.TCASA);
+    public Casa(int salud, int CRM, int CRP, int CCC, int capAl, int capAlojar) throws CeldaOcupadaException, ParametroIncorrectoException {
+        super(salud, CRM, CRP, CCC, capAl, Juego.TCASA);
         // Una casa puede alojar personajes
         this.setCapAlojar(true);
         this.setCapAlojamiento(capAlojar);

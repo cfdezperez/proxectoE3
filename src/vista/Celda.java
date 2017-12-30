@@ -203,8 +203,8 @@ public class Celda {
             if (this.edificio == null) {
                 this.edificio = e;
                 e.setCelda(this);
-                // Haz la celda transitable, ponle la civilizacion del personaje y corrige el tipo
-                this.setTransitable(true);
+                // Haz la celda no transitable, ponle la civilizacion del personaje y corrige el tipo
+                this.setTransitable(false);
                 this.setCivilizacion(e.getCivilizacion());
                 this.setTipo();
             } else {
@@ -261,22 +261,6 @@ public class Celda {
         return agrupar(grupo);
     }
 
-    /**
-     * Devuelve una cadena con las coordenadas de la celdas
-     *
-     * @return Las coordenadas de la celda
-     */
-    @Override
-    public String toString() {
-        String s = "(" + this.getY() + "," + this.getX() + ")";
-        return s;
-    }
-
-    public void eliminarPersonaje(Personaje p) {
-        this.listaPersonajes.remove(p);
-        // Fijo el tipo después de eliminar el personaje
-        this.setTipo();
-    }
 
     /**
      * Devuelve un String con información sobre el contenido de la celda
@@ -305,6 +289,22 @@ public class Celda {
     public void restartPersonajes() {
         this.listaPersonajes = new ArrayList<Personaje>();
     }
+    
+    
+    public void eliminarPersonaje(Personaje p) {
+        this.listaPersonajes.remove(p);
+        // Fijo el tipo después de eliminar el personaje
+        this.setTipo();
+    }
+    
+    /**
+     * Elimina el edificio de la celda
+     */
+    public void eliminaEdificio() {
+        this.edificio = null;
+        // Fijo el tipo después de eliminar el personaje
+        this.setTipo();
+    }
 
     /**
      * Reinicializa la celda
@@ -321,6 +321,19 @@ public class Celda {
 
     }
 
+    
+    /**
+     * Devuelve una cadena con las coordenadas de la celdas
+     *
+     * @return Las coordenadas de la celda
+     */
+    @Override
+    public String toString() {
+        String s = "(" + this.getY() + "," + this.getX() + ")";
+        return s;
+    }
+    
+    
     private void setTipo() {
         // Si no tiene elementos, la convierto en pradera
         if (getNumElementos() <= 0) {

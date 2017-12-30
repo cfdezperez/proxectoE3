@@ -14,6 +14,7 @@ import excepciones.celda.CeldaException;
 import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
+import excepciones.personaje.AtaqueExcepcion;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.NoAgrupableException;
@@ -23,7 +24,6 @@ import excepciones.personaje.SolConstruirException;
 import excepciones.personaje.SolRepararException;
 import excepciones.personaje.SoldadoRecException;
 import excepciones.recursos.RecursosException;
-import vista.Mapa;
 
 /**
  *
@@ -50,7 +50,9 @@ public interface Comando {
             ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException;
     public String desligar(String nPersonaje) throws EstarEnGrupoException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;
     public String desagrupar(String nGrupo) throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;    
-    public String defender(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, CeldaOcupadaException, EstarEnGrupoException, EdificioException, CeldaException;
-    public void atacar(String nPersonaje, String direccion) throws EstarEnGrupoException;
+    public String defender(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
+            CeldaEnemigaException, NoTransitablebleException, CeldaOcupadaException, EstarEnGrupoException, EdificioException, CeldaException;
+    public String atacar(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
+            NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException;
     public void salir();
 }

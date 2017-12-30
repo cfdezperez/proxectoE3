@@ -48,7 +48,7 @@ public abstract class Edificio {
     }*/
     public Edificio(int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
         //Inicializa sus atributos con unos datos predeterminados
-        this(100, 50, 40, 50, 50, 25, 20, tipo);
+        this(100, 50, 40, 50, 50, tipo);
 
     }
     /**
@@ -57,14 +57,12 @@ public abstract class Edificio {
      * @param salud1 Salud del edificio
      * @param CRM
      * @param CRP
-     * @param ataq
-     * @param def
      * @param CCC
      * @param capAlm
      * @throws CeldaOcupadaException
      * @throws ParametroIncorrectoException 
      */
-    public Edificio(int salud1, int CRM, int CRP, int ataq, int def, int CCC, int capAlm, int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
+    public Edificio(int salud1, int CRM, int CRP, int CCC, int capAlm, int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
         if (salud1 <= 0 || CRM < 0 || CRP < 0) { //Si no tiene salud no existe
             //this.estado = false;
             //this.saludInicial = 0;
@@ -79,8 +77,8 @@ public abstract class Edificio {
             this.saludInicial = salud1;
             this.costeReparacionMadera = CRM;
             this.costeReparacionPiedra = CRP;
-            this.ataque = ataq;
-            this.defensa = def;
+            this.ataque = 0;
+            this.defensa = 0;
             this.costeCrearComida = CCC;
             this.capAlmacenamiento[0] = capAlm;
             this.estarVacio = true;

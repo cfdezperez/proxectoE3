@@ -23,11 +23,11 @@ public class Cuartel extends Edificio{
     }
     
     public Cuartel(int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
-        this(100, 50, 40, 50, 50, 25, 20, capPer);
+        this(100, 50, 40, 50, 20, capPer);
     }
     
-    public Cuartel(int salud, int CRM, int CRP, int ataq, int def, int CCC, int capAl, int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
-        super(salud, CRM, CRP, ataq, def, CCC, capAl, Juego.TCUARTEL);
+    public Cuartel(int salud, int CRM, int CRP, int CCC, int capAl, int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
+        super(salud, CRM, CRP, CCC, capAl, Juego.TCUARTEL);
         // Una ciudadela puede crear paisanos y almacednar
         setCrearPaisanos(false);
         setCapPersonajes(capPer);
