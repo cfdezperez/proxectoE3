@@ -74,7 +74,14 @@ public abstract class ContRecurso {
         this.celda = c;
     }
     
-    public void setTransitable(boolean a){
+    /**
+     * Define si el CR es transitable (permite entrar) o no
+     * Lo ponemos final para que el NetBeans no proteste al cambiarlo
+     * en el constructor de pradera
+     * 
+     * @param a
+     */
+    public final void setTransitable(boolean a){
         this.transitable=a;
     }
     
