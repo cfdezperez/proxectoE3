@@ -376,7 +376,7 @@ public class Grupo extends Personaje {
         this.getCivilizacion().eliminaPersonaje(this);
         // Recorro la lista de personajes del grupo
         for(Personaje p : this.personajes) {
-            s += "\tRecuperado personaje "+p.getNombre()+"\n";
+            s += "Recuperado personaje "+p.getNombre()+"\n";
             // Añado el personaje a la celda actual
             actual.anhadePersonaje(p);
             p.setEstarGrupo(false);

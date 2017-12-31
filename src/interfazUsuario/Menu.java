@@ -317,7 +317,7 @@ public class Menu {
                             consola.imprimir("Debes indicar el grupo que quieres desagrupar.\n");
                         }
                         try {
-                            consola.imprimir(juego.desagrupar(orden[1]) + ".\n");
+                            consola.imprimir(juego.desagrupar(orden[1]));
                         } catch (CeldaEnemigaException | NoTransitablebleException | FueraDeMapaException ex) {
                             consola.imprimir("Error desligando a " + orden[1] + ": " + ex.getMessage() + "\n");
                         }
