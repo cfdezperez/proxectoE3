@@ -19,6 +19,7 @@ import excepciones.celda.NoAlmacenableException;
 import excepciones.celda.NoTransitablebleException;
 import excepciones.edificio.EdificioException;
 import excepciones.personaje.AtaqueExcepcion;
+import excepciones.personaje.CapMovimientoException;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.NoAgrupableException;
@@ -126,7 +127,6 @@ public class Menu {
                         break;
 
                     case "mover":
-                        int distancia = 1;
                         if (orden.length < 2) {
                             consola.imprimir("Debes indicar a quien quieres mover y hacia donde moverlo.\n");
                             continue;
@@ -136,18 +136,23 @@ public class Menu {
                                     + orden[1] + "\n");
                             continue;
                         }
-                        if (orden.length == 4) { // Se indica una distancia (opcional)
-                            try {
-                                distancia = Integer.parseInt(orden[3]);
-                            } catch (NumberFormatException ex) {
-                                throw new ParametroIncorrectoException(ex.getMessage());
-                            }
-                        }
-                        if ((distancia != 1) && (distancia != 2)) {
-                            throw new ParametroIncorrectoException("Solo puedes indicar una distancia de 1 o 2.\n");
-                        }
                         try {
-                            consola.imprimir(juego.mover(orden[1], orden[2], distancia) + "\n");
+                            int distancia;
+                            try {
+                                consola.imprimir(juego.mover(orden[1], orden[2]) + "\n");
+                            } catch (CapMovimientoException ex) {
+                                // La capacidad de movimiento es mayor de 1, preguntamos cuánto queremos mover
+                                try {
+                                    distancia = Integer.parseInt(consola.leer("Indica cuántas casilla te quieres desplazar: "));
+                                } catch (NumberFormatException nfex) {
+                                    throw new ParametroIncorrectoException(nfex.getMessage());
+                                }
+                                if (distancia > Integer.parseInt(ex.getMessage())) {
+                                    throw new ParametroIncorrectoException("La distancia indicada " + distancia
+                                            + " es mayor que la capacidad de movimiento del personaje, que es " + ex.getMessage());
+                                }
+                                consola.imprimir(juego.mover(orden[1], orden[2], distancia) + "\n");
+                            }
                         } catch (CeldaException ex) {
                             consola.imprimir("El personaje " + orden[1] + " no se puede mover al " + orden[2] + ": " + ex.getMessage() + "\n");
                         } catch (EstarEnGrupoException ex) {

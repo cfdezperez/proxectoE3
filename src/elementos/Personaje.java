@@ -52,6 +52,7 @@ public abstract class Personaje {
     private boolean capEdificacion;
     private boolean estarGrupo;
     private Grupo grupo;
+    private int capMovimiento;
 
     /**
      * Crea un personaje en una celda y asociado a una civilización
@@ -78,6 +79,8 @@ public abstract class Personaje {
             // No estamos en ningun grupo
             this.estarGrupo = false;
             grupo = null;
+            // Todos los personajes tienen capacidad de movimiento 1 menos los caballeros, que tienen 2
+            this.capMovimiento = 1;
             //this.actualizaVisibilidad();
 
             // Añadimos el personaje a la celda y cambiamos las características de la misma
@@ -178,6 +181,10 @@ public abstract class Personaje {
             throw new EstarEnGrupoException("El personaje " + getNombre() + " no está en ningún grupo");
         }
     }
+    
+    public int capacidadMovimiento() {
+        return capMovimiento;
+    }
 
     /**
      * Establece el nombre del personaje
@@ -252,6 +259,15 @@ public abstract class Personaje {
 
     public void setTipo(int tipo) {
         this.tipoPersonaje = tipo;
+    }
+    
+    /**
+     * Solo las subclases pueden cambiar la capacidad de movimiento del personaje
+     * 
+     * @param cap 
+     */
+    protected void setCapMovimiento(int cap) {
+        this.capMovimiento = cap;
     }
 
     //FUNCIONES

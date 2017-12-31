@@ -15,6 +15,7 @@ import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.AtaqueExcepcion;
+import excepciones.personaje.CapMovimientoException;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.NoAgrupableException;
@@ -30,6 +31,7 @@ import excepciones.recursos.RecursosException;
  * @author celia y maria
  */
 public interface Comando {
+    public String mover(String nPersonaje, String direccion) throws CapMovimientoException, EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
     public String mover(String nPersonaje, String direccion, int distancia) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException;
     public String listar(String tipo) throws ParametroIncorrectoException;
     public String describir(String nombre) throws ParametroIncorrectoException;

@@ -35,6 +35,7 @@ import excepciones.celda.NoAlmacenableException;
 import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.AtaqueExcepcion;
+import excepciones.personaje.CapMovimientoException;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
 import excepciones.personaje.NoAgrupableException;
@@ -204,9 +205,20 @@ public class Juego implements Comando {
     }
 
     @Override
+    public String mover(String nombre, String direccion) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException, CapMovimientoException {
+        Personaje p = Juego.civilizacionActiva.getPersonaje(nombre);
+        // Si el personaje puede moverse más una casilla, preguntamos
+        if(p.capacidadMovimiento() > 1) {
+            throw new CapMovimientoException(String.valueOf(p.capacidadMovimiento()));
+        }
+        // Si la capacidad de movimiento es 1
+        return mover(nombre, direccion, 1);
+    }
+    @Override
     public String mover(String nombre, String direccion, int distancia) throws EstarEnGrupoException, NoTransitablebleException, FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, CeldaOcupadaException {
         Personaje p = Juego.civilizacionActiva.getPersonaje(nombre);
         String s;
+
         if(p instanceof Caballero) {
             s = p.mover(mapa, direccion, distancia);
         } else if(distancia != 1) {

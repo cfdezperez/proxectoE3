@@ -29,6 +29,8 @@ public class Caballero extends Soldado {
     public void inicializaNombre(Civilizacion civil) {
         numeroCaballeros[civil.getIdCivilizacion()]++;
         setNombre("Caballero-" + numeroCaballeros[civil.getIdCivilizacion()]);
+        // Pone la capacidad de movimiento a 2
+        setCapMovimiento(2);
     }
    
 }
