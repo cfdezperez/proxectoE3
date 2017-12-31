@@ -145,7 +145,10 @@ public class Menu {
                                 try {
                                     distancia = Integer.parseInt(consola.leer("Indica cuántas casilla te quieres desplazar: "));
                                 } catch (NumberFormatException nfex) {
-                                    throw new ParametroIncorrectoException(nfex.getMessage());
+                                    throw new ParametroIncorrectoException("Tienes que indicar un entero >= 1");
+                                }
+                                if(distancia < 1) {
+                                    throw new ParametroIncorrectoException("Tienes que indicar un entero >= 1");
                                 }
                                 if (distancia > Integer.parseInt(ex.getMessage())) {
                                     throw new ParametroIncorrectoException("La distancia indicada " + distancia
