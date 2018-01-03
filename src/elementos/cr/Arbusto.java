@@ -21,11 +21,11 @@ public class Arbusto extends ContRecurso{
 
     @Override
     public String toString() {
-        return("\n\tContenedor de recursos de tipo Arbusto\n\tCantidad de comida "+this.getRecurso().getCapacidad());
+        return("\tContenedor de recursos de tipo Arbusto\n\tCantidad de comida "+this.getRecurso().getCapacidad());
     }
 
     @Override
-    public void procesar() throws NoProcesableException {
+    public Recurso procesar() throws NoProcesableException {
         throw new NoProcesableException("Los arbustos no se procesan");
     }
 }

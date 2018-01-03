@@ -11,7 +11,6 @@ import elementos.Personaje;
 import elementos.personaje.Arquero;
 import elementos.personaje.Caballero;
 import elementos.personaje.Legionario;
-import elementos.personaje.Paisano;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
 import excepciones.celda.CeldaEnemigaException;
@@ -33,7 +32,7 @@ public class Cuartel extends Edificio{
     }
     
     public Cuartel(int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
-        this(10, 50, 40, 50, 20, capPer);
+        this(100, 50, 40, 50, 2000, capPer);
     }
     
     public Cuartel(int salud, int CRM, int CRP, int CCC, int capAl, int capPer) throws CeldaOcupadaException, ParametroIncorrectoException {
@@ -42,7 +41,7 @@ public class Cuartel extends Edificio{
         setCrearPaisanos(false);
         setCapPersonajes(capPer);
         setCrearSoldados(true);
-        setCapAlmacenar(false);        
+        setCapAlmacenar(true);        
     }
     
     @Override

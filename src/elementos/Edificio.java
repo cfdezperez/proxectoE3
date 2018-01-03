@@ -8,10 +8,6 @@ package elementos;
 import elementos.edificio.Casa;
 import elementos.edificio.Ciudadela;
 import elementos.edificio.Cuartel;
-import elementos.personaje.Arquero;
-import elementos.personaje.Caballero;
-import elementos.personaje.Legionario;
-import elementos.personaje.Paisano;
 import excepciones.CivilizacionDestruidaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
@@ -42,7 +38,7 @@ public abstract class Edificio {
     private int defensa;
     private boolean crearPaisanos = false;
     private int costeCrearComida;
-    private int[] capAlmacenamiento = new int[4];
+    private final double[] capAlmacenamiento = new double[4];
     private boolean capAlmacenar = false;
     private boolean capAlojar = false;
     private static int capAlojamientoTotal = 0;
@@ -75,7 +71,7 @@ public abstract class Edificio {
      * @throws CeldaOcupadaException
      * @throws ParametroIncorrectoException
      */
-    public Edificio(int salud1, int CRM, int CRP, int CCC, int capAlm, int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
+    public Edificio(int salud1, int CRM, int CRP, int CCC, double capAlm, int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
         if (salud1 <= 0 || CRM < 0 || CRP < 0) { //Si no tiene salud no existe
             //this.estado = false;
             //this.saludInicial = 0;
@@ -152,23 +148,23 @@ public abstract class Edificio {
         return this.crearSoldados;
     }
 
-    public int[] getCapAlmacenamiento() { //Devuelve el vector con las capacidades de almacenamiento
+    public double[] getCapAlmacenamiento() { //Devuelve el vector con las capacidades de almacenamiento
         return this.capAlmacenamiento;
     }
 
-    public int getCapAlmacenamientoTotal() {
+    public double getCapAlmacenamientoTotal() {
         return this.capAlmacenamiento[0];
     }
 
-    public int getMadera() {
+    public double getMadera() {
         return this.capAlmacenamiento[Recurso.TRMADERA];
     }
 
-    public int getComida() {
+    public double getComida() {
         return this.capAlmacenamiento[Recurso.TRCOMIDA];
     }
 
-    public int getPiedra() {
+    public double getPiedra() {
         return this.capAlmacenamiento[Recurso.TRPIEDRA];
     }
 
@@ -242,10 +238,10 @@ public abstract class Edificio {
         this.estado = estado;
     }
 
-    public void setCapAlmacenamientoTotal(int capAl) throws ParametroIncorrectoException {
+    public void setCapAlmacenamientoTotal(double capAl) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
             if (capAl <= 0) {
-                throw new ParametroIncorrectoException("No es posible esa capacidad");
+                throw new ParametroIncorrectoException("Se supera la capacidad de almacenamiento de "+this.getNombre());
             } else {
                 this.capAlmacenamiento[0] = capAl;
             }
@@ -258,16 +254,16 @@ public abstract class Edificio {
      * @param recolectado
      * @throws ParametroIncorrectoException
      */
-    public void almacenar(int[] recolectado) throws ParametroIncorrectoException {
-        setCapAlmacenamientoTotal(getCapAlmacenamiento()[0] + recolectado[0]);
+    public void almacenar(double[] recolectado) throws ParametroIncorrectoException {
+        setCapAlmacenamientoTotal(getCapAlmacenamiento()[0]-(recolectado[Recurso.TRMADERA]+recolectado[Recurso.TRCOMIDA]+recolectado[Recurso.TRPIEDRA]));
         setMadera(getCapAlmacenamiento()[Recurso.TRMADERA] + recolectado[Recurso.TRMADERA]);
         setComida(getCapAlmacenamiento()[Recurso.TRCOMIDA] + recolectado[Recurso.TRCOMIDA]);
         setPiedra(getCapAlmacenamiento()[Recurso.TRPIEDRA] + recolectado[Recurso.TRPIEDRA]);
     }
 
-    public void setMadera(int capM) throws ParametroIncorrectoException {
+    public void setMadera(double capM) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
-            if (capM <= 0) {
+            if (capM < 0) {
                 throw new ParametroIncorrectoException("No es posible esa capacidad");
 
             } else {
@@ -276,9 +272,9 @@ public abstract class Edificio {
         }
     }
 
-    public void setComida(int capA) throws ParametroIncorrectoException {
+    public void setComida(double capA) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
-            if (capA <= 0) {
+            if (capA < 0) {
                 throw new ParametroIncorrectoException("No es posible esa capacidad");
 
             } else {
@@ -287,9 +283,9 @@ public abstract class Edificio {
         }
     }
 
-    public void setPiedra(int capP) throws ParametroIncorrectoException {
+    public void setPiedra(double capP) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
-            if (capP <= 0) {
+            if (capP < 0) {
                 throw new ParametroIncorrectoException("No es posible esa capacidad");
 
             } else {
@@ -364,7 +360,7 @@ public abstract class Edificio {
 
     @Override
     public String toString() {
-        String s = "\n\tTipo edicifio: ";
+        String s = "Tipo edicifio: ";
         if (this instanceof Casa) {
             s += "Casa";
         }
@@ -377,6 +373,10 @@ public abstract class Edificio {
         s += ", Nombre: " + this.getNombre();
         s += "\n\tCivilización a la que pertenece: " + this.getCivilizacion().getNomCivilizacion();
         s += "\n\tSalud: " + this.getSalud();
+        s += "\n\tCapacidad de almacenamiento: " + this.getCapAlmacenamiento()[0];
+        s += "\n\tComida almacenada " + this.getComida();
+        s += "\n\tMadera almacenada " + this.getMadera();
+        s += "\n\tPiedra almacenada " + this.getPiedra();
         s += "\n\tCoste de reparación en piedra: " + this.getCRP();
         s += "\n\tCoste de reparación en madera: " + this.getCRM();
         s += "\n\tCapacidad de ataque: " + getAtaque();
@@ -397,6 +397,7 @@ public abstract class Edificio {
      * Determina si podemos crear un personaje y la celda en la cuál podemos
      * crear el personaje
      *
+     * @param tipoPersonaje
      * @return La celda en la cuál podemos crear el personaje
      *
      * @throws EdificioException
@@ -435,8 +436,10 @@ public abstract class Edificio {
         } else {
             throw new EdificioException("Imposible crear en ninguna celda de las que rodean al edificio.");
         }
+        Personaje p = creaPersonaje(vecina, tipoPersonaje);
         this.setComida(this.getComida() - this.costeCrearComida);
-        return creaPersonaje(vecina, tipoPersonaje);
+        this.setCapAlmacenamientoTotal(this.getCapAlmacenamientoTotal() + this.costeCrearComida);
+        return p;
     }
 
     public abstract Personaje creaPersonaje(Celda vecina, String tipoPersonaje) throws EdificioException, ParametroIncorrectoException, 
@@ -452,6 +455,7 @@ public abstract class Edificio {
      * @throws CeldaEnemigaException
      * @throws AtaqueExcepcion
      * @throws EstarEnGrupoException 
+     * @throws excepciones.CivilizacionDestruidaException 
      */
     public String atacar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
             NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException, CivilizacionDestruidaException {
@@ -461,9 +465,13 @@ public abstract class Edificio {
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
         Civilizacion vecinaCivil = vecina.getCivilizacion();
         
+        if(vecinaCivil == null) {
+            throw new ParametroIncorrectoException("Civilización desconocida");
+        }
         if (vecina.getContRecurso() != null) {
             throw new NoTransitablebleException("No puedes atacar a un " + vecina.getContRecurso().getNombre());
-        } else if (vecinaCivil != null && vecinaCivil == this.getCivilizacion()) {
+        }
+        if (vecinaCivil == this.getCivilizacion()) {
             throw new CeldaEnemigaException("No puedes atacar a una celda amiga.");
         }
 

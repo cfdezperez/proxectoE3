@@ -20,11 +20,11 @@ public class Bosque extends ContRecurso {
     
     @Override
     public String toString() {
-        return("\n\tContenedor de recursos de tipo Bosque\n\tCantidad de madera "+this.getRecurso().getCapacidad());
+        return("\tContenedor de recursos de tipo Bosque\n\tCantidad de madera "+this.getRecurso().getCapacidad());
     }
     
     @Override
-    public void procesar() throws NoProcesableException {
+    public Recurso procesar() throws NoProcesableException {
         throw new NoProcesableException("Los bosques no se procesan");
     }    
 }

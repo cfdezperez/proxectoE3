@@ -113,7 +113,7 @@ public class Juego implements Comando {
             civilizaciones.put(nc[idCiv].trim(), new Civilizacion(nc[idCiv], idCiv));
             // La civilización inicialmente activa es la que tiene id = 0
             if (idCiv == 0) {
-                this.civilizacionActiva = this.civilizaciones.get(nc[idCiv]);
+                Juego.civilizacionActiva = this.civilizaciones.get(nc[idCiv]);
             }
             idCiv++;
         }
@@ -132,6 +132,7 @@ public class Juego implements Comando {
      * @throws excepciones.celda.CeldaOcupadaException
      * @throws excepciones.celda.CeldaEnemigaException
      * @throws excepciones.celda.NoTransitablebleException
+     * @throws excepciones.personaje.NoAgrupableException
      */
     public Juego(List<List<String>> personajes, List<List<String>> edificios, List<List<String>> recursos) throws FueraDeMapaException, ParametroIncorrectoException, CeldaOcupadaException, CeldaEnemigaException, NoTransitablebleException, NoAgrupableException {
         this.civilizaciones = new HashMap<String, Civilizacion>(2);
@@ -344,7 +345,8 @@ public class Juego implements Comando {
     public String crear(String nEdificio, String tipoPersonaje) throws EdificioException, FueraDeMapaException, CeldaEnemigaException, NoTransitablebleException, ParametroIncorrectoException {
         Edificio e = getCivilizacionActiva().getEdificio(nEdificio);
         Personaje p = e.crear(tipoPersonaje);
-        return(p.toString());
+        this.mapa.imprimir();
+        return("Creado personaje:\n"+p.toString());
     }
 
     @Override
@@ -590,63 +592,62 @@ public class Juego implements Comando {
         // Añadimos elementos por columnas
         // columna 0 (primera coordenada = columna, segunda = fila)
         // Bosque en (0, 0) con 10 Madera
-        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(0, 0));
+        anhadeCR(new Bosque(new Madera(100)), m.obtenerCelda(0, 0));
         // Arbusto en (0, 4) con 5 Comida
-        anhadeCR(new Arbusto(new Comida(5)), m.obtenerCelda(0, 4));
+        anhadeCR(new Arbusto(new Comida(500)), m.obtenerCelda(0, 4));
         // Arbusto en (0, 9) con 5 Comida
-        anhadeCR(new Arbusto(new Comida(5)), m.obtenerCelda(0, 9));
+        anhadeCR(new Arbusto(new Comida(50)), m.obtenerCelda(0, 9));
 
         // Columna 1
         anhadeEdificio(new Ciudadela(), m.obtenerCelda(1, 1), civ0);
         anhadePersonaje(new Paisano(), m.obtenerCelda(1, 2), civ0);
-        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(1, 6));
+        anhadeCR(new Cantera(new Piedra(400)), m.obtenerCelda(1, 6));
         anhadeCR(new Bosque(new Madera(100)), m.obtenerCelda(1, 7));
-        anhadeCR(new Arbusto(new Comida(20)), m.obtenerCelda(1, 9));
+        anhadeCR(new Arbusto(new Comida(200)), m.obtenerCelda(1, 9));
 
         // Columna 2
         anhadeEdificio(new Casa(), m.obtenerCelda(2, 2), civ0);
-        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(2, 4));
-        anhadeCR(new Arbusto(new Comida(10)), m.obtenerCelda(2, 9));
+        anhadeCR(new Bosque(new Madera(100)), m.obtenerCelda(2, 4));
+        anhadeCR(new Arbusto(new Comida(100)), m.obtenerCelda(2, 9));
 
         // Columna 3
-        anhadeCR(new Cantera(new Piedra(80)), m.obtenerCelda(3, 0));
-        anhadeCR(new Cantera(new Piedra(20)), m.obtenerCelda(3, 4));
+        anhadeCR(new Cantera(new Piedra(800)), m.obtenerCelda(3, 0));
+        anhadeCR(new Cantera(new Piedra(200)), m.obtenerCelda(3, 4));
         anhadePersonaje(new Caballero(), m.obtenerCelda(3, 8), civ1);
 
         // Columna 4
-        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(4, 6));
+        anhadeCR(new Cantera(new Piedra(400)), m.obtenerCelda(4, 6));
 
         // Columna 5
-        anhadeCR(new Bosque(new Madera(80)), m.obtenerCelda(5, 1));
-        anhadeCR(new Bosque(new Madera(10)), m.obtenerCelda(5, 2));
-        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(5, 5));
-        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(5, 6));
+        anhadeCR(new Bosque(new Madera(800)), m.obtenerCelda(5, 1));
+        anhadeCR(new Bosque(new Madera(100)), m.obtenerCelda(5, 2));
+        anhadeCR(new Cantera(new Piedra(400)), m.obtenerCelda(5, 5));
+        anhadeCR(new Cantera(new Piedra(400)), m.obtenerCelda(5, 6));
 
         // Columna 6
-        anhadeCR(new Bosque(new Madera(20)), m.obtenerCelda(6, 1));
-        anhadeCR(new Bosque(new Madera(60)), m.obtenerCelda(6, 2));
-        anhadeCR(new Arbusto(new Comida(20)), m.obtenerCelda(6, 8));
-        anhadeCR(new Arbusto(new Comida(40)), m.obtenerCelda(6, 9));
+        anhadeCR(new Bosque(new Madera(200)), m.obtenerCelda(6, 1));
+        anhadeCR(new Bosque(new Madera(600)), m.obtenerCelda(6, 2));
+        anhadeCR(new Arbusto(new Comida(200)), m.obtenerCelda(6, 8));
+        anhadeCR(new Arbusto(new Comida(400)), m.obtenerCelda(6, 9));
 
         // Columna 7
         anhadeEdificio(new Cuartel(), m.obtenerCelda(7, 4), civ1);
         anhadePersonaje(new Paisano(), m.obtenerCelda(7, 5), civ1);
         anhadeEdificio(new Ciudadela(), m.obtenerCelda(7, 6), civ1);
-anhadePersonaje(new Arquero(), m.obtenerCelda(7, 8), civ0);
-        anhadeCR(new Bosque(new Madera(80)), m.obtenerCelda(7, 9));
+        anhadeCR(new Bosque(new Madera(800)), m.obtenerCelda(7, 9));
 
         // Columna 8
-        anhadeCR(new Arbusto(new Comida(10)), m.obtenerCelda(8, 0));
+        anhadeCR(new Arbusto(new Comida(100)), m.obtenerCelda(8, 0));
         anhadeEdificio(new Casa(), m.obtenerCelda(8, 5), civ1);
 
         // Columna 9
-        anhadeCR(new Arbusto(new Comida(40)), m.obtenerCelda(9, 8));
-        anhadeCR(new Cantera(new Piedra(100)), m.obtenerCelda(9, 2));
-        anhadeCR(new Bosque(new Madera(90)), m.obtenerCelda(9, 3));
-        anhadeCR(new Bosque(new Madera(30)), m.obtenerCelda(9, 4));
-        anhadeCR(new Cantera(new Piedra(40)), m.obtenerCelda(9, 7));
-        anhadeCR(new Cantera(new Piedra(80)), m.obtenerCelda(9, 8));
-        anhadeCR(new Cantera(new Piedra(20)), m.obtenerCelda(9, 9));
+        anhadeCR(new Arbusto(new Comida(400)), m.obtenerCelda(9, 8));
+        anhadeCR(new Cantera(new Piedra(1000)), m.obtenerCelda(9, 2));
+        anhadeCR(new Bosque(new Madera(900)), m.obtenerCelda(9, 3));
+        anhadeCR(new Bosque(new Madera(300)), m.obtenerCelda(9, 4));
+        anhadeCR(new Cantera(new Piedra(400)), m.obtenerCelda(9, 7));
+        anhadeCR(new Cantera(new Piedra(800)), m.obtenerCelda(9, 8));
+        anhadeCR(new Cantera(new Piedra(200)), m.obtenerCelda(9, 9));
     }
 
     // Método auxiliar para añadir un CR a una celda

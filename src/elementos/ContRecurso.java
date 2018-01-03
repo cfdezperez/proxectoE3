@@ -21,13 +21,15 @@ public abstract class ContRecurso {
     private String nombre;
     private int tipoContenedor;
     private boolean transitable;
+    private final double capInicial;
 
     //CONSTRUCTORES
     public ContRecurso(Recurso rec) {
         //this.celda = c;
         this.recurso = new Recurso(rec);
         this.tipoContenedor = this.recurso.getTipo();
-        this.transitable=false;
+        this.transitable = false;
+        this.capInicial=this.getRecurso().getCapacidad();
         //c.setCivilizacion(null);
         //c.anhadeCR(this);
     }
@@ -49,8 +51,12 @@ public abstract class ContRecurso {
         return this.tipoContenedor;
     }
 
-    public boolean esTransitable(){
+    public boolean esTransitable() {
         return this.transitable;
+    }
+
+    public double getCapInicial (){
+        return this.capInicial;
     }
 
     //Solo se puede cambiar el recurso o tipo cuando llega a 0 y se transforma en pradera
@@ -69,21 +75,21 @@ public abstract class ContRecurso {
             throw new RecursosException("No se puede modificar el recurso del contenedor\n");
         }
     }
-    
+
     public void setCelda(Celda c) {
         this.celda = c;
     }
-    
+
     /**
-     * Define si el CR es transitable (permite entrar) o no
-     * Lo ponemos final para que el NetBeans no proteste al cambiarlo
-     * en el constructor de pradera
-     * 
+     * Define si el CR es transitable (permite entrar) o no. 
+     * Lo ponemos final para que el NetBeans no proteste al 
+     * cambiarlo en el constructor de pradera
+     *
      * @param a
      */
-    public final void setTransitable(boolean a){
-        this.transitable=a;
+    public final void setTransitable(boolean a) {
+        this.transitable = a;
     }
-    
-    public abstract void procesar() throws NoProcesableException;
+
+    public abstract Recurso procesar() throws NoProcesableException, RecursosException;
 }

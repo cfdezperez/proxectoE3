@@ -43,25 +43,25 @@ import vista.Celda;
 public class Grupo extends Personaje {
 
     private List<Personaje> personajes;
-    private int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
+    private final int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
     //2 capacidad comida, 3 capacidad piedra
     private final int capRecoleccionInicial;
-    private static int[] numeroGrupos = new int[Civilizacion.getNumDeCivilizaciones()];
+    private static final int[] NumeroGrupos = new int[Civilizacion.getNumDeCivilizaciones()];
     public boolean tieneSoldado = false;
 
     public Grupo() throws ParametroIncorrectoException {
         super(0, 0, 0, true, Juego.TGRUPO);
         personajes = new ArrayList<Personaje>();
         //numeroGrupos[civil.getIdCivilizacion()]++;
-        //setNombre("Grupo-" + numeroGrupos[civil.getIdCivilizacion()]);
+        //setNombre("Grupo-" + NumeroGrupos[civil.getIdCivilizacion()]);
         this.capRecoleccion[0] = 0;
         this.capRecoleccionInicial = this.capRecoleccion[0];        
     }
 
     @Override
     public void inicializaNombre(Civilizacion civil) {
-        numeroGrupos[civil.getIdCivilizacion()]++;
-        setNombre("Grupo-" + numeroGrupos[civil.getIdCivilizacion()]);
+        NumeroGrupos[civil.getIdCivilizacion()]++;
+        setNombre("Grupo-" + NumeroGrupos[civil.getIdCivilizacion()]);
     }
 
     /**
@@ -269,8 +269,8 @@ public class Grupo extends Personaje {
         //Solo va a haber un elemento en la celd que va a ser un contenedor de recurso
         //se restan de la capacidad del contenedor de recursos la capacidad 
         // que tiene el personaje para recolectar
-        int disponible = cr.getRecurso().getCapacidad(); //Capacidad disponible en ese momento
-        int recolectado;
+        double disponible = cr.getRecurso().getCapacidad(); //Capacidad disponible en ese momento
+        double recolectado;
         if (this.getCapRecoleccion() == 0) {
             throw new PersonajeLlenoException("El grupo "+this.getNombre()+" agotó su capacidad de recolección");
         } else if (disponible > this.getCapRecoleccion()) {

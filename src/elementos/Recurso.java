@@ -19,7 +19,7 @@ public class Recurso {
     public static final int TRPIEDRA = Juego.TCANTERA;
 
     private int tipo; //1 Madera, 2 comida, 3 piedra
-    private int capacidad;
+    private double capacidad;
     private String nombre;
 
     //CONSTRUCTORES
@@ -29,7 +29,7 @@ public class Recurso {
         this.nombre = "madera";
     }
 
-    public Recurso(int t1, int cap) {
+    public Recurso(int t1, double cap) {
         this.tipo = t1;
         this.capacidad = cap;
         switch (this.tipo) {
@@ -59,7 +59,7 @@ public class Recurso {
         return this.tipo;
     }
 
-    public int getCapacidad() {
+    public double getCapacidad() {
         return this.capacidad;
     }
 
@@ -67,7 +67,7 @@ public class Recurso {
         return this.nombre;
     }
 
-    public void setCapacidad(int cap) throws RecursosException {
+    public void setCapacidad(double cap) throws RecursosException {
         if (cap <= 0) {
             throw new RecursosException("La capacidad debe ser mayor que 0.");
         } else {
