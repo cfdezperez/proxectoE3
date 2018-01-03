@@ -25,6 +25,7 @@ import elementos.personaje.Paisano;
 import elementos.Personaje;
 import elementos.personaje.Grupo;
 import elementos.recursos.Piedra;
+import excepciones.CivilizacionDestruidaException;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
@@ -340,9 +341,10 @@ public class Juego implements Comando {
     }
     
     @Override
-    public String crear(String nEdificio, String tipoPersonaje) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //getMapa().imprimir();
+    public String crear(String nEdificio, String tipoPersonaje) throws EdificioException, FueraDeMapaException, CeldaEnemigaException, NoTransitablebleException, ParametroIncorrectoException {
+        Edificio e = getCivilizacionActiva().getEdificio(nEdificio);
+        Personaje p = e.crear(tipoPersonaje);
+        return(p.toString());
     }
 
     @Override
@@ -366,9 +368,17 @@ public class Juego implements Comando {
     }
 
     @Override
-    public String atacar(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
-            NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException {
-        String s = getCivilizacionActiva().getPersonaje(nPersonaje).atacar(direccion);
+    public String atacar(String nombre, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
+            NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException, CivilizacionDestruidaException {
+        String s;
+        if(getCivilizacionActiva().getMapaPersonajes().containsKey(nombre) ||
+                getCivilizacionActiva().getMapaGrupos().containsKey(nombre)) {
+            s = getCivilizacionActiva().getPersonaje(nombre).atacar(direccion);
+        } else if (getCivilizacionActiva().getMapaEdificios().containsKey(nombre)) {
+            s = getCivilizacionActiva().getEdificio(nombre).atacar(direccion);
+        } else {
+            throw new ParametroIncorrectoException("No existe ningún personaje, grupo o edificio de nombre "+nombre);
+        }
         getMapa().imprimir();
         return s;
     }
@@ -622,6 +632,7 @@ public class Juego implements Comando {
         anhadeEdificio(new Cuartel(), m.obtenerCelda(7, 4), civ1);
         anhadePersonaje(new Paisano(), m.obtenerCelda(7, 5), civ1);
         anhadeEdificio(new Ciudadela(), m.obtenerCelda(7, 6), civ1);
+anhadePersonaje(new Arquero(), m.obtenerCelda(7, 8), civ0);
         anhadeCR(new Bosque(new Madera(80)), m.obtenerCelda(7, 9));
 
         // Columna 8

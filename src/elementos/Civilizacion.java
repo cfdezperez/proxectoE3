@@ -5,6 +5,7 @@
  */
 package elementos;
 
+import elementos.edificio.Ciudadela;
 import elementos.personaje.Grupo;
 import excepciones.ParametroIncorrectoException;
 import java.util.HashMap;
@@ -18,11 +19,11 @@ import java.util.Map;
  */
 public class Civilizacion {
 
-    private Map<String, Personaje> Personajes; //personajes que pertenecen a la civilización
-    private Map<String, Edificio> Edificios; //edificios que pertenecen a la civilización
-    private Map<String, Grupo> Grupos; //grupos que pertenecen a la civilizacion
-    private String nombreCivilizacion; //Nombre da la civilización
-    private int idCivilizacion; //Identifica con un número que civilización es 0 primera, 1 segunda, 2...
+    private final Map<String, Personaje> Personajes; //personajes que pertenecen a la civilización
+    private final Map<String, Edificio> Edificios; //edificios que pertenecen a la civilización
+    private final Map<String, Grupo> Grupos; //grupos que pertenecen a la civilizacion
+    private final String nombreCivilizacion; //Nombre da la civilización
+    private final int idCivilizacion; //Identifica con un número que civilización es 0 primera, 1 segunda, 2...
     private static int numeroDeCivilizaciones = 0;
 
     /**
@@ -115,6 +116,7 @@ public class Civilizacion {
      *
      * @param nombre Nombre del personaje
      * @return El personaje
+     * @throws excepciones.ParametroIncorrectoException
      */
     public Personaje getPersonaje(String nombre) throws ParametroIncorrectoException {
         if (Personajes.containsKey(nombre)) {
@@ -126,7 +128,22 @@ public class Civilizacion {
                     + " no existe en la civilización " + this.getNomCivilizacion());
         }
     }
-
+    /**
+     * Devuelve un edificio de la civilización dado su
+     * nombre
+     *
+     * @param nombre Nombre del edificio
+     * @return El edificio
+     * @throws excepciones.ParametroIncorrectoException
+     */
+    public Edificio getEdificio(String nombre) throws ParametroIncorrectoException {
+        if (Edificios.containsKey(nombre)) {
+            return Edificios.get(nombre);
+        } else {
+            throw new ParametroIncorrectoException("El edificio " + nombre
+                    + " no existe en la civilización " + this.getNomCivilizacion());
+        }
+    }
     /**
      * Añade un personaje a la civilizacion
      *
@@ -227,5 +244,15 @@ public class Civilizacion {
             s += "\t" + e.getKey() + " " + ((Grupo) e.getValue()).getCelda();
         }
         return s;
+    }
+    
+    public boolean determinaDestruccion() {
+        // Si no hay ciudadelas, la civilización está destruida
+        for(Edificio e: Edificios.values()) {
+            if(e instanceof Ciudadela) {
+                return false;
+            }
+        }
+        return true;
     }
 }

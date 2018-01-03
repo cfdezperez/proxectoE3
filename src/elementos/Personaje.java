@@ -10,6 +10,7 @@ import elementos.personaje.Caballero;
 import elementos.personaje.Grupo;
 import elementos.personaje.Legionario;
 import elementos.personaje.Paisano;
+import excepciones.CivilizacionDestruidaException;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
@@ -31,10 +32,10 @@ import excepciones.recursos.RecursosException;
 import excepciones.personaje.SoldadoRecException;
 import vista.Celda;
 import interfazUsuario.Juego;
-import java.util.Iterator;
 import vista.Mapa;
 
 /**
+ * Clase genérica para los personajes (paisanos, soldados y grupos)
  *
  * @author celia y maria
  */
@@ -61,7 +62,7 @@ public abstract class Personaje {
      * @param armadura Capacidad de defensa inicial
      * @param ataque Capacidad de ataque inicial
      * @param capEdificacion Indica si puede edificar
-     * @param tipo
+     * @param tipo Tipo de personaje
      * @throws excepciones.ParametroIncorrectoException
      */
     public Personaje(int salud, int armadura, int ataque, boolean capEdificacion, int tipo) throws ParametroIncorrectoException {
@@ -81,16 +82,6 @@ public abstract class Personaje {
             grupo = null;
             // Todos los personajes tienen capacidad de movimiento 1 menos los caballeros, que tienen 2
             this.capMovimiento = 1;
-            //this.actualizaVisibilidad();
-
-            // Añadimos el personaje a la celda y cambiamos las características de la misma
-//            this.celda.anhadePersonaje(this);
-//            this.celda.setCivilizacion(Juego.getCivilizacionActiva());
-//            this.celda.setTransitable(true);
-//            this.celda.setVisible(true);
-//            
-//            // Añadimos el personaje a la civilizacion
-//            this.civilizacion.anhadePersonaje(this);
         }
     }
 
@@ -181,7 +172,13 @@ public abstract class Personaje {
             throw new EstarEnGrupoException("El personaje " + getNombre() + " no está en ningún grupo");
         }
     }
-    
+
+    /**
+     * Devuelve un entero que indoca cuantas casillas como máximo se puede mover
+     * el personaje de una vez
+     *
+     * @return La capacidad de movimiento
+     */
     public int capacidadMovimiento() {
         return capMovimiento;
     }
@@ -197,6 +194,8 @@ public abstract class Personaje {
 
     /**
      * Establece la civilización del personaje
+     *
+     * @param civ
      */
     public void setCivilizacion(Civilizacion civ) {
         this.civilizacion = civ;
@@ -260,11 +259,12 @@ public abstract class Personaje {
     public void setTipo(int tipo) {
         this.tipoPersonaje = tipo;
     }
-    
+
     /**
-     * Solo las subclases pueden cambiar la capacidad de movimiento del personaje
-     * 
-     * @param cap 
+     * Solo las subclases pueden cambiar la capacidad de movimiento del
+     * personaje
+     *
+     * @param cap
      */
     protected void setCapMovimiento(int cap) {
         this.capMovimiento = cap;
@@ -342,35 +342,18 @@ public abstract class Personaje {
     }
 
     /**
-     *
-     * @param direccion
-     * @return
-     * @throws excepciones.personaje.EstarEnGrupoException
-     * @throws RecursosException
-     * @throws PersonajeLlenoException
+     * Entra en un edificio para defenderlo
+     * @param direccion Dirección hacia la que entramos
+     * @return Mensaje de estado
      * @throws FueraDeMapaException
      * @throws ParametroIncorrectoException
-     * @throws NoRecolectableException
+     * @throws CeldaEnemigaException
+     * @throws NoTransitablebleException
      * @throws CeldaOcupadaException
-     * @throws SoldadoRecException
+     * @throws EstarEnGrupoException
+     * @throws EdificioException
+     * @throws CeldaException 
      */
-    public abstract String recolectar(String direccion) throws EstarEnGrupoException, RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, CeldaOcupadaException, SoldadoRecException;
-
-    //public abstract void construirEdificio(Mapa mapa, String nedificio, int tipo, String direccion);
-    /**
-     * Se encarga de fijar el nombre a partir del tipo de personaje y la
-     * civilización a la que pertenece
-     *
-     * @param civil Civilización a la que pertenece
-     */
-    public abstract void inicializaNombre(Civilizacion civil);
-
-    public abstract String construirEdificio(String nedificio, String direccion) throws SolConstruirException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException;
-
-    public abstract String reparar(String direccion) throws SolRepararException, FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException;
-
-    public abstract String almacenar(String direccion) throws InsuficientesRecException, SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException;
-
     public String defender(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, CeldaOcupadaException, EstarEnGrupoException, EdificioException, CeldaException {
         if (getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no puede defender, ya que está en el grupo " + getGrupo());
@@ -389,7 +372,7 @@ public abstract class Personaje {
                     vecina.setTransitable(true);
                     mover(this.getCelda().getMapa(), direccion);
                     vecina.setTransitable(false);
-                    
+
                     e.setDefensa(e.getDefensa() + this.getArmadura());
                     e.setCapPersonajes(e.getCapPersonajes() - 1);
                     this.setSalud(this.saludInicial);
@@ -404,8 +387,20 @@ public abstract class Personaje {
         }
         return s;
     }
-
-    public String atacar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException {
+    
+    /**
+     * Ataca a una celda vecina
+     * 
+     * @param direccion Dirección hacia la que atacar
+     * @return Mensaje de estado
+     * @throws FueraDeMapaException
+     * @throws ParametroIncorrectoException
+     * @throws NoTransitablebleException
+     * @throws CeldaEnemigaException
+     * @throws AtaqueExcepcion
+     * @throws EstarEnGrupoException 
+     */
+    public String atacar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException, CivilizacionDestruidaException {
         if (getEstarGrupo()) {
             throw new EstarEnGrupoException("El personaje no puede atacar, ya que está en el grupo " + getGrupo());
         }
@@ -413,10 +408,11 @@ public abstract class Personaje {
 
         Celda actual = this.getCelda();
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
+        Civilizacion vecinaCivil = vecina.getCivilizacion();
 
         if (vecina.getContRecurso() != null) {
             throw new NoTransitablebleException("No puedes atacar a un " + vecina.getContRecurso().getNombre());
-        } else if (vecina.getCivilizacion() != null && vecina.getCivilizacion() == this.getCivilizacion()) {
+        } else if (vecinaCivil != null && vecinaCivil == this.getCivilizacion()) {
             throw new CeldaEnemigaException("No puedes atacar a una celda amiga.");
         }
 
@@ -460,9 +456,9 @@ public abstract class Personaje {
             } else {
                 throw new AtaqueExcepcion("Error desconocido al atacar");
             }
-            
-        // Si no hay personajes, atacamos al edificio    
-        } else if (vecina.getEdificio() != null) { 
+
+            // Si no hay personajes, atacamos al edificio    
+        } else if (vecina.getEdificio() != null) {
             Edificio edificioEnemigo = vecina.getEdificio();
             // Intentamos atacar al edificio
             int danhoCausado = this.getAtaque() - edificioEnemigo.getDefensa();
@@ -490,15 +486,89 @@ public abstract class Personaje {
                     vecina.setVisitadaPor(this.getCivilizacion());
                 }
             }
+            // Comprueba si hamos destruido la civilizacion
+            if(vecinaCivil.determinaDestruccion()) {
+                throw new CivilizacionDestruidaException("La civilización "+vecinaCivil.getNomCivilizacion()+" ha sido destruida!");
+            }
             return s;
         } else {
             throw new AtaqueExcepcion("No hay nadie a quién atacar");
         }
     }
+
+    // FUNCIONES ABSTRACTAS
+    /**
+     * Se encarga de fijar el nombre a partir del tipo de personaje y la
+     * civilización a la que pertenece
+     *
+     * @param civil Civilización a la que pertenece
+     */
+    public abstract void inicializaNombre(Civilizacion civil);
+
+    /**
+     * Recolecta de una celda
+     *
+     * @param direccion Dirección hacia la que recolectar
+     * @return Mensaje de estado
+     * @throws excepciones.personaje.EstarEnGrupoException
+     * @throws RecursosException
+     * @throws PersonajeLlenoException
+     * @throws FueraDeMapaException
+     * @throws ParametroIncorrectoException
+     * @throws NoRecolectableException
+     * @throws CeldaOcupadaException
+     * @throws SoldadoRecException
+     */
+    public abstract String recolectar(String direccion) throws EstarEnGrupoException, RecursosException, PersonajeLlenoException, FueraDeMapaException, ParametroIncorrectoException, NoRecolectableException, CeldaOcupadaException, SoldadoRecException;
+    /**
+     * Almacena en una celda
+     *
+     * @param direccion Dirección hacia la que almacenar
+     * @return Mensaje de estado
+     * @throws excepciones.personaje.InsuficientesRecException
+     * @throws excepciones.personaje.SolAlmacenarException
+     * @throws excepciones.personaje.EstarEnGrupoException
+     * @throws FueraDeMapaException
+     * @throws excepciones.celda.NoAlmacenableException
+     * @throws ParametroIncorrectoException
+     */
+    public abstract String almacenar(String direccion) throws InsuficientesRecException, SolAlmacenarException, FueraDeMapaException, ParametroIncorrectoException, NoAlmacenableException, EstarEnGrupoException;
+    /**
+     * Repara un edificio en una celda
+     *
+     * @param direccion Dirección hacia la que reparar
+     * @return Mensaje de estado
+     * @throws excepciones.personaje.SolRepararException
+     * @throws excepciones.personaje.InsuficientesRecException
+     * @throws excepciones.personaje.EstarEnGrupoException
+     * @throws excepciones.edificio.NoNecRepararException
+     * @throws FueraDeMapaException
+     * @throws ParametroIncorrectoException
+     */
+    public abstract String reparar(String direccion) throws SolRepararException, FueraDeMapaException, ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException, EstarEnGrupoException;
+    /**
+     * Construye un edificio en una celda
+     *
+     * @param nedificio Nombre del edificio
+     * @param direccion Dirección hacia la que reparar
+     * @return Mensaje de estado
+     * @throws excepciones.personaje.SolConstruirException
+     * @throws excepciones.personaje.InsuficientesRecException
+     * @throws excepciones.personaje.EstarEnGrupoException
+     * @throws excepciones.celda.CeldaOcupadaException
+     * @throws FueraDeMapaException
+     * @throws excepciones.celda.CeldaEnemigaException
+     * @throws ParametroIncorrectoException
+     */
+    public abstract String construirEdificio(String nedificio, String direccion) throws SolConstruirException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException;
+ 
+    
+    // FUNCIONES ÚTILES
     
     /**
      * Haz visibles las celdas que rodean al personaje
      *
+     * @throws excepciones.celda.FueraDeMapaException
      */
     public void actualizaVisibilidad() throws FueraDeMapaException {
         Celda c = this.getCelda();

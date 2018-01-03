@@ -7,9 +7,15 @@ package elementos.edificio;
 
 import elementos.Civilizacion;
 import elementos.Edificio;
+import elementos.Personaje;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.celda.CeldaEnemigaException;
+import excepciones.celda.FueraDeMapaException;
+import excepciones.celda.NoTransitablebleException;
+import excepciones.edificio.EdificioException;
 import interfazUsuario.Juego;
+import vista.Celda;
 
 /**
  *
@@ -70,4 +76,9 @@ public class Casa extends Edificio{
         numeroCasas[civil.getIdCivilizacion()]++;
         setNombre("Casa-" + numeroCasas[civil.getIdCivilizacion()]);
     }    
+
+    @Override
+    public Personaje creaPersonaje(Celda vecina, String tipoPersonaje) throws EdificioException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        throw new EdificioException("Las casas no crean personajes");
+    }
 }

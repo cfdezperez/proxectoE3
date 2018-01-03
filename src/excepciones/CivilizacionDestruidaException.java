@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package excepciones.edificio;
+package excepciones;
 
 /**
  *
- * @author celia y maria
+ * @author tomas
  */
-public class EdificioException extends Exception {
-    public EdificioException(String m) {
+public class CivilizacionDestruidaException extends Exception {
+    public CivilizacionDestruidaException(String m) {
         super(m);
     }
-    
 }

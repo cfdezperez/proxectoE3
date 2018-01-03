@@ -8,8 +8,19 @@ package elementos;
 import elementos.edificio.Casa;
 import elementos.edificio.Ciudadela;
 import elementos.edificio.Cuartel;
+import elementos.personaje.Arquero;
+import elementos.personaje.Caballero;
+import elementos.personaje.Legionario;
+import elementos.personaje.Paisano;
+import excepciones.CivilizacionDestruidaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.ParametroIncorrectoException;
+import excepciones.celda.CeldaEnemigaException;
+import excepciones.celda.FueraDeMapaException;
+import excepciones.celda.NoTransitablebleException;
+import excepciones.edificio.EdificioException;
+import excepciones.personaje.AtaqueExcepcion;
+import excepciones.personaje.EstarEnGrupoException;
 import vista.*;
 
 /**
@@ -51,16 +62,18 @@ public abstract class Edificio {
         this(10, 50, 40, 50, 50, tipo);
 
     }
+
     /**
      * Creamos un edificio
-     * 
+     *
      * @param salud1 Salud del edificio
      * @param CRM
      * @param CRP
      * @param CCC
      * @param capAlm
+     * @param tipo
      * @throws CeldaOcupadaException
-     * @throws ParametroIncorrectoException 
+     * @throws ParametroIncorrectoException
      */
     public Edificio(int salud1, int CRM, int CRP, int CCC, int capAlm, int tipo) throws CeldaOcupadaException, ParametroIncorrectoException {
         if (salud1 <= 0 || CRM < 0 || CRP < 0) { //Si no tiene salud no existe
@@ -68,9 +81,6 @@ public abstract class Edificio {
             //this.saludInicial = 0;
             throw new ParametroIncorrectoException("La salud no puede ser negativa o nula");
         } else {
-            //this.celda = c1;
-            //this.nombre = nombre;
-            //this.civilizacion = civil;
             this.tipoEdificio = tipo;
             this.estado = true;
             this.salud = salud1;
@@ -82,26 +92,6 @@ public abstract class Edificio {
             this.costeCrearComida = CCC;
             this.capAlmacenamiento[0] = capAlm;
             this.estarVacio = true;
-
-            //this.celda.anhadeEdificio(this);
-            //this.celda.setCivilizacion(Juego.getCivilizacionActiva());
-            //this.celda.setTransitable(true);
-            // Si es una ciudadela, puede crear paisanos
-//            if (this.tipoEdificio == Juego.TCIUDADELA) {
-//                this.crearPaisanos = true;
-//                this.capAlmacenar = true;
-//            } // Si es un cuartel puede crear soldados
-//            else if (this.tipoEdificio == Juego.TCUARTEL) {
-//                this.crearSoldados = true;
-//            } else {
-//                this.crearPaisanos = false;
-//                this.crearSoldados = false;
-//                this.capAlojar = true;
-//                this.capAlojamiento = capAlojar;
-//                Edificio.capAlojamientoTotal += this.capAlojamiento;
-//            }
-            // Añade eficifio a la civilizacion
-            //this.civilizacion.anhadeEdificio(this);
         }
     }
 
@@ -262,6 +252,19 @@ public abstract class Edificio {
         }
     }
 
+    /**
+     * Almacena lo recolectado por un personaje
+     *
+     * @param recolectado
+     * @throws ParametroIncorrectoException
+     */
+    public void almacenar(int[] recolectado) throws ParametroIncorrectoException {
+        setCapAlmacenamientoTotal(getCapAlmacenamiento()[0] + recolectado[0]);
+        setMadera(getCapAlmacenamiento()[Recurso.TRMADERA] + recolectado[Recurso.TRMADERA]);
+        setComida(getCapAlmacenamiento()[Recurso.TRCOMIDA] + recolectado[Recurso.TRCOMIDA]);
+        setPiedra(getCapAlmacenamiento()[Recurso.TRPIEDRA] + recolectado[Recurso.TRPIEDRA]);
+    }
+
     public void setMadera(int capM) throws ParametroIncorrectoException {
         if (this.getCapAlmacenar() == true) {
             if (capM <= 0) {
@@ -325,7 +328,7 @@ public abstract class Edificio {
     public final void setCapAlojar(boolean b) {
         this.capAlojar = b;
     }
-    
+
     public final void setCapAlojamiento(int capAlojar) throws ParametroIncorrectoException {
         if (this.capAlojar == true) {
             if (capAlojar < 0) {
@@ -337,7 +340,7 @@ public abstract class Edificio {
             this.capAlojamiento = 0;
         }
     }
-    
+
     public static final void addCapAlojamientoTotal(int cap) {
         Edificio.capAlojamientoTotal += cap;
     }
@@ -362,24 +365,24 @@ public abstract class Edificio {
     @Override
     public String toString() {
         String s = "\n\tTipo edicifio: ";
-        if(this instanceof Casa) {
+        if (this instanceof Casa) {
             s += "Casa";
         }
-        if(this instanceof Ciudadela) {
+        if (this instanceof Ciudadela) {
             s += "Ciudadela";
         }
-        if(this instanceof Cuartel) {
+        if (this instanceof Cuartel) {
             s += "Cuartel";
         }
-        s += ", Nombre: "+this.getNombre();
+        s += ", Nombre: " + this.getNombre();
         s += "\n\tCivilización a la que pertenece: " + this.getCivilizacion().getNomCivilizacion();
         s += "\n\tSalud: " + this.getSalud();
         s += "\n\tCoste de reparación en piedra: " + this.getCRP();
         s += "\n\tCoste de reparación en madera: " + this.getCRM();
-        s += "\n\tCapacidad de ataque: "+getAtaque();
-        s += "\n\tCapacidad de defensa: "+getDefensa();
-        return(s);
-    }    
+        s += "\n\tCapacidad de ataque: " + getAtaque();
+        s += "\n\tCapacidad de defensa: " + getDefensa();
+        return (s);
+    }
 
     // Clases abstractas
     /**
@@ -390,92 +393,152 @@ public abstract class Edificio {
      */
     public abstract void inicializaNombre(Civilizacion civil);
 
-//    public void crear(Mapa mapa) {
-//        int x = this.getCelda().getX();
-//        int y = this.getCelda().getY();
-//        System.out.println("CCC "+this.getComida()+ " "+ this.costeCrearComida);
-//        if (Edificio.capAlojamientoTotal <= this.civilizacion.numeroPersonajes()) {
-//            System.out.println("No se pueden crear más personajes, necesitan más casas donde alojarse.");
-//        } else {
-//            if (this.getComida() < this.costeCrearComida) {
-//                System.out.println("No hay suficiente comida como para crear un personaje");
-//            } else {
-//                switch (this.getTipo()) {
-//                    //si edificio es ciudadela se tiene que crear paisano
-//                    case Mapa.TCIUDADELA:
-//                        //Compruebas celda norte                
-//                        if (x > 0 && mapa.getCeldas().get(x - 1).get(y).getTransitable()) {
-//                            crearPaisano(mapa, mapa.getCeldas().get(x - 1).get(y));
-//                        } //SUR
-//                        else if (x < (mapa.getCeldas().size() - 1)
-//                                && mapa.getCeldas().get(x + 1).get(y).getTransitable()) {
-//                            crearPaisano(mapa, mapa.getCeldas().get(x + 1).get(y));
-//                        } //ESTE
-//                        else if (y > 0 && mapa.getCeldas().get(x).get(y - 1).getTransitable()) {
-//                            crearPaisano(mapa, mapa.getCeldas().get(x).get(y - 1));
-//                        } //OESTE
-//                        else if (y < (mapa.getCeldas().get(0).size() - 1)
-//                                && mapa.getCeldas().get(x).get(y + 1).getTransitable()) {
-//                            crearPaisano(mapa, mapa.getCeldas().get(x).get(y + 1));
-//                        } else {
-//                            System.out.println("Imposible crear Paisano.");
-//                        }
-//                        break;
-//
-//                    //si edificio es cuartel se crea soldado
-//                    case Mapa.TCUARTEL:
-//                        //Compruebas celda norte                
-//                        if (x > 0 && mapa.getCeldas().get(x - 1).get(y).getTransitable()) {
-//                            crearSoldado(mapa, mapa.getCeldas().get(x - 1).get(y));
-//                        } //SUR
-//                        else if (x < (mapa.getCeldas().size() - 1)
-//                                && mapa.getCeldas().get(x + 1).get(y).getTransitable()) {
-//                            crearSoldado(mapa, mapa.getCeldas().get(x + 1).get(y));
-//                        } //ESTE
-//                        else if (y > 0 && mapa.getCeldas().get(x).get(y - 1).getTransitable()) {
-//                            crearSoldado(mapa, mapa.getCeldas().get(x).get(y - 1));
-//                        } //OESTE
-//                        else if (y < (mapa.getCeldas().get(0).size() - 1)
-//                                && mapa.getCeldas().get(x).get(y + 1).getTransitable()) {
-//                            crearSoldado(mapa, mapa.getCeldas().get(x).get(y + 1));
-//                        } else {
-//                            System.out.println("Imposible crear Soldado.");
-//                        }
-//                        break;
-//
-//                    default:
-//                        System.out.println("No se pueden crear personajes desde este edificio.");
-//                        break;
-//                }
-//            }
-//        }
-//    }
-//
-//    private void crearPaisano(Mapa mapa, Celda c) {
-//        Personaje Paisano = new Personaje(c, "Paisano", this.getCivilizacion(), Mapa.TPAISANO);
-//        mapa.addPersonaje(Paisano);
-//        c.setTransitable(false);
-//        c.setEntrable(true);
-//        if(c.getVisible() != true){
-//            c.setVisible(true);
-//            this.getCivilizacion().getCeldasCivilizacion().add(c);
-//        }
-//        c.setTipoCelda(Mapa.TPAISANO);
-//        this.setComida(this.getComida()-this.costeCrearComida);
-//    }
-//
-//    private void crearSoldado(Mapa mapa, Celda c) {
-//        Personaje Soldado = new Personaje(c, "Soldado", this.getCivilizacion(), Mapa.TSOLDADO);
-//        mapa.addPersonaje(Soldado);
-//        c.setTransitable(false);
-//        c.setEntrable(true);
-//        if(c.getVisible() != true){
-//            c.setVisible(true);
-//            this.getCivilizacion().getCeldasCivilizacion().add(c);
-//        }
-//        c.setTipoCelda(Mapa.TSOLDADO);
-//        this.setComida(this.getComida()-this.costeCrearComida);
-//    }
+    /**
+     * Determina si podemos crear un personaje y la celda en la cuál podemos
+     * crear el personaje
+     *
+     * @return La celda en la cuál podemos crear el personaje
+     *
+     * @throws EdificioException
+     * @throws FueraDeMapaException
+     * @throws ParametroIncorrectoException
+     * @throws excepciones.celda.CeldaEnemigaException
+     * @throws excepciones.celda.NoTransitablebleException
+     */
+    public Personaje crear(String tipoPersonaje) throws EdificioException, FueraDeMapaException, ParametroIncorrectoException, 
+            CeldaEnemigaException, NoTransitablebleException {
+
+        if (Edificio.capAlojamientoTotal <= this.civilizacion.numeroPersonajes()) {
+            throw new EdificioException("No se pueden crear más personajes, necesitan más casas donde alojarse.");
+        }
+
+        if (this.getComida() < this.costeCrearComida) {
+            throw new EdificioException("No hay suficiente comida como para crear un personaje");
+        }
+
+        // Determina la celda en la que crear
+        Celda actual = this.getCelda();
+        Celda vecina;
+        Celda vecinaNorte = actual.getMapa().obtenerCeldaVecina(actual, "norte");
+        Celda vecinaSur = actual.getMapa().obtenerCeldaVecina(actual, "sur");
+        Celda vecinaEste = actual.getMapa().obtenerCeldaVecina(actual, "este");
+        Celda vecinaOeste = actual.getMapa().obtenerCeldaVecina(actual, "oeste");
+
+        if (vecinaNorte.getTransitable()) {
+            vecina = vecinaNorte;
+        } else if (vecinaOeste.getTransitable()) {
+            vecina = vecinaOeste;
+        } else if (vecinaSur.getTransitable()) {
+            vecina = vecinaSur;
+        } else if (vecinaEste.getTransitable()) {
+            vecina = vecinaEste;
+        } else {
+            throw new EdificioException("Imposible crear en ninguna celda de las que rodean al edificio.");
+        }
+        this.setComida(this.getComida() - this.costeCrearComida);
+        return creaPersonaje(vecina, tipoPersonaje);
+    }
+
+    public abstract Personaje creaPersonaje(Celda vecina, String tipoPersonaje) throws EdificioException, ParametroIncorrectoException, 
+            CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;
+       /**
+     * Ataca a una celda vecina
+     * 
+     * @param direccion Dirección hacia la que atacar
+     * @return Mensaje de estado
+     * @throws FueraDeMapaException
+     * @throws ParametroIncorrectoException
+     * @throws NoTransitablebleException
+     * @throws CeldaEnemigaException
+     * @throws AtaqueExcepcion
+     * @throws EstarEnGrupoException 
+     */
+    public String atacar(String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
+            NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException, CivilizacionDestruidaException {
+        String s;
+
+        Celda actual = this.getCelda();
+        Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
+        Civilizacion vecinaCivil = vecina.getCivilizacion();
+        
+        if (vecina.getContRecurso() != null) {
+            throw new NoTransitablebleException("No puedes atacar a un " + vecina.getContRecurso().getNombre());
+        } else if (vecinaCivil != null && vecinaCivil == this.getCivilizacion()) {
+            throw new CeldaEnemigaException("No puedes atacar a una celda amiga.");
+        }
+
+        // Comprobamos si hay personajes y atacamos al más débil
+        if (!vecina.getPersonajes().isEmpty()) {
+            int saludEnemigo = Integer.MAX_VALUE;
+            Personaje pEnemigo = null;
+            for (Personaje p : vecina.getPersonajes()) {
+                if (p.getSalud() < saludEnemigo) {
+                    saludEnemigo = p.getSalud();
+                    pEnemigo = p;
+                }
+            }
+            if (pEnemigo != null) {
+                // Intentamos atacar al personaje
+                int danhoCausado = this.getAtaque() - pEnemigo.getArmadura();
+
+                if (danhoCausado < 1) {
+                    s = this.getNombre() + " no puede atacar: la defensa enemiga es demasiado fuerte.";
+                } else {
+                    int nuevaSalud = pEnemigo.getSalud() - danhoCausado;
+                    if (nuevaSalud > 0) {
+                        pEnemigo.setSalud(nuevaSalud);
+                        s = this.getNombre() + " ha inflingido " + danhoCausado + " de daño a " + pEnemigo.getNombre()
+                                + " (" + pEnemigo.getCivilizacion().getNomCivilizacion() + "): la salud de "
+                                + pEnemigo.getNombre() + " es ahora " + pEnemigo.getSalud();
+                    } else {
+                        s = this.getNombre() + " ha inflingido " + danhoCausado + " de daño a " + pEnemigo.getNombre()
+                                + " (" + pEnemigo.getCivilizacion().getNomCivilizacion() + "): "
+                                + pEnemigo.getNombre() + " ha muerto";
+                        vecina.eliminarPersonaje(pEnemigo);
+                        pEnemigo.getCivilizacion().eliminaPersonaje(pEnemigo);
+                        vecina.setVisitadaPor(this.getCivilizacion());
+                    }
+                }
+                return s;
+            } else {
+                throw new AtaqueExcepcion("Error desconocido al atacar");
+            }
+
+            // Si no hay personajes, atacamos al edificio    
+        } else if (vecina.getEdificio() != null) {
+            Edificio edificioEnemigo = vecina.getEdificio();
+            // Intentamos atacar al edificio
+            int danhoCausado = this.getAtaque() - edificioEnemigo.getDefensa();
+
+            if (danhoCausado < 1) {
+                s = this.getNombre() + " no puede atacar a " + edificioEnemigo.getNombre()
+                        + " (" + edificioEnemigo.getCivilizacion().getNomCivilizacion() + "): su defensa es demasiado fuerte.";
+            } else {
+                int nuevaSalud = edificioEnemigo.getSalud() - danhoCausado;
+                if (nuevaSalud > 0) {
+                    edificioEnemigo.setSalud(nuevaSalud);
+                    s = this.getNombre() + " ha inflingido " + danhoCausado + " de daño a " + edificioEnemigo.getNombre()
+                            + " (" + edificioEnemigo.getCivilizacion().getNomCivilizacion() + "): la salud de "
+                            + edificioEnemigo.getNombre() + " es ahora " + edificioEnemigo.getSalud();
+                } else {
+                    s = this.getNombre() + " ha inflingido " + danhoCausado + " de daño a " + edificioEnemigo.getNombre()
+                            + " (" + edificioEnemigo.getCivilizacion().getNomCivilizacion() + "): "
+                            + edificioEnemigo.getNombre() + " ha quedado destruido";
+                    vecina.eliminaEdificio();
+                    edificioEnemigo.getCivilizacion().eliminaEdificio(edificioEnemigo);
+                    vecina.setVisitadaPor(this.getCivilizacion());
+                }
+            }
+                        // Comprueba si hamos destruido la civilizacion
+            if(vecinaCivil.determinaDestruccion()) {
+                throw new CivilizacionDestruidaException("La civilización "+vecinaCivil.getNomCivilizacion()+" ha sido destruida!");
+            }
+            return s;
+        } else {
+            throw new AtaqueExcepcion("No hay nadie a quién atacar");
+        }
+    }
+
 //
 //    private void eliminarPersonaje(Mapa m, Celda c) {
 //        switch (c.getTipoCelda()) {
@@ -523,200 +586,4 @@ public abstract class Edificio {
 //        }
 //    }
 //        
-//    public void atacar(Mapa mapa, String direccion) {
-//        Celda vecina = obtenerCeldaVecina(mapa, direccion); 
-//
-//        if (vecina == null) {
-//            System.out.println("No se puede atacar hacia el "
-//                    + direccion + ": se sale del mapa.");
-//        } else
-//        {
-//            if (vecina.getNumElementos() != 0) {
-//
-//                Iterator it2 = obtenerCivEnemiga(mapa).getMapaEdificios().entrySet().iterator();
-//                while (it2.hasNext()) {
-//                    Map.Entry e = (Map.Entry) it2.next();
-//                    if (((Edificio) e.getValue()).getCelda().getX() == vecina.getX()
-//                            && ((Edificio) e.getValue()).getCelda().getY() == vecina.getY()) {
-//                        if (!((Edificio) e.getValue()).getCivilizacion().equals(this.getCivilizacion())) {
-//                            if (((Edificio) e.getValue()).getEstarVacio() == true) {
-//                                ((Edificio) e.getValue()).setSalud(((Edificio) e.getValue()).getSalud() - this.getAtaque());
-//                                System.out.println("El edificio " + ((Edificio) e.getValue()).getNombre() + " ha sido atacado.");
-//                                if (((Edificio) e.getValue()).getSalud() <= 0) {
-//                                    ((Edificio) e.getValue()).setEstado(false);
-//                                    vecina.setNumeroElementos(vecina.getNumElementos() - 1);
-//                                    System.out.println("El edificio " + ((Edificio) e.getValue()).getNombre() + " ha sido destruido.");
-//                                }
-//                            } else {
-//                                Iterator it = obtenerCivEnemiga(mapa).getPerCivilizacion().entrySet().iterator();
-//                                while (it.hasNext()) {
-//                                    Map.Entry e2 = (Map.Entry) it.next();
-//                                    if (((Personaje) e2.getValue()).getCelda().getX() == vecina.getX()
-//                                            && ((Personaje) e2.getValue()).getCelda().getY() == vecina.getY()) {
-//                                        if (!((Personaje) e2.getValue()).getCivilizacion().equals(this.getCivilizacion())) {
-//                                            if (((Personaje) e2.getValue()).getEstarGrupo() == false) {
-//                                                ((Personaje) e2.getValue()).setSalud(((Personaje) e2.getValue()).getSalud()
-//                                                        - this.getAtaque() / ((Personaje) e2.getValue()).getArmadura());
-//                                                System.out.println("El " + ((Personaje) e2.getValue()).getNombre() + " ha sido atacado.");
-//                                                if (((Personaje) e2.getValue()).getSalud() <= 0) {
-//                                                    ((Personaje) e2.getValue()).setEstado(false);
-//                                                    ((Edificio) e.getValue()).setCapPersonajes(((Edificio) e.getValue()).getCapPersonajes() + 1);
-//                                                    System.out.println("El " + ((Personaje) e2.getValue()).getNombre() + " ha muerto.");
-//                                                    vecina.setNumeroElementos(vecina.getNumElementos() - 1);
-//
-//                                                    ((Edificio) e.getValue()).setAtaque(((Edificio) e.getValue()).getAtaque() - ((Personaje) e2.getValue()).getAtaque());
-//                                                    ((Edificio) e.getValue()).setDefensa(((Edificio) e.getValue()).getDefensa() - ((Personaje) e2.getValue()).getArmadura());
-//                                                }
-//                                            }
-//                                        } else {
-//                                            System.out.println("No puedes atacar a alguien de tu misma civilizacion");
-//                                        }
-//                                    }
-//                                }
-//
-//                                Iterator it3 = obtenerCivEnemiga(mapa).getMapaGrupos().entrySet().iterator();
-//                                while (it3.hasNext()) {
-//                                    Map.Entry e3 = (Map.Entry) it3.next();
-//                                    if (((Grupo) e3.getValue()).getCelda().getX() == vecina.getX()
-//                                            && ((Grupo) e3.getValue()).getCelda().getY() == vecina.getY()) {
-//                                        if (!((Grupo) e3.getValue()).getCivilizacion().equals(this.getCivilizacion())) {
-//                                            Iterator it4 = ((Grupo) e3.getValue()).getCivilizacion().getPerCivilizacion().entrySet().iterator();
-//                                            while (it4.hasNext()) {
-//                                                Map.Entry e4 = (Map.Entry) it4.next();
-//                                                Personaje atacado = ((Personaje) e4.getValue());
-//                                                for (int i = 0; i < ((Grupo) e3.getValue()).getComponentes(); i++) {
-//                                                    atacado.setSalud(atacado.getSalud() - this.getAtaque() / atacado.getArmadura());
-//                                                    if (atacado.getSalud() <= 0) {
-//                                                        atacado.setEstado(false);
-//                                                        System.out.println("El " + atacado.getNombre() + " ha muerto.");
-//                                                        ((Grupo) e3.getValue()).desligar(atacado, mapa);
-//                                                    }
-//                                                }
-//                                            }
-//                                        } else {
-//                                            System.out.println("No puedes atacar a alguien de tu misma civilizacion");
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        } else {
-//                            System.out.println("No puedes atacar a un edificio de tu misma civilizacion");
-//                        }
-//                    }
-//                    else {
-//                        Iterator it = obtenerCivEnemiga(mapa).getPerCivilizacion().entrySet().iterator();
-//                        while (it.hasNext()) {
-//                            Map.Entry e2 = (Map.Entry) it.next();
-//                            if (((Personaje) e2.getValue()).getCelda().getX() == vecina.getX()
-//                                    && ((Personaje) e2.getValue()).getCelda().getY() == vecina.getY()) {
-//                                if (!((Personaje) e2.getValue()).getCivilizacion().equals(this.getCivilizacion())) {
-//                                    if (((Personaje) e2.getValue()).getEstarGrupo() == false) {
-//                                        ((Personaje) e2.getValue()).setSalud(((Personaje) e2.getValue()).getSalud()
-//                                                - this.getAtaque() / ((Personaje) e2.getValue()).getArmadura());
-//                                        if (((Personaje) e2.getValue()).getSalud() <= 0) {
-//                                            ((Personaje) e2.getValue()).setEstado(false);
-//                                            vecina.setNumeroElementos(vecina.getNumElementos() - 1);
-//                                            System.out.println("El " + ((Personaje) e2.getValue()).getNombre() + " ha muerto.");
-//                                        }
-//                                    }
-//                                } else {
-//                                    System.out.println("No puedes atacar a alguien de tu misma civilizacion");
-//                                }
-//
-//                            }
-//                        }
-//                        Iterator it3 = obtenerCivEnemiga(mapa).getMapaGrupos().entrySet().iterator();
-//                        while (it3.hasNext()) {
-//                            Map.Entry e3 = (Map.Entry) it3.next();
-//                            if (((Grupo) e3.getValue()).getCelda().getX() == vecina.getX()
-//                                    && ((Grupo) e3.getValue()).getCelda().getY() == vecina.getY()) {
-//                                if (!((Grupo) e3.getValue()).getCivilizacion().equals(this.getCivilizacion())) {
-//                                    Iterator it4 = ((Grupo) e3.getValue()).getCivilizacion().getPerCivilizacion().entrySet().iterator();
-//                                    while (it4.hasNext()) {
-//                                        Map.Entry e4 = (Map.Entry) it4.next();
-//                                        Personaje atacado = ((Personaje) e4.getValue());
-//                                        for (int i = 0; i < ((Grupo) e3.getValue()).getComponentes(); i++) {
-//                                            atacado.setSalud(atacado.getSalud() - this.getAtaque() / atacado.getArmadura());
-//                                            if (atacado.getSalud() <= 0) {
-//                                                atacado.setEstado(false);
-//                                                System.out.println("El " + atacado.getNombre() + " ha muerto.");
-//                                                ((Grupo) e3.getValue()).desligar(atacado, mapa);
-//                                            }
-//                                        }
-//                                    }
-//                                } else {
-//                                    System.out.println("No puedes atacar a alguien de tu misma civilizacion");
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//
-//            } else {
-//                System.out.println("La celda es una pradera, no se puede atacar.");
-//            }
-//            comprobarDestruccion(mapa);
-//        }
-//    }
-//    
-//    private Civilizacion obtenerCivEnemiga(Mapa mapa) {
-//        Civilizacion civ = this.civilizacion;
-//        Iterator it = mapa.getCivilizacion().entrySet().iterator();
-//        while (it.hasNext()) {
-//            //si el edificio tiene grupo dentro
-//            Map.Entry e = (Map.Entry) it.next();
-//            if (!((Civilizacion) e.getValue()).equals(mapa.getCivActiva())) {
-//                civ = ((Civilizacion) e.getValue());
-//            }
-//        }
-//        return civ;
-//    }
-//
-//    private void comprobarDestruccion(Mapa mapa) {
-//        Iterator it2 = obtenerCivEnemiga(mapa).getMapaEdificios().entrySet().iterator();
-//        while (it2.hasNext()) {
-//            Map.Entry e = (Map.Entry) it2.next();
-//            if (((Edificio) e.getValue()).getSalud() == 0) {
-//                it2.remove();
-//            }
-//        }
-//
-//        Iterator it = obtenerCivEnemiga(mapa).getPerCivilizacion().entrySet().iterator();
-//        while (it.hasNext()) {
-//            Map.Entry e = (Map.Entry) it.next();
-//            if (((Personaje) e.getValue()).getSalud() == 0) {
-//                it.remove();
-//            }
-//        }
-//    }
-//    
-//    // Devuelve la celda que se encuentra a la direccion indicada de la celda 
-//// del personaje
-//    private Celda obtenerCeldaVecina(Mapa mapa, String direccion) {
-//        Celda actual = this.getCelda();
-//        Celda vecina = null;
-//        switch (direccion.toLowerCase()) {
-//            case "norte":
-//                if (this.getCelda().getX() > 0) {
-//                    vecina = mapa.getCeldas().get(actual.getX() - 1).get(actual.getY());
-//                }
-//                break;
-//            case "sur":
-//                if (this.getCelda().getX() < (mapa.getCeldas().size() - 1)) {
-//                    vecina = mapa.getCeldas().get(actual.getX() + 1).get(actual.getY());
-//                }
-//                break;
-//            case "este":
-//                if (this.getCelda().getY() < (mapa.getCeldas().get(0).size() - 1)) {
-//                    vecina = mapa.getCeldas().get(actual.getX()).get(actual.getY() + 1);
-//                }
-//                break;
-//            case "oeste":
-//                if (this.getCelda().getY() > 0) {
-//                    vecina = mapa.getCeldas().get(actual.getX()).get(actual.getY() - 1);
-//                }
-//                break;
-//        }
-//        return vecina;
-//    }
 }

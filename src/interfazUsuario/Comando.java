@@ -5,6 +5,7 @@
  */
 package interfazUsuario;
 
+import excepciones.CivilizacionDestruidaException;
 import excepciones.celda.CeldaEnemigaException;
 import excepciones.celda.CeldaOcupadaException;
 import excepciones.celda.FueraDeMapaException;
@@ -38,7 +39,7 @@ public interface Comando {
     public String describir(String nombre, String Civilizacion) throws ParametroIncorrectoException;
     public String mirar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException;
     public String construir(String nPersonaje, String nEdificio, String direccion) throws EstarEnGrupoException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException;
-    public String crear(String nEdificio, String tipoPersonaje);
+    public String crear(String nEdificio, String tipoPersonaje) throws ParametroIncorrectoException, EdificioException, FueraDeMapaException, CeldaEnemigaException, NoTransitablebleException ;
     public String reparar(String nPersonaje, String direccion) throws EstarEnGrupoException, SolRepararException, FueraDeMapaException, 
             ParametroIncorrectoException, NoNecRepararException, InsuficientesRecException, EdificioException;
     public String recolectar(String nPersonaje, String direccion) throws 
@@ -55,6 +56,6 @@ public interface Comando {
     public String defender(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
             CeldaEnemigaException, NoTransitablebleException, CeldaOcupadaException, EstarEnGrupoException, EdificioException, CeldaException;
     public String atacar(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
-            NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException;
+            NoTransitablebleException, CeldaEnemigaException, AtaqueExcepcion, EstarEnGrupoException, CivilizacionDestruidaException;
     public void salir();
 }

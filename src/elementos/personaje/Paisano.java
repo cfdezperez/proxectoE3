@@ -28,7 +28,6 @@ import vista.Celda;
 import excepciones.recursos.NoRecolectableException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.recursos.RecursosException;
-import vista.Mapa;
 
 /**
  *
@@ -36,7 +35,7 @@ import vista.Mapa;
  */
 public class Paisano extends Personaje {
 
-    private int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
+    private final int[] capRecoleccion = new int[4]; //0 capacidad total, 1 capacidad madera, 
     //2 capacidad comida, 3 capacidad piedra
     private final int capRecoleccionInicial;
     private static int[] numeroPaisanos = new int[Civilizacion.getNumDeCivilizaciones()];
@@ -310,10 +309,9 @@ public class Paisano extends Personaje {
                 if(this.getCapRecoleccion() == (this.getCRInicial())){
                     throw new InsuficientesRecException("El paisano no tiene recursos que almacenar");
                 }else{
-                e.setCapAlmacenamientoTotal(e.getCapAlmacenamiento()[0] + this.capRecoleccion[0]);
-                e.setMadera(e.getCapAlmacenamiento()[Recurso.TRMADERA] + this.capRecoleccion[Recurso.TRMADERA]);
-                e.setComida(e.getCapAlmacenamiento()[Recurso.TRCOMIDA] + this.capRecoleccion[Recurso.TRCOMIDA]);
-                e.setPiedra(e.getCapAlmacenamiento()[Recurso.TRPIEDRA] + this.capRecoleccion[Recurso.TRPIEDRA]);
+                
+                e.almacenar(this.capRecoleccion);
+
                 //todo lo que tiene el personaje se le pasa a la ciudadela
                 s = ("Almacenado " + this.capRecoleccion[Recurso.TRMADERA]
                         + " madera, " + this.capRecoleccion[Recurso.TRCOMIDA]
