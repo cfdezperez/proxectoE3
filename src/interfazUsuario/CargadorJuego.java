@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class CargadorJuego {
 
-    private Consola consola;
+    private final Consola consola;
 
     public CargadorJuego(Consola consola) {
         this.consola = consola;
@@ -49,7 +49,6 @@ public class CargadorJuego {
     }
 
     public Juego juegoPorDefecto() throws CeldaException, ParametroIncorrectoException {
-        Juego juego = null;
         String[] nombreCivilizaciones;
 
         do {
@@ -60,7 +59,7 @@ public class CargadorJuego {
         } while (nombreCivilizaciones.length != 2);
 
         consola.imprimir("Creamos mapa por defecto (tamaño 10x10).\n");
-        juego = new Juego(10, 10, nombreCivilizaciones);
+        Juego juego = new Juego(10, 10, nombreCivilizaciones);
         juego.juegoPorDefecto();
         juego.getMapa().imprimir();
 

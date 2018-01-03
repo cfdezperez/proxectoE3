@@ -28,8 +28,6 @@ import excepciones.personaje.SolAlmacenarException;
 import excepciones.personaje.SolRepararException;
 import excepciones.recursos.RecursosException;
 import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

@@ -15,7 +15,12 @@ public class ConsolaVentana extends javax.swing.JFrame implements Consola {
     private static String civ1, civ2;
     private static int tamX, tamY;
     /**
-     * Creates new form ConsolaVentana
+     * Crea una ventana para mostrar el mapa
+     * 
+     * @param civ1 Civilización 1
+     * @param civ2 Civilización 2
+     * @param tamX Número de columnas del mapa
+     * @param tamY Número de filas del mapa
      */
     public ConsolaVentana(String civ1, String civ2, int tamX, int tamY) {
         ConsolaVentana.civ1 = civ1;

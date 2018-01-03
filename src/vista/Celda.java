@@ -30,7 +30,7 @@ import interfazUsuario.Juego;
 public class Celda {
 
     private int x, y;   // Posición del elemento en la pantalla
-    private Mapa mapa;
+    private final Mapa mapa;
     private int tipoCelda;
     private List<Personaje> listaPersonajes;
     private Edificio edificio = null;
@@ -157,6 +157,7 @@ public class Celda {
      * @param p Personaje a añadir
      * @throws excepciones.celda.CeldaEnemigaException
      * @throws excepciones.celda.NoTransitablebleException
+     * @throws excepciones.celda.FueraDeMapaException
      */
     public void anhadePersonaje(Personaje p) throws CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
         if (getTransitable()) {
@@ -189,6 +190,7 @@ public class Celda {
      *
      * @param e Edificio a añadir
      * @throws excepciones.celda.CeldaOcupadaException
+     * @throws excepciones.celda.CeldaEnemigaException
      */
     public void anhadeEdificio(Edificio e) throws CeldaOcupadaException, CeldaEnemigaException {
         if (getTransitable()) {
@@ -227,11 +229,7 @@ public class Celda {
             cr.setCelda(this);
             this.civilizacion = null;
             // Solo las praderas son transitables
-            if (cr instanceof Pradera) {
-                this.transitable = true;
-            } else {
-                this.transitable = false;
-            }
+            this.transitable = (cr instanceof Pradera);
             setTipo();
         } else {
             throw new CeldaOcupadaException("No se puede añadir el contenedor, la celda está ocupada.");
@@ -265,6 +263,7 @@ public class Celda {
     /**
      * Devuelve un String con información sobre el contenido de la celda
      *
+     * @return Información sobre la celda
      */
     public String mirar() {
         String s = "\nCelda en fila " + getY() + " columna " + getX();
@@ -290,7 +289,10 @@ public class Celda {
         this.listaPersonajes = new ArrayList<Personaje>();
     }
     
-    
+    /**
+     * Elimina un personaje de la celda
+     * @param p Personaje a eliminar
+     */    
     public void eliminarPersonaje(Personaje p) {
         this.listaPersonajes.remove(p);
         // Fijo el tipo después de eliminar el personaje

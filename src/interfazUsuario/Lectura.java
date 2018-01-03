@@ -22,7 +22,7 @@ public class Lectura {
      *
      * @param file Ficheiro de entrada. Exemplo: c:\\temp\\personajes.csv
      */
-    private List<List<String>> elementos;
+    private final List<List<String>> elementos;
 
     public Lectura(String file) throws FileNotFoundException {
         Scanner leer = new Scanner(new File(file.trim()));

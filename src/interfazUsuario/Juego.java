@@ -76,14 +76,14 @@ public class Juego implements Comando {
     public static final String[][] SIMBOLOS = {{" X ", " B ", " A ", " C ", " P ", " S ", " M ", " L ", " N ", " G ", " V ", " Q ", " O ", " I "},
     {" X ", " B ", " A ", " C ", " p ", " s ", " m ", " l ", " n ", " g ", " v ", " q ", " o ", " i "}};
 
-    private Map<String, Civilizacion> civilizaciones;
+    private final Map<String, Civilizacion> civilizaciones;
     private Map<String, ContRecurso> contRecursos;
     private static Civilizacion civilizacionActiva;
-    private Mapa mapa;
+    private final Mapa mapa;
     private int[] contador; // Para los contenedores de recursos
     private int[][] contadorElementos; //Primer campo es la civilizacion, segundo campo es el tipo de dato
-    private int tamX;
-    private int tamY;
+    private final int tamX;
+    private final int tamY;
 
     /**
      * Construye un juego por defecto
