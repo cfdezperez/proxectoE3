@@ -47,7 +47,7 @@ public abstract class Personaje {
     private boolean estado; // True vivo, False Muerto
     private int tipoPersonaje;
     private int salud;
-    private final int saludInicial;
+    private int saludInicial;
     private int armadura;
     private int ataque;
     private boolean capEdificacion;
@@ -223,6 +223,9 @@ public abstract class Personaje {
         }
     }
 
+    public void setSaludInicial(int s){
+        this.saludInicial = s;
+    }
     /**
      *
      * @param armadura
@@ -410,7 +413,7 @@ public abstract class Personaje {
         Celda vecina = actual.getMapa().obtenerCeldaVecina(actual, direccion);
         Civilizacion vecinaCivil = vecina.getCivilizacion();
 
-        if (vecina.getContRecurso() != null) {
+        if (vecina.getContRecurso() != null || vecinaCivil == null) {
             throw new NoTransitablebleException("No puedes atacar a un " + vecina.getContRecurso().getNombre());
         } else if (vecinaCivil != null && vecinaCivil == this.getCivilizacion()) {
             throw new CeldaEnemigaException("No puedes atacar a una celda amiga.");
@@ -428,12 +431,8 @@ public abstract class Personaje {
             }
             if (pEnemigo != null) {
                 // Intentamos atacar al personaje
-                int danhoCausado = this.getAtaque() - pEnemigo.getArmadura();
-                // Los caballeros hacen el doble de daño a los legionarios y arqueros
-                if ((this instanceof Caballero) && ((pEnemigo instanceof Legionario) || (pEnemigo instanceof Arquero))) {
-                    danhoCausado *= 2;
-                }
-
+                int danhoCausado = this.danhoAtaque(pEnemigo);
+                
                 if (danhoCausado < 1) {
                     s = this.getNombre() + " no puede atacar: la defensa enemiga es demasiado fuerte.";
                 } else {
@@ -450,6 +449,13 @@ public abstract class Personaje {
                         vecina.eliminarPersonaje(pEnemigo);
                         pEnemigo.getCivilizacion().eliminaPersonaje(pEnemigo);
                         vecina.setVisitadaPor(this.getCivilizacion());
+                        
+                        // Si la celda que abandonamos tenía edificio, le aumentamos su capacidad de acogida y le reducimos la defensa
+                        Edificio e = vecina.getEdificio();
+                        if (e != null) {
+                            e.setDefensa(e.getDefensa() - pEnemigo.getArmadura());
+                            e.setCapPersonajes(e.getCapPersonajes() + 1);
+                        }
                     }
                 }
                 return s;
@@ -461,11 +467,7 @@ public abstract class Personaje {
         } else if (vecina.getEdificio() != null) {
             Edificio edificioEnemigo = vecina.getEdificio();
             // Intentamos atacar al edificio
-            int danhoCausado = this.getAtaque() - edificioEnemigo.getDefensa();
-            // Si el que ataca a un edificio es un arquero, el daño se reduce a la mitad
-            if (this instanceof Arquero) {
-                danhoCausado /= 2;
-            }
+            int danhoCausado = this.getAtaque(edificioEnemigo);
 
             if (danhoCausado < 1) {
                 s = this.getNombre() + " no puede atacar a " + edificioEnemigo.getNombre()
@@ -496,6 +498,13 @@ public abstract class Personaje {
         }
     }
 
+    public int danhoAtaque(Personaje enemigo){
+        return (this.getAtaque() - enemigo.getArmadura());   
+    }
+    
+    public int getAtaque(Edificio enemigo){
+        return (this.getAtaque() - enemigo.getDefensa());
+    }
     // FUNCIONES ABSTRACTAS
     /**
      * Se encarga de fijar el nombre a partir del tipo de personaje y la
@@ -561,7 +570,6 @@ public abstract class Personaje {
      * @throws ParametroIncorrectoException
      */
     public abstract String construirEdificio(String nedificio, String direccion) throws SolConstruirException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, EstarEnGrupoException;
- 
     
     // FUNCIONES ÚTILES
     
@@ -619,7 +627,7 @@ public abstract class Personaje {
 
     @Override
     public String toString() {
-        String s = "\tTipo personaje: ";
+        String s = "Tipo personaje: ";
         if (this instanceof Paisano) {
             s += "Paisano";
         }

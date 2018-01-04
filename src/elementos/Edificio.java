@@ -360,7 +360,7 @@ public abstract class Edificio {
 
     @Override
     public String toString() {
-        String s = "Tipo edicifio: ";
+        String s = "Tipo edificio: ";
         if (this instanceof Casa) {
             s += "Casa";
         }

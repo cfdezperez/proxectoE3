@@ -28,7 +28,6 @@ public class Cantera extends ContRecurso {
 
     @Override
     public Recurso procesar() throws NoProcesableException, RecursosException {
-        //throw new UnsupportedOperationException("Not supported yet.");
         double max = this.getCapInicial();
         double cap = this.getRecurso().getCapacidad();
         Recurso r = new Recurso(Juego.TCANTERA, cap);

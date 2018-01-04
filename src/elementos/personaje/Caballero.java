@@ -6,6 +6,7 @@
 package elementos.personaje;
 
 import elementos.Civilizacion;
+import elementos.Personaje;
 import excepciones.ParametroIncorrectoException;
 import interfazUsuario.Juego;
 
@@ -32,5 +33,15 @@ public class Caballero extends Soldado {
         // Pone la capacidad de movimiento a 2
         setCapMovimiento(2);
     }
-   
+
+    @Override
+    public int danhoAtaque(Personaje enemigo) {
+        int danhoCausado = this.getAtaque() - enemigo.getArmadura();
+
+        // Los caballeros hacen el doble de daño a los legionarios y arqueros
+        if ((enemigo instanceof Legionario) || (enemigo instanceof Arquero)) {
+            danhoCausado *= 2;
+        }
+        return (danhoCausado);
+    }
 }

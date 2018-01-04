@@ -266,8 +266,11 @@ public class Juego implements Comando {
     }
 
     @Override
-    public String mirar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException {
+    public String mirar(String coordenadasCelda) throws ParametroIncorrectoException, NumberFormatException, FueraDeMapaException {
         String[] fc = coordenadasCelda.split("");
+        if(fc.length != 5){
+            throw new ParametroIncorrectoException("Coordenadas mal indicadas");
+        }
         int f = Integer.parseInt(fc[1]);
         int c = Integer.parseInt(fc[3]);
         
@@ -309,9 +312,12 @@ public class Juego implements Comando {
     }
     
     @Override
-    public String agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException, 
+    public String agrupar(String coordenadasCelda) throws ParametroIncorrectoException, NumberFormatException, FueraDeMapaException, 
             ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException {
         String[] fc = coordenadasCelda.split("");
+        if(fc.length != 5){
+            throw new ParametroIncorrectoException("Coordenadas mal introducidas");
+        }
         int f = Integer.parseInt(fc[1]);
         int c = Integer.parseInt(fc[3]);
         String s = this.getMapa().obtenerCelda(c, f).agrupar();
@@ -613,10 +619,14 @@ public class Juego implements Comando {
         // Columna 3
         anhadeCR(new Cantera(new Piedra(800)), m.obtenerCelda(3, 0));
         anhadeCR(new Cantera(new Piedra(200)), m.obtenerCelda(3, 4));
-        anhadePersonaje(new Caballero(), m.obtenerCelda(3, 8), civ1);
+        anhadePersonaje(new Caballero(), m.obtenerCelda(3, 8), civ0);
 
         // Columna 4
-        anhadeCR(new Cantera(new Piedra(400)), m.obtenerCelda(4, 6));
+        anhadeCR(new Cantera(new Piedra(400)), m.obtenerCelda(4, 0));
+        anhadeEdificio(new Ciudadela(), m.obtenerCelda(4, 6), civ0);
+        anhadePersonaje(new Paisano(), m.obtenerCelda(4, 7), civ0);
+        anhadeEdificio(new Cuartel(), m.obtenerCelda(4, 8), civ0);
+        
 
         // Columna 5
         anhadeCR(new Bosque(new Madera(800)), m.obtenerCelda(5, 1));
@@ -627,6 +637,7 @@ public class Juego implements Comando {
         // Columna 6
         anhadeCR(new Bosque(new Madera(200)), m.obtenerCelda(6, 1));
         anhadeCR(new Bosque(new Madera(600)), m.obtenerCelda(6, 2));
+        anhadePersonaje(new Arquero(), m.obtenerCelda(6, 4), civ1);
         anhadeCR(new Arbusto(new Comida(200)), m.obtenerCelda(6, 8));
         anhadeCR(new Arbusto(new Comida(400)), m.obtenerCelda(6, 9));
 
@@ -638,10 +649,11 @@ public class Juego implements Comando {
 
         // Columna 8
         anhadeCR(new Arbusto(new Comida(100)), m.obtenerCelda(8, 0));
+        anhadePersonaje(new Legionario(), m.obtenerCelda(8, 4), civ1);
         anhadeEdificio(new Casa(), m.obtenerCelda(8, 5), civ1);
 
         // Columna 9
-        anhadeCR(new Arbusto(new Comida(400)), m.obtenerCelda(9, 8));
+        anhadeCR(new Arbusto(new Comida(400)), m.obtenerCelda(9, 0));
         anhadeCR(new Cantera(new Piedra(1000)), m.obtenerCelda(9, 2));
         anhadeCR(new Bosque(new Madera(900)), m.obtenerCelda(9, 3));
         anhadeCR(new Bosque(new Madera(300)), m.obtenerCelda(9, 4));

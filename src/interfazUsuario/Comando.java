@@ -37,7 +37,7 @@ public interface Comando {
     public String listar(String tipo) throws ParametroIncorrectoException;
     public String describir(String nombre) throws ParametroIncorrectoException;
     public String describir(String nombre, String Civilizacion) throws ParametroIncorrectoException;
-    public String mirar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException;
+    public String mirar(String coordenadasCelda) throws ParametroIncorrectoException, NumberFormatException, FueraDeMapaException;
     public String construir(String nPersonaje, String nEdificio, String direccion) throws EstarEnGrupoException, InsuficientesRecException, ParametroIncorrectoException, CeldaOcupadaException, FueraDeMapaException, CeldaEnemigaException, SolConstruirException;
     public String crear(String nEdificio, String tipoPersonaje) throws ParametroIncorrectoException, EdificioException, FueraDeMapaException, CeldaEnemigaException, NoTransitablebleException ;
     public String reparar(String nPersonaje, String direccion) throws EstarEnGrupoException, SolRepararException, FueraDeMapaException, 
@@ -49,7 +49,7 @@ public interface Comando {
     public void cambiarCivilizacion(String nCivilizacion) throws ParametroIncorrectoException;
     public void imprimirCivilizacion() throws ParametroIncorrectoException;
     public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException;
-    public String agrupar(String coordenadasCelda) throws NumberFormatException, FueraDeMapaException, 
+    public String agrupar(String coordenadasCelda) throws ParametroIncorrectoException, NumberFormatException, FueraDeMapaException, 
             ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException;
     public String desligar(String nPersonaje) throws EstarEnGrupoException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;
     public String desagrupar(String nGrupo) throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;    

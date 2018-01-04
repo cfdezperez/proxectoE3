@@ -355,6 +355,8 @@ public class Grupo extends Personaje {
         } else if(p instanceof Soldado) {
             this.tieneSoldado = true;
         }
+        //El grupo se crea con una salud inicial igual a la que tienen sus personajes
+        this.setSaludInicial(this.getSalud());
     }
     
     /**
