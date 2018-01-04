@@ -51,8 +51,8 @@ public interface Comando {
     public void imprimirCivilizacion(String nCivilizacion) throws ParametroIncorrectoException;
     public String agrupar(String coordenadasCelda) throws ParametroIncorrectoException, NumberFormatException, FueraDeMapaException, 
             ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException;
-    public String desligar(String nPersonaje) throws EstarEnGrupoException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;
-    public String desagrupar(String nGrupo) throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;    
+    public String desligar(String nPersonaje) throws NoAgrupableException, EstarEnGrupoException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;
+    public String desagrupar(String nGrupo) throws NoAgrupableException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException;    
     public String defender(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 
             CeldaEnemigaException, NoTransitablebleException, CeldaOcupadaException, EstarEnGrupoException, EdificioException, CeldaException;
     public String atacar(String nPersonaje, String direccion) throws FueraDeMapaException, ParametroIncorrectoException, 

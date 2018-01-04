@@ -326,7 +326,7 @@ public class Juego implements Comando {
     }
     
     @Override
-    public String desagrupar(String nGrupo) throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+    public String desagrupar(String nGrupo) throws NoAgrupableException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
         String s;
         Personaje p = getCivilizacionActiva().getPersonaje(nGrupo);
         if(p instanceof Grupo) {
@@ -339,7 +339,7 @@ public class Juego implements Comando {
     }
 
     @Override
-    public String desligar(String nPersonaje) throws EstarEnGrupoException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+    public String desligar(String nPersonaje) throws NoAgrupableException, EstarEnGrupoException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
         String s;
         Personaje p = getCivilizacionActiva().getPersonaje(nPersonaje);
         s = p.getGrupo().desligar(p);

@@ -313,7 +313,7 @@ public class Menu {
                                 consola.imprimir(juego.desligar(orden[1]) + ".\n");
                             } catch (EstarEnGrupoException ex) {
                                 consola.imprimir("Imposible desligar al personaje " + orden[1] + ": " + ex.getMessage() + "\n");
-                            } catch (CeldaEnemigaException | NoTransitablebleException | FueraDeMapaException ex) {
+                            } catch (NoAgrupableException | CeldaEnemigaException | NoTransitablebleException | FueraDeMapaException ex) {
                                 consola.imprimir("Error desligando a " + orden[1] + ": " + ex.getMessage() + "\n");
                             }
                             break;
@@ -324,8 +324,8 @@ public class Menu {
                             }
                             try {
                                 consola.imprimir(juego.desagrupar(orden[1]));
-                            } catch (CeldaEnemigaException | NoTransitablebleException | FueraDeMapaException ex) {
-                                consola.imprimir("Error desligando a " + orden[1] + ": " + ex.getMessage() + "\n");
+                            } catch (NoAgrupableException | CeldaEnemigaException | NoTransitablebleException | FueraDeMapaException ex) {
+                                consola.imprimir("Error desagrupando a " + orden[1] + ": " + ex.getMessage() + "\n");
                             }
                             break;
 

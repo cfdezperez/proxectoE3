@@ -237,6 +237,10 @@ public class Celda {
     }
 
     public String agrupar(String nombreGrupo, Civilizacion civ) throws NoAgrupableException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        //Dentro de los edificios no se puede agrupar
+        if(this.getEdificio() != null){
+            throw new NoAgrupableException("Dentro de un edificio no se puede agrupar");
+        }
         if (this.getPersonajes().size() <= 1) {
             throw new NoAgrupableException("No hay personajes suficientes para agrupar");
         }
@@ -249,6 +253,10 @@ public class Celda {
     }
 
     public String agrupar() throws ParametroIncorrectoException, NoAgrupableException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        //Dentro de un edificio no se puede agrupar
+        if(this.getEdificio() != null){
+            throw new NoAgrupableException("Dentro de un edificio no se puede agrupar");
+        }
         if (this.getPersonajes().size() <= 1) {
             throw new NoAgrupableException("No hay personajes suficientes para agrupar");
         }

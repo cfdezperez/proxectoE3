@@ -25,6 +25,7 @@ import excepciones.edificio.EdificioException;
 import excepciones.edificio.NoNecRepararException;
 import excepciones.personaje.EstarEnGrupoException;
 import excepciones.personaje.InsuficientesRecException;
+import excepciones.personaje.NoAgrupableException;
 import excepciones.personaje.PersonajeLlenoException;
 import excepciones.personaje.SolAlmacenarException;
 import excepciones.personaje.SolConstruirException;
@@ -368,7 +369,11 @@ public class Grupo extends Personaje {
      * @throws NoTransitablebleException
      * @throws FueraDeMapaException 
      */
-    public String desagrupar() throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+    public String desagrupar() throws NoAgrupableException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        //Dentro de los edificios no se puede desligar
+        if(this.getCelda().getEdificio() != null){
+            throw new NoAgrupableException("Dentro de un edificio no se puede desagrupar");
+        }
         String s = "";
         Celda actual = this.getCelda();
         // Elimino el grupo de la celda actual
@@ -393,12 +398,17 @@ public class Grupo extends Personaje {
      * 
      * @param p El personaje a separar
      * @return Mesanje de acción
+     * @throws excepciones.personaje.NoAgrupableException
      * @throws excepciones.ParametroIncorrectoException
      * @throws excepciones.celda.CeldaEnemigaException
      * @throws excepciones.celda.NoTransitablebleException
      * @throws excepciones.celda.FueraDeMapaException
      */
-    public String desligar(Personaje p) throws ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+    public String desligar(Personaje p) throws NoAgrupableException, ParametroIncorrectoException, CeldaEnemigaException, NoTransitablebleException, FueraDeMapaException {
+        //Dentro de los edificios no se puede desligar
+        if(this.getCelda().getEdificio() != null){
+            throw new NoAgrupableException("Dentro de un edificio no se puede desligar");
+        }
         // Saca al personaje de la lista de personajes del grupo
         if(this.personajes.contains(p)) {
             this.personajes.remove(p);
