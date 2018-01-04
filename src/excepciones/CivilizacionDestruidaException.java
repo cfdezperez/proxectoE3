@@ -6,8 +6,9 @@
 package excepciones;
 
 /**
- *
- * @author tomas
+ * Se lanza cuando se destruyen todas las ciudadelas de una civilizacion
+ * 
+ * @author celia y maria
  */
 public class CivilizacionDestruidaException extends Exception {
     public CivilizacionDestruidaException(String m) {

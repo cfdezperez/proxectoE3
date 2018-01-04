@@ -104,7 +104,7 @@ public class Grupo extends Personaje {
         return this.capRecoleccionInicial;
     }
 
-    public int getRecursoTipo(int tipo) {
+    public int getRecursoTipo(int tipo) throws ParametroIncorrectoException {
         switch (tipo) {
             case Recurso.TRMADERA:
                 return capRecoleccion[Recurso.TRMADERA];
@@ -113,8 +113,7 @@ public class Grupo extends Personaje {
             case Recurso.TRPIEDRA:
                 return capRecoleccion[Recurso.TRPIEDRA];
             default:
-                System.out.println("El recurso no existe");
-                return 0;
+                throw new ParametroIncorrectoException("El recurso no existe");
         }
     }
 

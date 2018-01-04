@@ -39,7 +39,7 @@ public abstract class ContRecurso {
         return this.celda;
     }
 
-    public Recurso getRecurso() {
+    public final Recurso getRecurso() {
         return this.recurso;
     }
 
